@@ -4,7 +4,7 @@ Libreria para consumir la API Web de Facturama.
 ## Perfil
 Obtiene información de la cuenta
 ```cs
-facturama.Profile.Get()
+facturama.Profile.Get();
 ```
 ## Clientes
 Crear clients 
@@ -32,16 +32,16 @@ facturama.Clients.Create(cliente)
 ```
 Obtener un cliente ó varios
 ```.cs
-facturama.Clients.Retrieve(cliente.Id)
-facturama.Clients.List()
+facturama.Clients.Retrieve(cliente.Id);
+facturama.Clients.List();
 ```
 Actualizarlo
 ```.cs
-facturama.Clients.Update(cliente, cliente.Id)
+facturama.Clients.Update(cliente, cliente.Id);
 ```
 Eliminarlo
 ```.cs
-facturama.Clients.Remove(cliente.Id)
+facturama.Clients.Remove(cliente.Id);
 ```
 ## Productos
 Puede consultar su catalogo de productos y efectuar las siguientes operaciones CRUD
@@ -78,20 +78,20 @@ var product = new Product
         }
     }
 };
-facturama.Products.Create(product)
+facturama.Products.Create(product);
 ```
 Obtener un producto ó varios
 ```.cs
-facturama.Products.Retrieve(product.Id)
-facturama.Products.List()
+facturama.Products.Retrieve(product.Id);
+facturama.Products.List();
 ```
 Actualizarlo
 ```.cs
-facturama.Products.Update(product, product.Id)
+facturama.Products.Update(product, product.Id);
 ```
 Eliminarlo
 ```.cs
-facturama.Products.Remove(product.Id)
+facturama.Products.Remove(product.Id);
 ```
 ## CFDI 3.3
 Creacion de CFDI 3.3,  y Descarga
