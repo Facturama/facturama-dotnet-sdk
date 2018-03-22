@@ -1,0 +1,13 @@
+﻿using Newtonsoft.Json;
+
+namespace Facturama.Models.Request
+{
+    public class Image
+    {
+        [JsonProperty("Image")]
+        public string Base64Image { get; set; }
+
+        [JsonProperty("Type")]
+        public string Type { get; set; }
+    }
+}
