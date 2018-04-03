@@ -1,5 +1,39 @@
+
 # Facturama-SDK
 Libreria para consumir la API Web de Facturama.
+
+## Compatibilidad
+* .Net Framework 4.5 ó superior
+
+## Dependecias
+* [Newtonsoft.Json](http://james.newtonking.com/json)
+* [RestSharp](http://restsharp.org/)
+* [System.ValueTuple](https://www.nuget.org/packages/System.ValueTuple/)
+
+## Inicio Rapido
+
+#### Instalación #####
+
+Es recomendable utilizar [NuGet](http://docs.nuget.org) para instalar la librería. ó puedes hacer fork y modificar a tu conveniencia.
+
+#### Configuración #####
+
+Antes de usar la libreria es importante establecer tus accesos de facturama de la siguiente forma:
+```net
+var facturama = new FacturamaApi(USUARIO, CONTRASEÑA);
+```
+
+#### Instanciando en modo Sandbox/Producción  #####
+
+Al no recibir otro parametro aparte de usuario y contraseña la libreria esta en modo sandbox
+```cs
+var facturama = new FacturamaApi("usuario", "contraseña");
+```
+y especificando la propiedad isDevelopment en false esta en modo producción
+```cs
+var facturama = new FacturamaApi("usuario", "contraseña", isDevelopment: false);
+```
+
 ## CFDI 3.3
 Creacion de CFDI 3.3
 ```cs
