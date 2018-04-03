@@ -25,7 +25,7 @@ namespace Facturama.Services
             return Put(model, $"{model.IdBranchOffice}/{model.Name}");
         }
 
-        public Serie Delete(string idBranchOffice, string serieName)
+        public Serie Remove(string idBranchOffice, string serieName)
         {
             return Delete($"{idBranchOffice}/{serieName}");
         }

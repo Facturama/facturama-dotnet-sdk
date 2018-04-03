@@ -322,3 +322,7 @@ ASALocalRun/
 
 # NVidia Nsight GPU debugger configuration file
 *.nvuser
+
+# Nuget package
+Facturama/Facturama.nuspec
+Facturama/nuget.exe
