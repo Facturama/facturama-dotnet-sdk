@@ -37,9 +37,9 @@ namespace PruebasUnitarias
 
             Assert.IsNotNull(sucursal.Id);
             sucursal.Name = "Rancho La Chingada";
-            facturama.BranchOffices.Update(sucursal, sucursal.Name);
+            facturama.BranchOffices.Update(sucursal, sucursal.Id);
             Assert.AreEqual(sucursal.Name = "Rancho La Chingada", sucursal.Name);
-            //sucursal = facturama.BranchOffices.Retrieve(sucursal.Id);
+            sucursal = facturama.BranchOffices.Retrieve(sucursal.Id);
             facturama.BranchOffices.Remove(sucursal.Id);
             var Conta = facturama.BranchOffices.List();
             var ContDos = Conta.Count;
