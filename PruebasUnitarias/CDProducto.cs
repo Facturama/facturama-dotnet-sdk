@@ -58,11 +58,11 @@ namespace PruebasUnitarias
                 Assert.IsNotNull(product.Id);
 
                 //<-------------------update and retrive----------------------------------->>
-                //product.CuentaPredial = "420";
-                //product = facturama.Products.Update(product, product.Id);
-                //Assert.AreEqual(product.CuentaPredial = "420", product.CuentaPredial);
-                //product = facturama.Products.Retrieve(product.Id);
-                //Assert.IsNotNull(product.Id);
+                product.CuentaPredial = "420";
+                product = facturama.Products.Update(product, product.Id);
+                Assert.AreEqual(product.CuentaPredial = "420", product.CuentaPredial);
+                product = facturama.Products.Retrieve(product.Id);
+                Assert.IsNotNull(product.Id);
                 
                 facturama.Products.Remove(product.Id);
                 productOs = facturama.Clients.List();

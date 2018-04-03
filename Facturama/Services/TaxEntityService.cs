@@ -13,7 +13,7 @@ namespace Facturama.Services
 {
     public class TaxEntityService : HttpService<Models.Request.TaxEntity, Models.Response.TaxEntity>
     {
-        public TaxEntityService(RestClient httpClient) : base(httpClient, "taxentity")
+        public TaxEntityService(RestClient httpClient) : base(httpClient, "taxentity/")
         {
         }
 

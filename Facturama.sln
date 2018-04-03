@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Facturama", "Facturama\Fact
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples", "Samples\Samples.csproj", "{05E17DF1-1897-41AE-9A22-CBF7BD61EB40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PruebasUnitarias", "PruebasUnitarias\PruebasUnitarias.csproj", "{343D36BD-963F-4248-A9D2-B60E178215DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{05E17DF1-1897-41AE-9A22-CBF7BD61EB40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05E17DF1-1897-41AE-9A22-CBF7BD61EB40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05E17DF1-1897-41AE-9A22-CBF7BD61EB40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{343D36BD-963F-4248-A9D2-B60E178215DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{343D36BD-963F-4248-A9D2-B60E178215DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{343D36BD-963F-4248-A9D2-B60E178215DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{343D36BD-963F-4248-A9D2-B60E178215DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
