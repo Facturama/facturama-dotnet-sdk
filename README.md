@@ -19,14 +19,7 @@ Es recomendable utilizar [NuGet](http://docs.nuget.org) para instalar la librer�
 Install-Package Facturama -Version 1.0.0.1
 ```
 
-#### Configuración #####
-
-Antes de usar la libreria es importante establecer tus accesos de facturama de la siguiente forma:
-```net
-var facturama = new FacturamaApi(USUARIO, CONTRASEÑA);
-```
-
-#### Instanciando en modo Sandbox/Producción  #####
+#### Configuración  #####
 
 Al no recibir otro parametro aparte de usuario y contraseña la libreria esta en modo sandbox
 ```cs
