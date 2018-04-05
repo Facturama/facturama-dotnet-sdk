@@ -10,6 +10,12 @@ namespace Facturama.Services
         {
         }
 
+        //---------------------------- metodo create add by kiva -----------------------// no sirve u.u
+        public Serie Create(Serie modelo)
+        {
+            return Post(modelo, $"{modelo.IdBranchOffice}");
+        }
+
         public List<Serie> List(string idBranchOffice)
         {
             return GetList(idBranchOffice);
