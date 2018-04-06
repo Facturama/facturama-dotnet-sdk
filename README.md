@@ -92,6 +92,10 @@ Consulta tus facturas en cualquier momento mediante una palabra clave ó algun a
 facturama.Cfdis.List("Expresion en Software");
 facturama.Cfdis.List(rfc: "ESO1202108R2");
 ```
+Envia tu CFDI por Email
+```.cs
+facturama.Cfdis.SendByMail(cfdiCreated.Id, "diego@facturama.com.mx")
+```
 
 ## Otras Operaciones
 * Consultar Perfil y Suscripción actual,
