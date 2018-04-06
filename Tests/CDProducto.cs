@@ -1,10 +1,10 @@
 ﻿using System;
 using Facturama;
 using Facturama.Models;
-using Tax = Facturama.Models.Request.Tax;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tax = Facturama.Models.Request.Tax;
 
-namespace PruebasUnitarias
+namespace Tests
 {
     [TestClass]
     public class CDProducto

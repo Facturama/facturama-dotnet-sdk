@@ -21,9 +21,9 @@ namespace Samples
             //TestCrudClient(facturama);
             //TestValidationsClient(facturama);
             //TestCreateProduct(facturama);
-            //TestCreateCfdi(facturama);
+            TestCreateCfdi(facturama);
             //TestLogo(facturama);
-            TestSerie(facturama);
+            //TestSerie(facturama);
         }
 
         private static void TestValidationsClient(FacturamaApi facturama)
@@ -240,6 +240,12 @@ namespace Samples
                 Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
                 list = facturama.Cfdis.List(rfc: "ESO1202108R2"); //Atributo en especifico
                 Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+
+                if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "diego@facturama.com.mx"))
+                {
+                    Console.WriteLine("Se envió correctamente el CFDI");
+                }
+
 
                 facturama.Cfdis.Remove(cfdiCreated.Id);
                 Console.WriteLine(

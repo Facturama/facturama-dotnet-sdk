@@ -114,5 +114,21 @@ namespace Facturama.Services
             var file = GetFile(id, FileFormat.Html, type);
             File.WriteAllBytes(filePath, Convert.FromBase64String(file.Content));
         }
+
+        public bool SendByMail(string id, string email, string subject = null, InvoiceType type = InvoiceType.Issued)
+        {   
+            var request = new RestRequest($"Cfdi?cfdiType={type}&cfdiId={id}&email={email}&subject={subject}", Method.POST);
+            var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
+            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+
+            var response = taskCompletionSource.Task.Result;
+            var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
+            if (result != null && result.ContainsKey("success"))
+            {
+                return (bool)result["success"];
+            }
+            return false;
+
+        }
     }
 }

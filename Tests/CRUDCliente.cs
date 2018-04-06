@@ -1,10 +1,8 @@
-﻿using System;
-using System;
-using Facturama;
+﻿using Facturama;
 using Facturama.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace PruebasUnitarias
+namespace Tests
 {
     [TestClass]
     public class CRUDCliente
