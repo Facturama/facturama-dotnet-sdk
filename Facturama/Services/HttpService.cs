@@ -38,8 +38,13 @@ namespace Facturama.Services
                 throw new FacturamaException(exception.Message, exception);
             }
             if (response.StatusCode == HttpStatusCode.InternalServerError)
-                throw new Exception(response.ErrorMessage);
-
+            {
+                throw new Exception(response.Content, response.ErrorException);
+            }
+            if (response.StatusCode == HttpStatusCode.MethodNotAllowed)
+            {
+                throw new Exception(response.Content);
+            }
             return response;
         }
 

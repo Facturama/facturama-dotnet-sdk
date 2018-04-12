@@ -76,5 +76,24 @@ namespace Facturama.Services
             }
         }
 
+        public UseCfdiCatalog[] CfdiUses(string rfc)
+        {
+            var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/CfdiUses?keyword={rfc}" };
+            var response = Execute(request);
+            var modelView = JsonConvert.DeserializeObject<List<UseCfdiCatalog>>(response.Content);
+            return modelView.ToArray();
+        }
+
+        public CatalogViewModel[] FiscalRegimens
+        {
+            get
+            {
+                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/FiscalRegimens" };
+                var response = Execute(request);
+                var modelView = JsonConvert.DeserializeObject<List<CatalogViewModel>>(response.Content);
+                return modelView.ToArray();
+            }
+        }
+
     }
 }

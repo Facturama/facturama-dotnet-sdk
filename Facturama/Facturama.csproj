@@ -53,16 +53,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FacturamaApi.cs" />
+    <Compile Include="FacturamaApiMultiemisor.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\BranchOffice.cs" />
     <Compile Include="Models\Client.cs" />
-    <Compile Include="Models\Csd.cs" />
     <Compile Include="Models\Exception\FacturamaException.cs" />
     <Compile Include="Models\Exception\ModelException.cs" />
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\Request\Cfdi.cs" />
+    <Compile Include="Models\Request\CfdiMulti.cs" />
     <Compile Include="Models\Request\CfdiRelation.cs" />
     <Compile Include="Models\Request\CfdiRelations.cs" />
+    <Compile Include="Models\Request\Csd.cs" />
     <Compile Include="Models\Request\Image.cs" />
     <Compile Include="Models\Request\Item.cs" />
     <Compile Include="Models\Request\Receiver.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Models\Response\Catalogs\Cfdi\UseCfdiCatalog.cs" />
     <Compile Include="Models\Response\Cfdi.cs" />
     <Compile Include="Models\Response\CfdiSearchResult.cs" />
+    <Compile Include="Models\Response\Csd.cs" />
     <Compile Include="Models\Response\InvoiceFile.cs" />
     <Compile Include="Models\Response\Profile.cs" />
     <Compile Include="Models\Response\Suscription.cs" />
@@ -87,9 +90,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BranchOfficeService.cs" />
     <Compile Include="Services\CatalogService.cs" />
+    <Compile Include="Services\CfdiLiteService.cs" />
     <Compile Include="Services\CfdiService.cs" />
     <Compile Include="Services\ClientService.cs" />
     <Compile Include="Services\CrudService.cs" />
+    <Compile Include="Services\CsdService.cs" />
     <Compile Include="Services\HttpService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\ProfileService.cs" />

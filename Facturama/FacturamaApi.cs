@@ -32,7 +32,7 @@ namespace Facturama
         public ProfileService Profile { get; }
         public TaxEntityService TaxEntities { get;  }
         public SerieService Series { get; }
-        public CatalogService Catalogs { get; set; }
+        public CatalogService Catalogs { get; }
 
     }
 
