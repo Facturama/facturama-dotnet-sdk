@@ -107,18 +107,12 @@ namespace Samples
                 var cfdiCreated = facturama.Cfdis.Create(cfdi);
                 Console.WriteLine(
                     $"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
                 facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
 
                 var list = facturama.Cfdis.List("Emisor de Ejemplo");
                 Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
                 list = facturama.Cfdis.List(rfc: "ESO1202108R2"); //Atributo en especifico
                 Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
-
-                if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "diego@facturama.com.mx"))
-                {
-                    Console.WriteLine("Se envió correctamente el CFDI");
-                }
                 
                 facturama.Cfdis.Remove(cfdiCreated.Id);
                 Console.WriteLine(
