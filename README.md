@@ -17,7 +17,7 @@ Libreria para consumir la API Web de Facturama.
 
 Es recomendable utilizar [NuGet](http://docs.nuget.org) para instalar la librería. ó puedes hacer fork y modificar a tu conveniencia.
 ```net
-Install-Package Facturama -Version 1.0.0.1
+Install-Package Facturama
 ```
 
 #### Configuración  #####
