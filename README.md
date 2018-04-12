@@ -33,18 +33,21 @@ var facturama = new FacturamaApi("usuario", "contraseña", isDevelopment: false)
 
 ## Operaciones Web API
 
-Crear, Consultar Cancelar CFDI así como descargar XML, PDF y envió de estos por mail
-Consultar Perfil y Suscripción actual,
-Carga de Logo y Certificados Digitales
-CRUD de Productos, Clientes, Sucursales y Series.
-Algunos ejemplos: [aquí](https://github.com)
+- Crear, Consultar Cancelar CFDI así como descargar XML, PDF y envió de
+   estos por mail.
+- Consultar Perfil y Suscripción actual
+- Carga de Logo y Certificados Digitales
+- CRUD de Productos, Clientes, Sucursales y Series.
+
+Algunos ejemplos: [aquí](https://github.com/Facturama/facturama-dotnet-sdk/wiki/API-Web)
 
 *Todas las operaciones son reflejadas en la plataforma web.*
 
 ## Operaciones API Multiemisor
 
-Crear, Consultar, Cancelar descarga de XML
-CRUD de CSD (Certificados de los Sellos Digitales).
-Algunos ejemplos: [aquí](https://github.com)
+- Crear, Consultar, Cancelar descarga de XML
+- CRUD de CSD (Certificados de los Sellos Digitales).
+
+Algunos ejemplos: [aquí](https://github.com/Facturama/facturama-dotnet-sdk/wiki/API-Multiemisor)
 
 *Las operaciones no se reflejan en la plataforma web.*
