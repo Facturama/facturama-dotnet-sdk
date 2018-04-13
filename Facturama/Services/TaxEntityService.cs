@@ -29,7 +29,7 @@ namespace Facturama.Services
 
         public bool UploadImage(Image img)
         {
-            var request = new RestRequest($"{UriResource}UploadImage", Method.PUT);
+            var request = new RestRequest($"{UriResource}UploadLogo", Method.PUT);
             request.AddHeader("Content-Type", "application/json");
 
             var json = JsonConvert.SerializeObject(img,
@@ -48,7 +48,7 @@ namespace Facturama.Services
             if (response.StatusCode == HttpStatusCode.InternalServerError)
                 throw new Exception(response.ErrorMessage);
 
-            if (response.StatusCode == HttpStatusCode.NoContent)
+            if (response.StatusCode == HttpStatusCode.OK)
                 return true;
             return false;
         }
