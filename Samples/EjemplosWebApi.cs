@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,7 @@ namespace Samples
             TestLogo(facturama);
             TestSerie(facturama);
             TestCreateCfdi(facturama);
+            Console.ReadKey();
         }
 
         private static void TestValidationsClient(FacturamaApi facturama)
@@ -54,7 +56,6 @@ namespace Samples
                     Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
                 }
             }
-            Console.ReadKey();
         }
 
         private static void TestCrudClient(FacturamaApi facturama)
@@ -164,7 +165,7 @@ namespace Samples
 
             var branchOffice = facturama.BranchOffices.List().First();
             var random = new Random();
-            var nitems = random.Next(1, products.Count) % 10; // Cantidad de items para la factura
+            var nitems = random.Next(1, products.Count) % 10 + 1; // Cantidad de items para la factura
             var decimals = (int)currency.Decimals;
 
             var cfdi = new Cfdi
@@ -260,8 +261,6 @@ namespace Samples
             {
                 Console.WriteLine($"Error inesperado: ", ex.Message);
             }
-            Console.ReadKey();
-
         }
 
         private static void TestLogo(FacturamaApi facturama)
@@ -296,22 +295,23 @@ namespace Samples
 
         private static void TestSerie(FacturamaApi facturama)
         {
-            var serie = (new Serie
+            var serie = new Serie
             {
-                IdBranchOffice = "G8H81UGPAcqAXVXxtfhGyw2",
-                Name = "DondeJalo",
+                IdBranchOffice = "yzBJZx7uYQiX8FhGN_WIOQ2",
+                Name = "TR" + DateTime.Now.ToString("MMddmmss"),
                 Description = "A Nice Place to Work",
-                Folio = 0
-            });
+                Folio = 100
+            };
             try
             {
-                //serie = facturama.Series.Create(serie);
-
-                //serie.Folio = 421;
-                //serie = facturama.Series.Update(serie);
+                serie = facturama.Series.Create(serie);
+                Console.WriteLine($"Se creo exitosamente la serie {serie.Name} en la sucursal {serie.IdBranchOffice}." );
+                serie.IdBranchOffice = "yzBJZx7uYQiX8FhGN_WIOQ2";
+                serie.Description = "Serie Editada"; //Solo la descripcion es editable
+                facturama.Series.Update(serie);
                 serie = facturama.Series.Retrieve(serie.IdBranchOffice, serie.Name);
-                serie.IdBranchOffice = "G8H81UGPAcqAXVXxtfhGyw2";
-                facturama.Series.Remove(serie.IdBranchOffice, serie.Name);
+                Console.WriteLine($"Se actualizó la descripcion de la serie: {serie.Name} descripcion: {serie.Description}");
+
             }
             catch (FacturamaException ex)
             {

@@ -15,6 +15,7 @@ namespace Samples
             var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebas", "pruebas2011");
             TestListCreateAndRemoveCsd(facturamaMultiEmisor);
             TestCreateCfdiMultiemisor(facturamaMultiEmisor);
+            Console.ReadKey();
         }
 
 
@@ -119,17 +120,18 @@ namespace Samples
             {
                 Console.WriteLine($"Error inesperado: ", ex.Message);
             }
-            Console.ReadKey();
         }
 
         private static void TestListCreateAndRemoveCsd(FacturamaApiMultiemisor facturama)
         {
             // Archivo a Base64 convertido en http://jpillora.com/base64-encoder/
             var csds = facturama.Csds.List();
+            Console.WriteLine($"Se encontraron {csds.Count} csd.");
             var csd = csds.FirstOrDefault(c => c.Rfc == "AAA010101AAA");
             if (csd != null)
             {
                 facturama.Csds.Remove(csd.Rfc);
+                Console.WriteLine($"Se eliminó el CSD relacionado con el RFC: {csd.Rfc}");
             }
             var csdRequest = new Csd
             {
@@ -141,8 +143,12 @@ namespace Samples
             try
             {
                 facturama.Csds.Create(csdRequest);
+                Console.WriteLine($"Se guardo el CSD relacionado con el RFC: {csdRequest.Rfc}");
+
                 csdRequest.Rfc = "AAA010101AAA";
                 facturama.Csds.Update(csdRequest);
+                Console.WriteLine($"Se actualizó el CSD relacionado con el RFC: {csdRequest.Rfc}");
+
             }
             catch (Exception e)
             {

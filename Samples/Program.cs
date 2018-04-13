@@ -17,7 +17,7 @@ namespace Samples
         static void Main(string[] args)
         {
             EjemplosMultiEmisor.RunExamples();
-            //EjemplosWebApi.RunExamples();
+            EjemplosWebApi.RunExamples();
         }
     }
 }
