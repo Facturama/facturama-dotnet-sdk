@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Facturama;
+using Facturama.Models;
+using Facturama.Models.Complements;
 using Facturama.Models.Request;
+using Tax = Facturama.Models.Request.Tax;
 
 namespace Samples
 {
@@ -13,11 +16,86 @@ namespace Samples
         public static void RunExamples()
         {
             var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebas", "pruebas2011");
-            TestListCreateAndRemoveCsd(facturamaMultiEmisor);
-            TestCreateCfdiMultiemisor(facturamaMultiEmisor);
+            //TestListCreateAndRemoveCsd(facturamaMultiEmisor);
+            //TestCreateCfdiMultiemisor(facturamaMultiEmisor);
+            TestCreatePaymentCfdi(facturamaMultiEmisor);
             Console.ReadKey();
         }
 
+        private static void TestCreatePaymentCfdi(FacturamaApiMultiemisor facturama)
+        {
+            var nameId = facturama.Catalogs.NameIds[14]; //Nombre en el pdf: "Factura"
+            var paymentForm = facturama.Catalogs.PaymentForms.First(p => p.Name == "Efectivo");
+            var regimen = facturama.Catalogs.FiscalRegimens.First();
+
+
+            var cfdi = new CfdiMulti
+            {
+                NameId = nameId.Value,
+                CfdiType = CfdiType.Pago,
+                Folio = "100",
+                ExpeditionPlace = "78220",
+                Issuer = new Issuer
+                {
+                    Rfc = "AAA010101AAA",
+                    Name = "Expresion en Software SAPI de CV",
+                    FiscalRegime = regimen.Value
+                },
+                Receiver = new Receiver
+                {
+                    Rfc = "JAR1106038RA",
+                    Name = "SinDelantal Mexico",
+                    CfdiUse = "P01"
+                },
+                Complement = new Complement
+                {
+                    Payments = new List<Payment>
+                    {
+                        new Payment
+                        {
+                            Date = "2018-04-04T00:00:00.000Z",
+                            PaymentForm = paymentForm.Value,
+                            Currency = "MXN",
+                            Amount = 1200.00m,
+                            RelatedDocuments = new List<RelatedDocument> {
+                                new RelatedDocument {
+                                    Uuid = "F884C787-EEA6-4720-874D-B5048DB8F960",
+                                    Folio = "100032007",
+                                    Currency = "MXN",
+                                    PaymentMethod = "PUE",
+                                    PartialityNumber = 1,
+                                    PreviousBalanceAmount = 1200.00m,
+                                    AmountPaid = 1200.00m
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+            try
+            {
+                var cfdiCreated = facturama.Cfdis.Create(cfdi);
+                Console.WriteLine(
+                    $"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+                facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
+                Console.WriteLine($"Se guardo existosamente la factura con el UUID: {cfdiCreated.Complement.TaxStamp.Uuid}.");
+                facturama.Cfdis.Remove(cfdiCreated.Id);
+                Console.WriteLine(
+                    $"Se eliminó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            catch (FacturamaException ex)
+            {
+                Console.WriteLine(ex.Message);
+                foreach (var messageDetail in ex.Model.Details)
+                {
+                    Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: ", ex.Message);
+            }
+        }
 
         private static void TestCreateCfdiMultiemisor(FacturamaApiMultiemisor facturama)
         {

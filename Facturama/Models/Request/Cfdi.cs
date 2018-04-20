@@ -74,5 +74,8 @@ namespace Facturama.Models.Request
 
         [JsonProperty("PaymentBankName")]
         public string PaymentBankName { get; set; }
+
+        [JsonProperty("Complemento")]
+        public Complement Complement { get; set; }
     }
 }

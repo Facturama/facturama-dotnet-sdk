@@ -180,7 +180,7 @@ namespace Samples
                 Items = new List<Item>(),
                 Receiver = new Receiver
                 {
-                    CfdiUse = cliente.CfdiUse,
+                    CfdiUse = "P01",
                     Name = cliente.Name,
                     Rfc = cliente.Rfc
                 },

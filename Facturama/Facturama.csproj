@@ -57,6 +57,7 @@
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\BranchOffice.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\Complements\Payments.cs" />
     <Compile Include="Models\Exception\FacturamaException.cs" />
     <Compile Include="Models\Exception\ModelException.cs" />
     <Compile Include="Models\Product.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Models\Response\Catalogs\Cfdi\UseCfdiCatalog.cs" />
     <Compile Include="Models\Response\Cfdi.cs" />
     <Compile Include="Models\Response\CfdiSearchResult.cs" />
+    <Compile Include="Models\Complement.cs" />
     <Compile Include="Models\Response\Csd.cs" />
     <Compile Include="Models\Response\InvoiceFile.cs" />
     <Compile Include="Models\Response\Profile.cs" />
