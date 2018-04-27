@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Facturama.Models.Request
@@ -8,6 +9,6 @@ namespace Facturama.Models.Request
         public string Type { get; set; }
 
         [JsonProperty("Cfdis")]
-        public CfdiRelation[] Cfdis { get; set; }
+        public List<CfdiRelation> Cfdis { get; set; }
     }
 }
