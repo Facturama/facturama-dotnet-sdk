@@ -69,6 +69,7 @@
     <Compile Include="Models\Request\Image.cs" />
     <Compile Include="Models\Request\Item.cs" />
     <Compile Include="Models\Request\Receiver.cs" />
+    <Compile Include="Models\Request\RelatedDocument.cs" />
     <Compile Include="Models\Request\Tax.cs" />
     <Compile Include="Models\Request\TaxEntity.cs" />
     <Compile Include="Models\Response\Catalogs\CatalogViewModel.cs" />
