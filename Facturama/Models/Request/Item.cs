@@ -6,7 +6,10 @@ namespace Facturama.Models.Request
 {
     public class Item
     {
-        [JsonProperty("ProductCode")]
+	    [JsonProperty("IdProduct")]
+	    public string ProductId { get; set; }
+
+	    [JsonProperty("ProductCode")]
         public string ProductCode { get; set; }
 
         [JsonProperty("IdentificationNumber")]
