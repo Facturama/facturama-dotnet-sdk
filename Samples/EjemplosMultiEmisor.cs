@@ -16,8 +16,8 @@ namespace Samples
         public static void RunExamples()
         {
             var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebas", "pruebas2011");
-            //TestListCreateAndRemoveCsd(facturamaMultiEmisor);
-            //TestCreateCfdiMultiemisor(facturamaMultiEmisor);
+            TestListCreateAndRemoveCsd(facturamaMultiEmisor);
+            TestCreateCfdiMultiemisor(facturamaMultiEmisor);
             TestCreatePaymentCfdi(facturamaMultiEmisor);
             Console.ReadKey();
         }
@@ -79,10 +79,25 @@ namespace Samples
                     $"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
                 facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
                 Console.WriteLine($"Se guardo existosamente la factura con el UUID: {cfdiCreated.Complement.TaxStamp.Uuid}.");
-                facturama.Cfdis.Remove(cfdiCreated.Id);
-                Console.WriteLine(
-                    $"Se eliminó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
-            }
+				var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+
+				if (cancelationStatus.Status == "canceled")
+				{
+					Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else if (cancelationStatus.Status == "pending")
+				{
+					Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else if (cancelationStatus.Status == "active")
+				{
+					Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else
+				{
+					Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+			}
             catch (FacturamaException ex)
             {
                 Console.WriteLine(ex.Message);
@@ -182,9 +197,25 @@ namespace Samples
                 list = facturama.Cfdis.List(rfc: "ESO1202108R2"); //Atributo en especifico
                 Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
 
-                facturama.Cfdis.Remove(cfdiCreated.Id);
-                Console.WriteLine(
-                    $"Se eliminó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+                var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+
+				if(cancelationStatus.Status == "canceled")
+				{
+					Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else if (cancelationStatus.Status == "pending")
+				{
+					Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else if (cancelationStatus.Status == "active")
+				{
+					Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else
+				{
+					Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+                
             }
             catch (FacturamaException ex)
             {

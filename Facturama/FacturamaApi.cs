@@ -23,7 +23,9 @@ namespace Facturama
             TaxEntities = new TaxEntityService(httpClient);
             Series = new SerieService(httpClient);
             Catalogs = new CatalogService(httpClient);
-        }
+			Store = new StoreService(httpClient);
+			Charges = new ChargeService(httpClient);
+		}
 
         public ProductService Products { get; }
         public ClientService Clients { get; }
@@ -33,8 +35,10 @@ namespace Facturama
         public TaxEntityService TaxEntities { get;  }
         public SerieService Series { get; }
         public CatalogService Catalogs { get; }
+		public StoreService Store { get; }
+		public ChargeService Charges { get; }
 
-    }
+	}
 
 
 }

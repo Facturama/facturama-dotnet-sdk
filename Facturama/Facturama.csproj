@@ -56,6 +56,9 @@
     <Compile Include="FacturamaApiMultiemisor.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\BranchOffice.cs" />
+    <Compile Include="Models\Charge\Charge.cs" />
+    <Compile Include="Models\Charge\InvoiceData.cs" />
+    <Compile Include="Models\Charge\Item.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\Complements\Payments.cs" />
     <Compile Include="Models\Exception\FacturamaException.cs" />
@@ -72,6 +75,7 @@
     <Compile Include="Models\Request\RelatedDocument.cs" />
     <Compile Include="Models\Request\Tax.cs" />
     <Compile Include="Models\Request\TaxEntity.cs" />
+    <Compile Include="Models\Response\CancelationStatusMulti.cs" />
     <Compile Include="Models\Response\Catalogs\CatalogViewModel.cs" />
     <Compile Include="Models\Response\Catalogs\Cfdi\CfdiTypeCatalog.cs" />
     <Compile Include="Models\Response\Catalogs\Cfdi\CurrencyCatalog.cs" />
@@ -82,6 +86,7 @@
     <Compile Include="Models\Response\Catalogs\Cfdi\TariffFractionCatalog.cs" />
     <Compile Include="Models\Response\Catalogs\Cfdi\UseCfdiCatalog.cs" />
     <Compile Include="Models\Response\Cfdi.cs" />
+    <Compile Include="Models\Response\CancelationStatus.cs" />
     <Compile Include="Models\Response\CfdiSearchResult.cs" />
     <Compile Include="Models\Complement.cs" />
     <Compile Include="Models\Response\Csd.cs" />
@@ -92,6 +97,8 @@
     <Compile Include="Models\Serie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BranchOfficeService.cs" />
+    <Compile Include="Services\ChargeService.cs" />
+    <Compile Include="Services\StoreService.cs" />
     <Compile Include="Services\CatalogService.cs" />
     <Compile Include="Services\CfdiLiteService.cs" />
     <Compile Include="Services\CfdiService.cs" />

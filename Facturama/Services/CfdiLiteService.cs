@@ -32,15 +32,37 @@ namespace Facturama.Services
             return Post(model, "api-lite/2/cfdis");
         }
 
-        public override Cfdi Remove(string id)
+		/// <summary>
+		/// Cancelacion con aceptación de CFDI 3.3 vigencia 2018 y posteriores
+		/// </summary>
+		/// <param name="id">ID del CFDI</param>
+		/// <returns>Estado de cancelación</returns>
+		public Models.Response.CancelationStatusMulti Cancel(string id)
+		{
+			if (String.IsNullOrEmpty(id))
+				throw new ArgumentNullException(nameof(id));
+
+			var request = new RestRequest(Method.DELETE) { Resource = $"{UriResource}api-lite/cfdis/{id}" };
+			var response = Execute(request);
+			return JsonConvert.DeserializeObject<Models.Response.CancelationStatusMulti>(response.Content);
+		}
+
+		/// <summary>
+		/// Cancelación CFDI3.3  vigencia 2017 y anteriores
+		/// </summary>
+		/// <param name="id">ID del CFDI</param>
+		/// <returns>CFDI</returns>
+		[Obsolete(" El método 'Remove' está OBSOLETO, por favor utiliza 'Cancel',  para la 'cancelación con aceptación' implementada en 2018.")]
+		public override Cfdi Remove(string id)
         {
             if (String.IsNullOrEmpty(id))
                 throw new ArgumentNullException(nameof(id));
             
             var request = new RestRequest(Method.DELETE) { Resource = $"{UriResource}api-lite/cfdis/{id}" };
-            var response = Execute(request);
-            return JsonConvert.DeserializeObject<Cfdi>(response.Content);
-        }
+            var response = Execute(request);			
+
+			return Retrieve(id);
+		}
 
         public override Cfdi Retrieve(string id)
         {
@@ -80,8 +102,9 @@ namespace Facturama.Services
 
         private InvoiceFile GetFile(string id, FileFormat format)
         {
+			var strFormat = format.ToString().ToLower();
 
-            var request = new RestRequest($"{UriResource}cfdi/{format}/issuedLite/{id}", Method.GET);
+			var request = new RestRequest($"{UriResource}cfdi/{strFormat}/issuedLite/{id}", Method.GET);
             request.AddHeader("Content-Type", "application/json");
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();

@@ -16,12 +16,12 @@ namespace Samples
         public static void RunExamples()
         {
             var facturama = new FacturamaApi("pruebas", "pruebas2011");
-            TestCrudClient(facturama);
-            TestValidationsClient(facturama);
-            TestCreateProduct(facturama);
-            TestLogo(facturama);
-            TestSerie(facturama);
-            TestCreateCfdi(facturama);
+			TestCrudClient(facturama);
+			TestValidationsClient(facturama);
+			TestCreateProduct(facturama);
+			TestLogo(facturama);
+			TestSerie(facturama);
+			TestCreateCfdi(facturama);
             Console.ReadKey();
         }
 
@@ -190,7 +190,7 @@ namespace Samples
             {
                 var product = products[i];
                 var quantity = random.Next(1, 5); //Una cantidad aleatoria
-                var discount = product.Price % (product.Price == 0 ? 1 : random.Next(0, (int)product.Price)); //Un descuento aleatorio
+                var discount = product.Price % (product.Price == 0 ? 1 : random.Next(1, (int)product.Price)); //Un descuento aleatorio
                 var subtotal = Math.Round(product.Price * quantity, decimals);
 
                 var item = new Item
@@ -198,7 +198,7 @@ namespace Samples
                     ProductCode = product.CodeProdServ,
                     UnitCode = product.UnitCode,
                     Unit = product.Unit,
-                    Description = product.Description,
+                    Description = string.IsNullOrEmpty(product.Description) ? "Producto de ejemplo" : product.Description,
                     IdentificationNumber = product.IdentificationNumber,
                     Quantity = quantity,
                     Discount = Math.Round(discount, decimals),
@@ -239,17 +239,31 @@ namespace Samples
                 list = facturama.Cfdis.List(rfc: "ESO1202108R2"); //Atributo en especifico
                 Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
 
-                if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "diego@facturama.com.mx"))
+                if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "chucho@facturama.mx"))
                 {
                     Console.WriteLine("Se envió correctamente el CFDI");
                 }
 
 
-                facturama.Cfdis.Remove(cfdiCreated.Id);
-                Console.WriteLine(
-                    $"Se eliminó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+                var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+				if (cancelationStatus.Status == "canceled")
+				{
+					Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else if (cancelationStatus.Status == "pending")
+				{
+					Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else if (cancelationStatus.Status == "active")
+				{
+					Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else
+				{
+					Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
 
-            }
+			}
             catch (FacturamaException ex)
             {
                 Console.WriteLine(ex.Message);

@@ -11,7 +11,7 @@ namespace Facturama.Services
 {
     public class CfdiService : CrudService<Models.Request.Cfdi, Models.Response.Cfdi>
     {
-        private enum FileFormat
+        public enum FileFormat
         {
             Xml, Pdf, Html
         }
@@ -37,17 +37,41 @@ namespace Facturama.Services
             return Post(model, "2/cfdis");
         }
 
-        public override Models.Response.Cfdi Remove(string id)
+		/// <summary>
+		/// Cancelacion con aceptación de CFDI 3.3 vigencia 2018 y posteriores
+		/// </summary>
+		/// <param name="id">ID del CFDI</param>
+		/// <returns>Estado de cancelación</returns>
+        public Models.Response.CancelationStatus Cancel(string id)
         {
             if (String.IsNullOrEmpty(id))
                 throw new ArgumentNullException(nameof(id));
 
             var request = new RestRequest(Method.DELETE) { Resource = $"{UriResource}cfdi/{id}?type=issued" };
             var response = Execute(request);
-            return JsonConvert.DeserializeObject<Models.Response.Cfdi>(response.Content);
+            return JsonConvert.DeserializeObject<Models.Response.CancelationStatus>(response.Content);
         }
 
-        public Cfdi Retrieve(string id, InvoiceType type = InvoiceType.Issued)
+		/// <summary>
+		/// Cancelación CFDI3.3  vigencia 2017 y anteriores
+		/// </summary>
+		/// <param name="id">ID del CFDI</param>
+		/// <returns>CFDI</returns>
+		[Obsolete(" El método 'Remove' está OBSOLETO, por favor utiliza 'Cancel',  para la 'cancelación con aceptación' implementada en 2018.")]
+		public override Models.Response.Cfdi Remove(string id)
+		{
+			if (String.IsNullOrEmpty(id))
+				throw new ArgumentNullException(nameof(id));
+
+			var request = new RestRequest(Method.DELETE) { Resource = $"{UriResource}cfdi/{id}?type=issued" };
+			var response = Execute(request);
+
+			return Retrieve(id);			
+		}
+
+
+
+		public Cfdi Retrieve(string id, InvoiceType type = InvoiceType.Issued)
         {
             return Get($"cfdi/{id}?type={type}");
         }
@@ -83,10 +107,10 @@ namespace Facturama.Services
             return list;
         }
 
-        private InvoiceFile GetFile(string id, FileFormat format, InvoiceType type = InvoiceType.Issued)
+        public InvoiceFile GetFile(string id, FileFormat format, InvoiceType type = InvoiceType.Issued)
         {
-            
-            var request = new RestRequest($"{UriResource}cfdi/{format}/{type}/{id}", Method.GET);
+			var strFormat = format.ToString().ToLower();
+            var request = new RestRequest($"{UriResource}cfdi/{strFormat}/{type}/{id}", Method.GET);
             request.AddHeader("Content-Type", "application/json");
             
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
@@ -130,5 +154,41 @@ namespace Facturama.Services
             return false;
 
         }
-    }
+
+		/// <summary>
+		/// Carga de una factura recibida.
+		/// Se coloca en la entidad fiscal  que realiza la llamada
+		/// </summary>
+		/// <param name="cfdiXMLBase64">Archivo XML en string de base64</param>
+		public bool Upload(string cfdiXMLBase64)
+		{
+			var invFile = new InvoiceFile()
+			{
+				Content = cfdiXMLBase64,
+				ContentEncoding = "base64",
+				ContentType = "xml",
+				ContentLength = cfdiXMLBase64.Length
+			};
+			
+
+			var request = new RestRequest(Method.POST) { Resource = $"{UriResource}/upload/cfdi" };
+			request.AddHeader("Content-Type", "application/json");
+			var json = JsonConvert.SerializeObject(invFile, Formatting.None, new JsonSerializerSettings
+			{
+				NullValueHandling = NullValueHandling.Ignore,
+				Converters = new List<JsonConverter> { new Newtonsoft.Json.Converters.StringEnumConverter() }
+			});
+			request.AddParameter("application/json", json, ParameterType.RequestBody);
+			var response = Execute(request);
+
+			var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
+			if (result != null && result.ContainsKey("success"))
+			{
+				return (bool)result["success"];
+			}
+			return false;
+
+		}		
+
+	}
 }
