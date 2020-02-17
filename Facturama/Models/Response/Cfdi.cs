@@ -69,7 +69,10 @@
 
         [JsonProperty("Complement")]
         public Complement Complement { get; set; }
-    }
+
+		[JsonProperty("SendMail")]
+		public bool SendMail { get; set; }		
+	}
 
     public class Complement
     {

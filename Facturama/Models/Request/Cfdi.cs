@@ -18,12 +18,18 @@ namespace Facturama.Models.Request
         Traslado,
 
         [EnumMember(Value = "P")]
-        Pago
-    }
+        Pago,
+
+	    [EnumMember(Value = "N")]
+	    Nomina
+	}
 
     public class Cfdi 
     {
-        [JsonProperty("NameId")]
+	    [JsonProperty("Folio")]
+	    public string Folio { get; set; }
+
+		[JsonProperty("NameId")]
         public string NameId { get; set; }
 
         [JsonProperty("Date")]
