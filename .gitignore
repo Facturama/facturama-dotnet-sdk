@@ -324,5 +324,4 @@ ASALocalRun/
 *.nvuser
 
 # Nuget package
-Facturama/Facturama.nuspec
 Facturama/nuget.exe
