@@ -8,6 +8,6 @@ namespace Facturama.Models.Complements.Payroll
 		public string OriginSource { get; set; }
 
 		[JsonProperty("AmountOriginSource")]
-		public decimal AmountOriginSource { get; set; }
+		public decimal? AmountOriginSource { get; set; }
 	}
 }

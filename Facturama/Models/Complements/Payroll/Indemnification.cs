@@ -8,7 +8,7 @@ namespace Facturama.Models.Complements.Payroll
 		public decimal TotalPaid { get; set; }
 
 		[JsonProperty("YearsOfService")]
-		public decimal YearsOfService { get; set; }
+		public int YearsOfService { get; set; }
 
 		[JsonProperty("LastMonthlySalaryOrd")]
 		public decimal LastMonthlySalaryOrd { get; set; }
