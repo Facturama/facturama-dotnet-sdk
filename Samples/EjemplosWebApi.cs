@@ -17,11 +17,12 @@ namespace Samples
         {
             var facturama = new FacturamaApi("pruebas", "pruebas2011");
 			TestCrudClient(facturama);
-			TestValidationsClient(facturama);
 			TestCreateProduct(facturama);
 			TestLogo(facturama);
 			TestSerie(facturama);
 			TestCreateCfdi(facturama);
+			SamplePaymentComplement(facturama);
+
             Console.ReadKey();
         }
 
@@ -347,7 +348,7 @@ namespace Samples
             var currency = facturama.Catalogs.Currencies.First(m => m.Value == "MXN");
             var paymentMethod = facturama.Catalogs.PaymentMethods.First(p => p.Value == "PUE");
             var paymentForm = facturama.Catalogs.PaymentForms.First(p => p.Name == "Efectivo");
-            var cliente = facturama.Clients.List().First(c => c.Rfc == "ESO1202108R2");
+            var cliente = facturama.Clients.List().First();
 
             var branchOffice = facturama.BranchOffices.List().First();
 
@@ -405,7 +406,7 @@ namespace Samples
                     ProductCode = product.CodeProdServ,
                     UnitCode = product.UnitCode,
                     Unit = product.Unit,
-                    Description = product.Description,
+                    Description = $"Item{i}: product.Description",
                     IdentificationNumber = product.IdentificationNumber,
                     Quantity = quantity,
                     Discount = Convert.ToDecimal(Math.Round(discount * numberOfDecimals) / numberOfDecimals),
@@ -499,7 +500,7 @@ namespace Samples
 
             Receiver receiver = new Receiver
             {
-                CfdiUse = client.CfdiUse,//"P01"
+                CfdiUse = "P01",
                 Name = client.Name,
                 Rfc = client.Rfc
             };
