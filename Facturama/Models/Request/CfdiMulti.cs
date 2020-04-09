@@ -8,7 +8,7 @@ namespace Facturama.Models.Request
 {
     public class CfdiMulti : Cfdi
     {
-        public string Folio { get; set; }
+        //public string Folio { get; set; }
         public Issuer Issuer { get; set; }
     }
 

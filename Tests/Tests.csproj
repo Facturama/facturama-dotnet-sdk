@@ -95,12 +95,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Facturama\Facturama.csproj">
-      <Project>{acbbdce1-ccc5-4131-b47e-45757d56682c}</Project>
+      <Project>{3d843c81-6a95-4ed6-aa7c-0d5b1424a981}</Project>
       <Name>Facturama</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Samples\Samples.csproj">
-      <Project>{05e17df1-1897-41ae-9a22-cbf7bd61eb40}</Project>
-      <Name>Samples</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
