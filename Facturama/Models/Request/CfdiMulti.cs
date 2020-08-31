@@ -10,6 +10,7 @@ namespace Facturama.Models.Request
     {
         //public string Folio { get; set; }
         public Issuer Issuer { get; set; }
+        public string LogoUrl { get; set; }        
     }
 
     public class Issuer

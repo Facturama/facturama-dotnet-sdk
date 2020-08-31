@@ -115,37 +115,37 @@ namespace Facturama.Services
             return file;
         }
 
-        //public void SavePdf(string filePath, string id)
-        //{
-        //    var file = GetFile(id, FileFormat.Pdf);
-        //    File.WriteAllBytes(filePath, Convert.FromBase64String(file.Content));
-        //}
+		public void SavePdf(string filePath, string id)
+		{
+			var file = GetFile(id, FileFormat.Pdf);
+			File.WriteAllBytes(filePath, Convert.FromBase64String(file.Content));
+		}
 
-        public void SaveXml(string filePath, string id)
+		public void SaveXml(string filePath, string id)
         {
             var file = GetFile(id, FileFormat.Xml);
             File.WriteAllBytes(filePath, Convert.FromBase64String(file.Content));
         }
 
-        //public void SaveHtml(string filePath, string id)
-        //{
-        //    var file = GetFile(id, FileFormat.Html);
-        //    File.WriteAllBytes(filePath, Convert.FromBase64String(file.Content));
-        //}
+		public void SaveHtml(string filePath, string id)
+		{
+			var file = GetFile(id, FileFormat.Html);
+			File.WriteAllBytes(filePath, Convert.FromBase64String(file.Content));
+		}
 
-        //public bool SendByMail(string id, string email, string subject = null)
-        //{
-        //    var request = new RestRequest($"Cfdi?cfdiType=issuedLite&cfdiId={id}&email={email}&subject={subject}", Method.POST);
-        //    var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-        //    HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+		public bool SendByMail(string id, string email, string subject = null)
+		{
+			var request = new RestRequest($"Cfdi?cfdiType=issuedLite&cfdiId={id}&email={email}&subject={subject}", Method.POST);
+			var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
+			HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
 
-        //    var response = taskCompletionSource.Task.Result;
-        //    var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
-        //    if (result != null && result.ContainsKey("success"))
-        //    {
-        //        return (bool)result["success"];
-        //    }
-        //    return false;
-        //}
-    }
+			var response = taskCompletionSource.Task.Result;
+			var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
+			if (result != null && result.ContainsKey("success"))
+			{
+				return (bool)result["success"];
+			}
+			return false;
+		}
+	}
 }

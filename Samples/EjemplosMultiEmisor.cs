@@ -35,6 +35,8 @@ namespace Samples
                 CfdiType = CfdiType.Pago,
                 Folio = "100",
                 ExpeditionPlace = "78220",
+                LogoUrl = "https://www.ejemplos.co/wp-content/uploads/2015/11/Logo-Chanel.jpg",
+
                 Issuer = new Issuer
                 {
                     Rfc = "AAA010101AAA",
@@ -135,6 +137,7 @@ namespace Samples
                 Currency = currency.Value,
                 Date = DateTime.Now,
                 ExpeditionPlace = "78180",
+                LogoUrl = "https://www.ejemplos.co/wp-content/uploads/2015/11/Logo-Chanel.jpg",
                 Items = new List<Item>(),
                 Issuer = new Issuer
                 {
@@ -191,7 +194,8 @@ namespace Samples
                 var cfdiCreated = facturama.Cfdis.Create(cfdi);
                 Console.WriteLine(
                     $"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
+                facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);                
+                facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);                
 
                 var list = facturama.Cfdis.List("Emisor de Ejemplo");
                 Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
