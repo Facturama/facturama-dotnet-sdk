@@ -11,7 +11,10 @@ namespace Facturama.Services
 {
     public class CfdiLiteService : CrudService<Models.Request.CfdiMulti, Cfdi>
     {
-        private enum FileFormat
+        /// <summary>
+        /// Enumeración de los formatos de archivos disponibles para descarga
+        /// </summary>
+        public enum FileFormat
         {
             Xml, Pdf, Html
         }
@@ -100,7 +103,13 @@ namespace Facturama.Services
             return list;
         }
 
-        private InvoiceFile GetFile(string id, FileFormat format)
+        /// <summary>
+        /// Obtiene el Archivo de la factura en Base64. 
+        /// </summary>
+        /// <param name="id">Identificador del CFDI</param>
+        /// <param name="format">Formato en que se desea obtener,  debe ser una instancia de la enumeración (Xml, Pdf, Html)</param>
+        /// <returns>Objeto InvoiceFile el cual en el atributo 'Content' tiene el Base64 del archivo</returns>
+        public InvoiceFile GetFile(string id, FileFormat format)
         {
 			var strFormat = format.ToString().ToLower();
 

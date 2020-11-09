@@ -34,7 +34,7 @@ namespace Facturama.Models.Request
 
         [JsonProperty("Date")]
         [JsonConverter(typeof(DateFormatConverter), "yyyy-MM-ddTHH:mm:ss")]
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         [JsonProperty("Serie")]
         public string Serie { get; set; }

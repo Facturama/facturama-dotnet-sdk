@@ -135,7 +135,7 @@ namespace Samples
                 PaymentForm = paymentForm.Value,
                 PaymentMethod = paymentMethod.Value,
                 Currency = currency.Value,
-                Date = DateTime.Now,
+                Date = null,
                 ExpeditionPlace = "78180",
                 LogoUrl = "https://www.ejemplos.co/wp-content/uploads/2015/11/Logo-Chanel.jpg",
                 Items = new List<Item>(),
