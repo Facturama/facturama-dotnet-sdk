@@ -41,5 +41,11 @@ namespace Facturama.Models.Complements.Payroll
 
 		[JsonProperty("DaysPaid")]
 		public decimal DaysPaid { get; set; }
+		
+		[JsonProperty("DailySalary")]
+		public decimal DailySalary { get; set; }
+
+		[JsonProperty("BaseSalary")]
+		public decimal BaseSalary { get; set; }
 	}
 }

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Facturama;
 using Facturama.Models;
 using Facturama.Models.Complements;
 using Facturama.Models.Request;
 using Tax = Facturama.Models.Request.Tax;
 
-namespace Samples
+namespace MultiIssuerExamples
 {
-    public class EjemplosMultiEmisor
+    public class MultiIssuerExamples
     {
         public static void RunExamples()
         {
