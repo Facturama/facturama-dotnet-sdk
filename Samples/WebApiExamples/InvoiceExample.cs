@@ -114,7 +114,7 @@ namespace WebApiExamples
                 if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "chucho@facturama.mx"))
                 {
                     Console.WriteLine("Se envió correctamente el CFDI");
-                }
+                }                
 
 
                 var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);

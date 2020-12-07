@@ -71,8 +71,11 @@
         public Complement Complement { get; set; }
 
 		[JsonProperty("SendMail")]
-		public bool SendMail { get; set; }		
-	}
+		public bool SendMail { get; set; }
+
+        [JsonProperty("Status")]
+        public string Status { get; set; }
+    }
 
     public class Complement
     {
