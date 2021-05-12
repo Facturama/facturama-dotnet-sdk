@@ -82,7 +82,7 @@ namespace WebApiExamples
                 },
                 CfdiUse = "P01",
                 Email = "diego@facturama.com.mx",
-                Rfc = "ESO1202108R2",
+                Rfc = "EWE1709045U0",
                 Name = "Expresion en Software"
             });
 

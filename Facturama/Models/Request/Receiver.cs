@@ -21,5 +21,8 @@ namespace Facturama.Models.Request
 
         [JsonProperty("TaxRegistrationNumber")]
         public string TaxRegistrationNumber { get; set; }
+
+        [JsonProperty("Address")]
+        public Address Address { get; set; }
     }
 }

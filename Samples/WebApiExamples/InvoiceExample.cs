@@ -38,7 +38,7 @@ namespace WebApiExamples
 
             var branchOffice = facturama.BranchOffices.List().First();
             var random = new Random();
-            var nitems = random.Next(1, products.Count) % 10 + 1; // Cantidad de items para la factura
+            var nitems = random.Next(1, products.Count) % 2 + 1; // Cantidad de items para la factura
             var decimals = (int)currency.Decimals;
 
             var cfdi = new Cfdi
@@ -55,7 +55,18 @@ namespace WebApiExamples
                 {
                     CfdiUse = "P01",
                     Name = cliente.Name,
-                    Rfc = cliente.Rfc
+                    Rfc = cliente.Rfc,
+                    Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
+					{
+                        Street = "Avenida de los pinos",
+                        ExteriorNumber = "110",
+                        InteriorNumber = "A",
+                        Neighborhood = "Las villerías",
+                        ZipCode = "78000",
+                        Municipality = "San Luis Potosí",
+                        State = "San Luis Potosí",
+                        Country = "México"
+					}
                 },
             };
             for (var i = products.Count - nitems; i < products.Count && i > 0; i++)
@@ -108,7 +119,7 @@ namespace WebApiExamples
 
                 var list = facturama.Cfdis.List("Expresion en Software");
                 Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
-                list = facturama.Cfdis.List(rfc: "ESO1202108R2"); //Atributo en especifico
+                list = facturama.Cfdis.List(rfc: "EWE1709045U0"); //RFC receptor en especifico
                 Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
 
                 if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "chucho@facturama.mx"))
