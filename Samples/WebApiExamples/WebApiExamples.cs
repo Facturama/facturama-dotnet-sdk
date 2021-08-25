@@ -14,12 +14,13 @@ namespace WebApiExamples
             // Los datos de usuario y contraseña serán los mismos con los que creaste tu cuenta en Facturama,
             // Si aún no tienes cuenta en Facturama te recomiendo el crear una en ambiente de sandbox (pruebas)
             // https://dev.facturama.mx/api/registro
-            var facturama = new FacturamaApi("pruebas", "pruebas2011");
+            var facturama = new FacturamaApi("pruebasapi", "pruebas2011");
                         
-            new CatalogsExample(facturama).Run();               // CRUD  de clientes y productos
-            new InvoiceExample(facturama).Run();                // Creación de factura, descarga de XML y PDF, envío por correo
-            new PaymentComplementExample(facturama).Run();      // Complemento de pago
-            new PayrollExample(facturama).Run();                // Nómina
+            new CatalogsExample(facturama).Run();                           // CRUD  de clientes y productos
+			new InvoiceExample(facturama).Run();                            // Creación de factura, descarga de XML y PDF, envío por correo
+			new PaymentComplementExample(facturama).Run();                  // Complemento de pago
+			new PayrollExample(facturama).Run();                            // Nómina
+			new EducationalInstitutionComplementExample(facturama).Run();   // Complemento IEDU - Instituciones educativas
 
             // Además puedes editar el logo y agregar series a las sucursales como en los siguientes ejemplos
             //TestLogo(facturama);
@@ -27,10 +28,16 @@ namespace WebApiExamples
 
             Console.ReadKey();
         }
-        
-        
 
-        
+
+
+        /// <summary>
+        /// Solo aplica para "API Web"   https://apisandbox.facturama.mx/guias#api-modalidades
+        /// Ejempo de actualización del logo (aplicable para el "perfil fiscal")
+        /// Puedes obtener el mismo resultado modificando directamente el logo en  tu perfil fiscal
+        /// https://apisandbox.facturama.mx/guias/perfil-fiscal
+        /// </summary>
+        /// <param name="facturama"></param>
         private static void TestLogo(FacturamaApi facturama)
         {
             var logo = (new Image
@@ -59,6 +66,14 @@ namespace WebApiExamples
 
         }
 
+
+        /// <summary>
+        /// Solo aplica para "API Web"   https://apisandbox.facturama.mx/guias#api-modalidades
+        /// Ejempo de actualización del logo (aplicable para el "perfil fiscal")
+        /// Puedes obtener el mismo resultado agregando la serie mediante el perfil fiscal
+        /// https://apisandbox.facturama.mx/guias/perfil-fiscal#lugares-expedicion-series
+        /// </summary>
+        /// <param name="facturama"></param>
         private static void TestSerie(FacturamaApi facturama)
         {
             var serie = new Serie

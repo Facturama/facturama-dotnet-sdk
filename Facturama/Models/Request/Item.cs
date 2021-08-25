@@ -1,4 +1,3 @@
-using Facturama.Models.Response.Catalogs.Cfdi;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -44,5 +43,7 @@ namespace Facturama.Models.Request
 
         [JsonProperty("Total")]
         public decimal Total { get; set; }
+
+        public Complements.ItemComplement Complement { get; set; }
     }
 }

@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="MultiIssuerExamples\MultiIssuerExamples.cs" />
     <Compile Include="WebApiExamples\CatalogsExample.cs" />
+    <Compile Include="WebApiExamples\EducationalInstitutionComplementExample.cs" />
     <Compile Include="WebApiExamples\InvoiceExample.cs" />
     <Compile Include="WebApiExamples\PayrollExample.cs" />
     <Compile Include="WebApiExamples\PaymentComplementExample.cs" />

@@ -6,6 +6,10 @@ using Newtonsoft.Json;
 
 namespace Facturama.Models
 {
+    /// <summary>
+    /// Complementos del comprobante.
+    /// Aplican para todo el comprobante
+    /// </summary>
     public class Complement
     {
         [JsonProperty("TaxStamp")]
