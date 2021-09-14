@@ -16,21 +16,26 @@ namespace Tests
     /// Descripción resumida de PaymentComplement
     /// </summary>
     [TestClass]
-    public class PaymentComplement
+    public class CDPaymentComplement
     {
-        public PaymentComplement()
+        private readonly FacturamaApi _facturamaWeb;
+		private readonly FacturamaApiMultiemisor _facturamaMultiEmisor;
+
+        public CDPaymentComplement()
         {
-            /*
             //Api
-            var facturama = new FacturamaApi("pruebas", "pruebas2011");
-            // Ejemplo de la creación de un complemento de pago
+            _facturamaWeb = new FacturamaApi("pruebas", "pruebas2011");
+            
+			/*// Ejemplo de la creación de un complemento de pago
             SamplePaymentComplement(facturama);
             */
 
             //Api Multiemisor
-            var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebas", "pruebas2011");
+            _facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebas", "pruebas2011");
+
+
             // Ejemplo de la creación de un complemento de pago Multiemeisor
-            SampleCreatePaymentCfdiMultiemisor(facturamaMultiEmisor);
+            //SampleCreatePaymentCfdiMultiemisor(facturamaMultiEmisor);
         }
 
         private TestContext testContextInstance;
@@ -74,18 +79,21 @@ namespace Tests
         #endregion
 
         [TestMethod]
-        public void TestMethod1()
+        public void CreateSamplePaymentMultiemisorComplement()
         {
-            //
-            // TODO: Agregar aquí la lógica de las pruebas
-            //
-
+            var cfdi = SampleCreatePaymentCfdiMultiemisor(_facturamaMultiEmisor);
+			Assert.IsNotNull(cfdi);
+			Assert.IsTrue(Guid.TryParse(cfdi.Complement.TaxStamp.Uuid, out Guid uuid));
+			Assert.AreEqual(cfdi.Status, "active");
+			cfdi = _facturamaMultiEmisor.Cfdis.Remove(cfdi.Id);
+			Assert.AreEqual(cfdi.Status, "canceled");
         }
+
         /**
          * Llenado del modelo de CFDI, de una forma general
          * - Se especifica: la moneda, método de pago, forma de pago, cliente, y lugar de expedición     
          */
-        private static Facturama.Models.Request.Cfdi CreateModelCfdiGeneral(FacturamaApi facturama)
+        private static Cfdi CreateModelCfdiGeneral(FacturamaApi facturama)
         {
             var products = facturama.Products.List().Where(p => p.Taxes.Any()).ToList();
 
@@ -109,7 +117,7 @@ namespace Tests
                 //Items = new List<Item>(),
                 Receiver = new Receiver
                 {
-                    CfdiUse = cliente.CfdiUse,
+                    CfdiUse = string.IsNullOrEmpty(cliente.CfdiUse) ? "P01": cliente.CfdiUse,
                     Name = cliente.Name,
                     Rfc = cliente.Rfc
                 },
@@ -117,7 +125,7 @@ namespace Tests
             
             return cfdi;
         }
-        private static Facturama.Models.Request.Cfdi AddItemsToCfdi(FacturamaApi facturama,Cfdi cfdi) {
+        private static Cfdi AddItemsToCfdi(FacturamaApi facturama,Cfdi cfdi) {
 
             // Lista de todos los productos
             List<Product> lstProducts = facturama.Products.List();
@@ -227,7 +235,7 @@ namespace Tests
         * Modelo "Complemento de pago"
         * - Se especifica: la moneda, método de pago, forma de pago, cliente, y lugar de expedición     
         */
-        private static Facturama.Models.Request.Cfdi CreateModelCfdiPaymentComplement(FacturamaApi facturama, Facturama.Models.Response.Cfdi cfdiInicial)
+        private static Cfdi CreateModelCfdiPaymentComplement(FacturamaApi facturama, Facturama.Models.Response.Cfdi cfdiInicial)
         {
 
 
@@ -323,16 +331,16 @@ namespace Tests
          * En virtud de que el complemento de pago, requiere ser asociado a un CFDI con el campo "PaymentMethod" = "PPD"
          * En este ejemplo se incluye la creacón de este CFDI, para posteriormente realizar el  "Complemento de pago" = "PUE"     
         */
-        private static void SamplePaymentComplement(FacturamaApi facturama)
+        private static Cfdi SamplePaymentComplement(FacturamaApi facturama)
         {
 
             try
             {
                 Console.WriteLine("----- Inicio del ejemplo samplePaymentComplement -----");
 
-                // Cfdi Incial (debe ser "PPD")
-                // -------- Creacion del cfdi en su forma general (sin items / productos) asociados --------
-                Facturama.Models.Request.Cfdi cfdi = CreateModelCfdiGeneral(facturama);
+				// Cfdi Incial (debe ser "PPD")
+				// -------- Creacion del cfdi en su forma general (sin items / productos) asociados --------
+				Cfdi cfdi = CreateModelCfdiGeneral(facturama);
 
                 // -------- Agregar los items que lleva el cfdi ( para este ejemplo, se agregan con datos aleatorios) --------        
                 cfdi = AddItemsToCfdi(facturama, cfdi);
@@ -351,9 +359,9 @@ namespace Tests
 
 
 
-                // Complemento de pago (debe ser "PUE")        
-                // Y no lleva "Items" solo especifica el "Complemento"
-                Facturama.Models.Request.Cfdi paymentComplementModel = CreateModelCfdiPaymentComplement(facturama, cfdiInicial);
+				// Complemento de pago (debe ser "PUE")        
+				// Y no lleva "Items" solo especifica el "Complemento"
+				Cfdi paymentComplementModel = CreateModelCfdiPaymentComplement(facturama, cfdiInicial);
 
 
                 // Se manda timbrar el complemento de pago mediante Facturama
@@ -375,6 +383,7 @@ namespace Tests
 
 
                 Console.WriteLine("----- Fin del ejemplo de samplePaymentComplement -----");
+				return cfdi;
             }
             catch (FacturamaException ex)
             {
@@ -383,10 +392,12 @@ namespace Tests
                 {
                     Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
                 }
+				return null;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error inesperado: ", ex.Message);
+				return null;
             }
 
         }
@@ -394,7 +405,7 @@ namespace Tests
          * Ejemplo de creación de un CFDI Multiemisor "complemento de pago"
          * 
          */
-        private static void SampleCreatePaymentCfdiMultiemisor(FacturamaApiMultiemisor facturama)
+        private static Facturama.Models.Response.Cfdi SampleCreatePaymentCfdiMultiemisor(FacturamaApiMultiemisor facturama)
         {
             var nameId = facturama.Catalogs.NameIds[14]; //Nombre en el pdf: "Factura"
             var paymentForm = facturama.Catalogs.PaymentForms.First(p => p.Name == "Efectivo");
@@ -409,7 +420,7 @@ namespace Tests
                 ExpeditionPlace = "78220",
                 Issuer = new Issuer
                 {
-                    Rfc = "AAA010101AAA",
+                    Rfc = "EKU9003173C9",
                     Name = "Expresion en Software SAPI de CV",
                     FiscalRegime = regimen.Value
                 },
@@ -451,9 +462,9 @@ namespace Tests
                     $"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
                 facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
                 Console.WriteLine($"Se guardo existosamente la factura con el UUID: {cfdiCreated.Complement.TaxStamp.Uuid}.");
-                facturama.Cfdis.Remove(cfdiCreated.Id);
-                Console.WriteLine(
-                    $"Se eliminó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+               
+            
+				return cfdiCreated;
             }
             catch (FacturamaException ex)
             {
@@ -467,6 +478,7 @@ namespace Tests
             {
                 Console.WriteLine($"Error inesperado: ", ex.Message);
             }
+			return null;
         }
 
     }
