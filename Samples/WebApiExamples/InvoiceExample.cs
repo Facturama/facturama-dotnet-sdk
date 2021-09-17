@@ -69,7 +69,7 @@ namespace WebApiExamples
 					}
                 },
             };
-            for (var i = products.Count - nitems; i < products.Count && i > 0; i++)
+            for (var i = products.Count - nitems; i < products.Count; i++)
             {
                 var product = products[i];
                 var quantity = random.Next(1, 5); //Una cantidad aleatoria

@@ -75,6 +75,11 @@
 
         [JsonProperty("Status")]
         public string Status { get; set; }
+
+        [JsonProperty("OriginalString")]
+        public string OriginalString { get; set; }
+
+        
     }
 
     public class Complement

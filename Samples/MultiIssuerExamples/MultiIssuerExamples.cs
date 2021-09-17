@@ -17,6 +17,9 @@ namespace MultiIssuerExamples
             TestListCreateAndRemoveCsd(facturamaMultiEmisor);
             TestCreateCfdiMultiemisor(facturamaMultiEmisor);
             TestCreatePaymentCfdi(facturamaMultiEmisor);
+
+            new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
+
             Console.ReadKey();
         }
 
