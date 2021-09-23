@@ -5,13 +5,13 @@ namespace Facturama.Models.Complements.Payroll
 	public class Retirement
 	{
 		[JsonProperty("TotalASinglePayment")]
-		public decimal TotalASinglePayment { get; set; }
+		public decimal? TotalASinglePayment { get; set; }
 
 		[JsonProperty("TotalParciality")]
-		public decimal TotalParciality { get; set; }
+		public decimal? TotalParciality { get; set; }
 
 		[JsonProperty("DailyAmount")]
-		public decimal DailyAmount { get; set; }
+		public decimal? DailyAmount { get; set; }
 
 		[JsonProperty("AccumulatedIncome")]
 		public decimal AccumulatedIncome { get; set; }
