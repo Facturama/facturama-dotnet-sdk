@@ -186,7 +186,7 @@ namespace Tests
             //List<Tax> lstProductTaxes = product.Taxes.Select(i=>i).ToList(); // impuestos del producto
             List<Facturama.Models.Request.Tax> lstTaxes = new List<Facturama.Models.Request.Tax>();              // Impuestos del item (del cfdi)
 
-            Double baseAmount = Math.Round((Decimal.ToDouble(item.Subtotal) - Decimal.ToDouble(item.Discount)) * numberOfDecimals) / numberOfDecimals;
+            Double baseAmount = Math.Round((Decimal.ToDouble(item.Subtotal) - Decimal.ToDouble(item.Discount ?? 0)) * numberOfDecimals) / numberOfDecimals;
 
             for (int j = 0; j < lstProductTaxes.Count; j++)
             {
@@ -226,7 +226,7 @@ namespace Tests
             }
 
             // Calculo del subtotal
-            item.Total=(item.Subtotal - item.Discount + Convert.ToDecimal(transfersAmount) - Convert.ToDecimal(retentionsAmount));
+            item.Total=(item.Subtotal - (item.Discount ?? 0) + Convert.ToDecimal(transfersAmount) - Convert.ToDecimal(retentionsAmount));
 
             return item;
 

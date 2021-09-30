@@ -11,6 +11,8 @@ namespace Facturama.Models.Complements
         [JsonProperty("EducationalInstitution")]
         public EducationalInstitution.EducationalInstitution EducationalInstitution { get; set; }
         
+        [JsonProperty("ThirdPartyAccount")]
+        public ThirdPartyAccount.ThirdPartyAccount ThirdPartyAccount { get; set; }
 	}
 }
 

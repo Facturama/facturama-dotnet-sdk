@@ -92,7 +92,7 @@ namespace WebApiExamples
             };
             var retenciones = item.Taxes?.Where(t => t.IsRetention).Sum(t => t.Total) ?? 0;
             var traslados = item.Taxes?.Where(t => !t.IsRetention).Sum(t => t.Total) ?? 0;
-            item.Total = item.Subtotal - item.Discount + traslados - retenciones;
+            item.Total = item.Subtotal - (item.Discount ?? 0) + traslados - retenciones;
             cfdi.Items.Add(item);
 
             try

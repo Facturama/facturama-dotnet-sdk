@@ -11,6 +11,9 @@ namespace Facturama.Models.Request
 	    [JsonProperty("ProductCode")]
         public string ProductCode { get; set; }
 
+        [JsonProperty("SKU")]
+        public string SKU { get; set; }
+
         [JsonProperty("IdentificationNumber")]
         public string IdentificationNumber { get; set; }
 
@@ -33,7 +36,7 @@ namespace Facturama.Models.Request
         public decimal Subtotal { get; set; }
 
         [JsonProperty("Discount")]
-        public decimal Discount { get; set; }
+        public decimal? Discount { get; set; }
 
         [JsonProperty("Taxes")]
         public List<Tax> Taxes { get; set; }
