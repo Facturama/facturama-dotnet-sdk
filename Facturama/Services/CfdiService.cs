@@ -37,17 +37,21 @@ namespace Facturama.Services
             return Post(model, "2/cfdis");
         }
 
-		/// <summary>
-		/// Cancelacion con aceptación de CFDI 3.3 vigencia 2018 y posteriores
-		/// </summary>
-		/// <param name="id">ID del CFDI</param>
-		/// <returns>Estado de cancelación</returns>
-        public Models.Response.CancelationStatus Cancel(string id)
+        /// <summary>
+        /// Cancelacion con motivo (obligatorio a partir de 01 de enero de 2022)
+        /// Nota: en el caso de que No se especifique el motivo de cancelación se considera el 02
+        /// https://apisandbox.facturama.mx/guias/api-web/cfdi/cancelacion        
+        /// </summary>
+        /// <param name="id">ID del CFDI</param>
+        /// <param name="motive">Clave del motivo de cancelación</param>
+        /// <param name="uuidReplacement">UUID del comprobante que sustituye al cancelado</param>
+        /// <returns>Estado de cancelación</returns>
+        public Models.Response.CancelationStatus Cancel(string id, string motive = "02", string uuidReplacement = null)
         {
             if (String.IsNullOrEmpty(id))
                 throw new ArgumentNullException(nameof(id));
 
-            var request = new RestRequest(Method.DELETE) { Resource = $"{UriResource}cfdi/{id}?type=issued" };
+            var request = new RestRequest(Method.DELETE) { Resource = $"{UriResource}cfdi/{id}?type=issued&motive={motive}&uuidReplacement={uuidReplacement}" };
             var response = Execute(request);
             return JsonConvert.DeserializeObject<Models.Response.CancelationStatus>(response.Content);
         }

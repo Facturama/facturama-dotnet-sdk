@@ -31,7 +31,7 @@ namespace Tests
                 },
                 CfdiUse = "P01",
                 Email = "diego@facturama.com.mx",
-                Rfc = "ESO1202108R2",
+                Rfc = "JES900109Q90",
                 Name = "Expresion en Software"
             });
 

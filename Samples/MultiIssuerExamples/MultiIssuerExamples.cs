@@ -13,12 +13,13 @@ namespace MultiIssuerExamples
     {
         public static void RunExamples()
         {
-            var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebas", "pruebas2011");
-            TestListCreateAndRemoveCsd(facturamaMultiEmisor);
-            TestCreateCfdiMultiemisor(facturamaMultiEmisor);
-            TestCreatePaymentCfdi(facturamaMultiEmisor);
+            var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebasapi", "pruebas2011");
+			TestListCreateAndRemoveCsd(facturamaMultiEmisor);
+			TestCreateCfdiMultiemisor(facturamaMultiEmisor);
+			TestCreatePaymentCfdi(facturamaMultiEmisor);
 
-            new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
+			new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
+			new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
 
             Console.ReadKey();
         }

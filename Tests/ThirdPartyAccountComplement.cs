@@ -66,7 +66,7 @@ namespace Tests
 						{
 							ThirdPartyAccount = new ThirdPartyAccount
 							{
-								Rfc = "ESO1202108R2",
+								Rfc = "JES900109Q90",
 								Name = "Expresión en Software",
 								Taxes = new List<ThirdPartyAccountTax>
 								{

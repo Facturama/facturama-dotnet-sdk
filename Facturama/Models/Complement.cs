@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Facturama.Models.Complements;
 using Facturama.Models.Complements.Payroll;
+using Facturama.Models.Complements.Waybill;
 using Facturama.Models.Response;
 using Newtonsoft.Json;
 
@@ -20,7 +21,12 @@ namespace Facturama.Models
 		
 	    [JsonProperty("Payroll")]
 	    public Payroll Payroll { get; set; }
-	}
+
+        /// <summary>
+        /// Complemento de carta porte 2.0
+        /// </summary>
+        public ComplementoCartaPorte20 CartaPorte20 { get; set; }
+    }
 }
 
 
