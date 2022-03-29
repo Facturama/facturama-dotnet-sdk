@@ -49,13 +49,16 @@ namespace WebApiExamples
                 PaymentMethod = paymentMethod.Value,
                 Currency = currency.Value,
                 Date = null,                                    // Al especificar null, Facturama asigna la fecha y hora actual, de acuerdo al "ExpeditionPlace"
-                ExpeditionPlace = "78240",
+                ExpeditionPlace = "78140",
                 Items = new List<Item>(),
                 Receiver = new Receiver
                 {
                     CfdiUse = "P01",
-                    Name = cliente.Name,
-                    Rfc = cliente.Rfc,
+                    Name = "ESCUELA KEMPER URGATE",
+                    Rfc = "EKU9003173C9",
+                    //FiscalRegime="603",       //Elemento usado para CFDI 4.0
+                    //TaxZipCode= "26015",      //Elemento usado para CFDI 4.0
+                    /*
                     Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
 					{
                         Street = "Avenida de los pinos",
@@ -66,7 +69,7 @@ namespace WebApiExamples
                         Municipality = "San Luis Potosí",
                         State = "San Luis Potosí",
                         Country = "México"
-					}
+					}*/
                 },
             };
             for (var i = products.Count - nitems; i < products.Count; i++)
@@ -87,6 +90,7 @@ namespace WebApiExamples
                     Discount = Math.Round(discount, decimals),
                     UnitPrice = Math.Round(product.Price, decimals),
                     Subtotal = subtotal,
+                    //ObjetoImp="02",       //Elemento usado para CFDI 4.0
                     Taxes = product.Taxes?.Select(
                         t =>
                         {
@@ -112,22 +116,29 @@ namespace WebApiExamples
             try
             {
                 var cfdiCreated = facturama.Cfdis.Create(cfdi);
-                Console.WriteLine(
-                    $"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
-                facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
+                //var cfdiCreated = facturama.Cfdis.Create3(cfdi); // Probar CFDI 4.0
+                Console.WriteLine($"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
 
-                var list = facturama.Cfdis.List("Expresion en Software");
-                Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
-                list = facturama.Cfdis.List(rfc: "EWE1709045U0"); //RFC receptor en especifico
-                Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+                //Descargar PDF y XML
+                //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
+                //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
 
-                if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "chucho@facturama.mx"))
+
+                //var list = facturama.Cfdis.List("Expresion en Software");
+               //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+                //list = facturama.Cfdis.List(rfc: "EWE1709045U0"); //RFC receptor en especifico
+                //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+
+                
+                //Enviar CFDI por correo
+                /*
+                if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "rafael@facturama.mx"))
                 {
                     Console.WriteLine("Se envió correctamente el CFDI");
                 }                
+                */
 
-
+                /*
                 var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
                 if (cancelationStatus.Status == "canceled")
                 {
@@ -145,7 +156,7 @@ namespace WebApiExamples
                 {
                     Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
                 }
-
+                */
             }
             catch (FacturamaException ex)
             {

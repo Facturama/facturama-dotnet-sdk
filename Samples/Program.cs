@@ -14,7 +14,7 @@
         {
             
             WebApiExamples.RunExamples();
-            MultiIssuerExamples.RunExamples();
+            //MultiIssuerExamples.RunExamples();
         }
     }
 }
