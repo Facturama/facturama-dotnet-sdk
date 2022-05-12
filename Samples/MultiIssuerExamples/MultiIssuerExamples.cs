@@ -13,13 +13,13 @@ namespace MultiIssuerExamples
     {
         public static void RunExamples()
         {
-            var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebasapi", "pruebas2011");
-			TestListCreateAndRemoveCsd(facturamaMultiEmisor);
-			TestCreateCfdiMultiemisor(facturamaMultiEmisor);
-			TestCreatePaymentCfdi(facturamaMultiEmisor);
+            var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebassdk", "prueba2022");
+            //TestListCreateAndRemoveCsd(facturamaMultiEmisor);
+            TestCreateCfdiMultiemisor(facturamaMultiEmisor);
+			//TestCreatePaymentCfdi(facturamaMultiEmisor);
 
-			new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
-			new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
+			//new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
+			//new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
 
             Console.ReadKey();
         }
@@ -144,14 +144,16 @@ namespace MultiIssuerExamples
                 Issuer = new Issuer
                 {
                     FiscalRegime = regimen.Value,
-                    Name = "Kemper Urgate",
+                    Name = "ESCUELA KEMPER URGATE",
                     Rfc = "EKU9003173C9"
                 },
                 Receiver = new Receiver
                 {
-                    CfdiUse = cfdiUse.Value,
-                    Name = "Escuela Wilson Esquivel",
-                    Rfc = "EWE1709045U0"
+                    CfdiUse = "G03",
+                    Name = "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+                    Rfc = "URE180429TM6",
+                    FiscalRegime= "601",
+		            TaxZipCode = "65000"
                 },
             };
 
@@ -162,15 +164,13 @@ namespace MultiIssuerExamples
 
             var item = new Item
             {
-                ProductCode = codeProdServ.Value,
-                UnitCode = unitCode.Value,
-                Unit = "Libra",
-                Description = "Descripción del Producto",
-                IdentificationNumber = "010101-56",
-                Quantity = quantity,
-                Discount = Math.Round(discount, decimals),
-                UnitPrice = Math.Round(price, decimals),
-                Subtotal = subtotal,
+                ProductCode = "25173108",
+                UnitCode = "E48",
+                Description = "GPS estandar pruebas",
+                Quantity = 1.0M,
+                UnitPrice = 100.0M,
+                Subtotal = 100.00M,
+                TaxObject=  "02",
                 Taxes = new List<Tax>
                 {
                     new Tax
@@ -193,19 +193,23 @@ namespace MultiIssuerExamples
 
             try
             {
-                var cfdiCreated = facturama.Cfdis.Create(cfdi);
-                Console.WriteLine(
-                    $"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);                
-                facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);                
+                //var cfdiCreated = facturama.Cfdis.Create(cfdi);
+                //Console.WriteLine($"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
 
-                var list = facturama.Cfdis.List("Emisor de Ejemplo");
-                Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
-                list = facturama.Cfdis.List(rfc: "EWE1709045U0"); //RFC receptor en especifico
-                Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+                var cfdiCreated = facturama.Cfdis.Create3(cfdi);// Prueba CFDI 4.0
+                Console.WriteLine($"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
 
-                var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+                //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);                
+                //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);                
 
+                //var list = facturama.Cfdis.List("Emisor de Ejemplo");
+                //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+                //list = facturama.Cfdis.List(rfc: "EWE1709045U0"); //RFC receptor en especifico
+                //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+
+                //var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+
+                /*
 				if(cancelationStatus.Status == "canceled")
 				{
 					Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
@@ -222,7 +226,8 @@ namespace MultiIssuerExamples
 				{
 					Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
 				}
-                
+                */
+
             }
             catch (FacturamaException ex)
             {
