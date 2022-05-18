@@ -35,8 +35,8 @@ namespace Facturama.Models.Request
         [JsonProperty("Subtotal")]
         public decimal Subtotal { get; set; }
 
-        [JsonProperty("ObjetoImp")]
-        public string ObjetoImp { get; set; }
+        [JsonProperty("TaxObject")]
+        public string TaxObject { get; set; }
 
         [JsonProperty("Discount")]
         public decimal? Discount { get; set; }

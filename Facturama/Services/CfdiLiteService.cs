@@ -32,7 +32,12 @@ namespace Facturama.Services
 
         public override Cfdi Create(Models.Request.CfdiMulti model)
         {
-            return Post(model, "api-lite/2/cfdis");
+            //return Post(model, "api-lite/3/cfdis");   // Disponible el 01/07/2022
+            return Post(model, "api-lite/2/cfdis");     // Vigente hasta el 30/06/2022
+        }
+        public override Cfdi Create3(Models.Request.CfdiMulti model) // Metodo de prueba para CFDI 4.0
+        {
+            return Post(model, "api-lite/3/cfdis");
         }
 
         /// <summary>

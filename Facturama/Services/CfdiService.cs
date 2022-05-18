@@ -34,7 +34,8 @@ namespace Facturama.Services
 
         public override Models.Response.Cfdi Create(Models.Request.Cfdi model)
         {
-            return Post(model, "2/cfdis");
+            //return Post(model, "3/cfdis");    // Disponible el 01/07/2022
+            return Post(model, "2/cfdis");      // Vigente hasta el 30/06/2022
         }
         
         //Metodo temporal para la creacion del CFDI 4.0, disponible hasta el 30 de Junio 2022.

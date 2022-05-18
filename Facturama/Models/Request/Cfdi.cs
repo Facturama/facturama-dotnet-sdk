@@ -24,12 +24,12 @@ namespace Facturama.Models.Request
 	    Nomina
 	}
 
-    public class Cfdi 
+    public class Cfdi
     {
-	    [JsonProperty("Folio")]
-	    public string Folio { get; set; }
+        [JsonProperty("Folio")]
+        public string Folio { get; set; }
 
-		[JsonProperty("NameId")]
+        [JsonProperty("NameId")]
         public string NameId { get; set; }
 
         [JsonProperty("Date")]
@@ -66,6 +66,13 @@ namespace Facturama.Models.Request
         [JsonProperty("PaymentMethod")]
         public string PaymentMethod { get; set; }
 
+        [JsonProperty("Exportation")]
+        public string Exportation { get; set; }
+
+        [JsonProperty("GlobalInformation")]
+        public GlobalInformation GlobalInformation { get; set; }
+
+
         [JsonProperty("Receiver")]
         public Receiver Receiver { get; set; }
 
@@ -83,5 +90,7 @@ namespace Facturama.Models.Request
 
         [JsonProperty("Complemento")]
         public Complement Complement { get; set; }
+
+
     }
 }
