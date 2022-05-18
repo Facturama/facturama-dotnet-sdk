@@ -66,6 +66,13 @@ namespace Facturama.Models.Request
         [JsonProperty("PaymentMethod")]
         public string PaymentMethod { get; set; }
 
+        [JsonProperty("Exportation")]
+        public string Exportation { get; set; }
+
+        [JsonProperty("GlobalInformation")]
+        public GlobalInformation GlobalInformation { get; set; }
+
+
         [JsonProperty("Receiver")]
         public Receiver Receiver { get; set; }
 
@@ -84,10 +91,6 @@ namespace Facturama.Models.Request
         [JsonProperty("Complemento")]
         public Complement Complement { get; set; }
 
-        [JsonProperty("GlobalInformation")]
-        public GlobalInformation GlobalInformation { get; set; }
 
-        [JsonProperty("Exportation")]
-        public string Exportation { get; set; }
     }
 }
