@@ -13,13 +13,14 @@ namespace MultiIssuerExamples
     {
         public static void RunExamples()
         {
-            var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebassdk", "prueba2022");
+            var facturamaMultiEmisor = new FacturamaApiMultiemisor("sdkpruebas", "pruebas2022");
             //TestListCreateAndRemoveCsd(facturamaMultiEmisor);
-            TestCreateCfdiMultiemisor(facturamaMultiEmisor);
-			//TestCreatePaymentCfdi(facturamaMultiEmisor);
+            //TestCreateCfdiMultiemisor(facturamaMultiEmisor);// CFDI 3.3
+            TestCreateCfdiMultiemisor40(facturamaMultiEmisor);// CFDI 4.0
+            //TestCreatePaymentCfdi(facturamaMultiEmisor);
 
-			//new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
-			//new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
+            //new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
+            //new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
 
             Console.ReadKey();
         }
@@ -182,6 +183,133 @@ namespace MultiIssuerExamples
                         Rate = 0.160000m,
                         Base = Math.Round(subtotal - discount, decimals),
                         Total = Math.Round((subtotal - discount) * 0.160000m, decimals)
+                    }
+                }
+
+            };
+            var retenciones = item.Taxes?.Where(t => t.IsRetention).Sum(t => t.Total) ?? 0;
+            var traslados = item.Taxes?.Where(t => !t.IsRetention).Sum(t => t.Total) ?? 0;
+            item.Total = item.Subtotal - (item.Discount ?? 0) + traslados - retenciones;
+            cfdi.Items.Add(item);
+
+            try
+            {
+                //var cfdiCreated = facturama.Cfdis.Create(cfdi);
+                //Console.WriteLine($"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+
+                var cfdiCreated = facturama.Cfdis.Create3(cfdi);// Prueba CFDI 4.0
+                Console.WriteLine($"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+
+                //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);                
+                //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);                
+
+                //var list = facturama.Cfdis.List("Emisor de Ejemplo");
+                //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+                //list = facturama.Cfdis.List(rfc: "EWE1709045U0"); //RFC receptor en especifico
+                //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+
+                //var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+
+                /*
+				if(cancelationStatus.Status == "canceled")
+				{
+					Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else if (cancelationStatus.Status == "pending")
+				{
+					Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else if (cancelationStatus.Status == "active")
+				{
+					Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+				else
+				{
+					Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+				}
+                */
+
+            }
+            catch (FacturamaException ex)
+            {
+                Console.WriteLine(ex.Message);
+                foreach (var messageDetail in ex.Model.Details)
+                {
+                    Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: ", ex.Message);
+            }
+        }
+
+        private static void TestCreateCfdiMultiemisor40(FacturamaApiMultiemisor facturama)
+        {
+
+            var cfdi = new CfdiMulti
+            {
+                Folio = "10",
+                NameId = "1",
+                CfdiType = CfdiType.Ingreso,
+                PaymentForm = "01",
+                PaymentMethod = "PUE",
+                Currency = "MXN",
+                Date = null,
+                ExpeditionPlace = "78140",
+                LogoUrl = "https://www.ejemplos.co/wp-content/uploads/2015/11/Logo-Chanel.jpg",
+
+                Exportation = "01",
+
+                GlobalInformation=new GlobalInformation
+                {
+                    Periodicity="04",
+                    Months="04",
+                    Year="2022"
+                },
+
+                Items = new List<Item>(),
+                Issuer = new Issuer
+                {
+                    FiscalRegime = "601",
+                    Name = "ESCUELA KEMPER URGATE",
+                    Rfc = "EKU9003173C9"
+                },
+                Receiver = new Receiver
+                {
+                    Rfc = "XAXX010101000",
+                    Name = "PUBLICO GENERAL",
+                    CfdiUse = "S01",           
+                    FiscalRegime = "616",
+                    TaxZipCode = "78140"
+                },
+            };
+
+            var price = 100.00m;
+            var quantity = 2m;
+            var discount = 10m;
+            var subtotal = Math.Round(price * quantity, 2);
+
+            var item = new Item
+            {
+                ProductCode = "25173108",
+                UnitCode = "E48",
+                Description = "GPS estandar pruebas",
+                Quantity = 1.0M,
+                UnitPrice = 100.0M,
+                Subtotal = 100.00M,
+                TaxObject = "02",
+                Taxes = new List<Tax>
+                {
+                    new Tax
+                    {
+                        Name = "IVA",
+                        IsQuota = false,
+                        IsRetention = false,
+
+                        Rate = 0.160000m,
+                        Base = Math.Round(subtotal - discount, 2),
+                        Total = Math.Round((subtotal - discount) * 0.160000m, 2)
                     }
                 }
 

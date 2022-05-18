@@ -51,13 +51,23 @@ namespace WebApiExamples
                 Date = null,                                    // Al especificar null, Facturama asigna la fecha y hora actual, de acuerdo al "ExpeditionPlace"
                 ExpeditionPlace = "78140",
                 Items = new List<Item>(),
+
+                Exportation = "01",
+
+                GlobalInformation= new GlobalInformation
+                {
+                    Periodicity="04",
+                    Months="04",
+                    Year="2022",
+                },
+
                 Receiver = new Receiver
                 {
-                    CfdiUse = "CP01",
-                    Name = "ESCUELA KEMPER URGATE",
-                    Rfc = "EKU9003173C9",
-                    FiscalRegime="603",       //Elemento usado para CFDI 4.0
-                    TaxZipCode= "26015",      //Elemento usado para CFDI 4.0
+                    Rfc = "XAXX010101000",
+                    Name = "PUBLICO EN GENERAL",
+                    CfdiUse = "S01",           
+                    FiscalRegime="616",    
+                    TaxZipCode= "78140",
                     /*
                     Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
 					{
@@ -115,7 +125,7 @@ namespace WebApiExamples
 
             try
             {
-                //var cfdiCreated = facturama.Cfdis.Create(cfdi);
+                //var cfdiCreated = facturama.Cfdis.Create(cfdi); //CFDI 3.3
                 var cfdiCreated = facturama.Cfdis.Create3(cfdi); // Probar CFDI 4.0
                 Console.WriteLine($"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
 
