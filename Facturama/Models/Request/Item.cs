@@ -38,6 +38,9 @@ namespace Facturama.Models.Request
         [JsonProperty("TaxObject")]
         public string TaxObject { get; set; }
 
+        [JsonProperty("ThirdPartyAccount")]
+        public ThirdPartyAccount ThirdPartyAccount { get; set; }
+
         [JsonProperty("Discount")]
         public decimal? Discount { get; set; }
 

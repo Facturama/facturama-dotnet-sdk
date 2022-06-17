@@ -26,147 +26,13 @@ namespace WebApiExamples
 
         public void Run()
         {
-            Console.WriteLine("----- Inicio del ejemplo InvoiceExample -----");
-
-            var products = facturama.Products.List().Where(p => p.Taxes.Any()).ToList();
-
-            var nameId = facturama.Catalogs.NameIds.ElementAt(0);   //Nombre en el pdf: "Factura"
-            var currency = facturama.Catalogs.Currencies.First(m => m.Value == "MXN");
-            var paymentMethod = facturama.Catalogs.PaymentMethods.First(p => p.Name == "Pago en una sola exhibición");
-            var paymentForm = facturama.Catalogs.PaymentForms.First(p => p.Name == "Efectivo");
-            var cliente = facturama.Clients.List().First(c => c.Rfc == "XAXX010101000");
-
-            var branchOffice = facturama.BranchOffices.List().First();
-            var random = new Random();
-            var nitems = random.Next(1, products.Count) % 2 + 1; // Cantidad de items para la factura
-            var decimals = (int)currency.Decimals;
-
-            var cfdi = new Cfdi
-            {
-                NameId = nameId.Value,
-                CfdiType = CfdiType.Ingreso,
-                PaymentForm = paymentForm.Value,
-                PaymentMethod = paymentMethod.Value,
-                Currency = currency.Value,
-                Date = null,                                    // Al especificar null, Facturama asigna la fecha y hora actual, de acuerdo al "ExpeditionPlace"
-                ExpeditionPlace = "78140",
-                Items = new List<Item>(),
-
-                Exportation = "01",
-
-                GlobalInformation= new GlobalInformation
-                {
-                    Periodicity="04",
-                    Months="04",
-                    Year="2022",
-                },
-
-                Receiver = new Receiver
-                {
-                    Rfc = "XAXX010101000",
-                    Name = "PUBLICO EN GENERAL",
-                    CfdiUse = "S01",           
-                    FiscalRegime="616",    
-                    TaxZipCode= "78140",
-                    /*
-                    Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
-					{
-                        Street = "Avenida de los pinos",
-                        ExteriorNumber = "110",
-                        InteriorNumber = "A",
-                        Neighborhood = "Las villerías",
-                        ZipCode = "78000",
-                        Municipality = "San Luis Potosí",
-                        State = "San Luis Potosí",
-                        Country = "México"
-					}*/
-                },
-            };
-            for (var i = products.Count - nitems; i < products.Count; i++)
-            {
-                var product = products[i];
-                var quantity = random.Next(1, 5); //Una cantidad aleatoria
-                var discount = product.Price % (product.Price == 0 ? 1 : random.Next(1, (int)product.Price)); //Un descuento aleatorio
-                var subtotal = Math.Round(product.Price * quantity, decimals);
-
-                var item = new Item
-                {
-                    ProductCode = product.CodeProdServ,
-                    UnitCode = product.UnitCode,
-                    Unit = product.Unit,
-                    Description = string.IsNullOrEmpty(product.Description) ? "Producto de ejemplo" : product.Description,
-                    IdentificationNumber = product.IdentificationNumber,
-                    Quantity = quantity,
-                    Discount = Math.Round(discount, decimals),
-                    UnitPrice = Math.Round(product.Price, decimals),
-                    Subtotal = subtotal,
-                    TaxObject="02",       //Elemento usado para CFDI 4.0
-                    Taxes = product.Taxes?.Select(
-                        t =>
-                        {
-                            var baseAmount = Math.Round(subtotal - discount, decimals);
-                            return new Tax
-                            {
-                                Name = t.Name,
-                                IsQuota = t.IsQuota,
-                                IsRetention = t.IsRetention,
-
-                                Rate = Math.Round(t.Rate, 6),
-                                Base = Math.Round(subtotal - discount, decimals),
-                                Total = Math.Round(baseAmount * t.Rate, decimals)
-                            };
-                        }).ToList()
-                };
-                var retenciones = item.Taxes?.Where(t => t.IsRetention).Sum(t => t.Total) ?? 0;
-                var traslados = item.Taxes?.Where(t => !t.IsRetention).Sum(t => t.Total) ?? 0;
-                item.Total = item.Subtotal - (item.Discount??0) + traslados - retenciones;
-                cfdi.Items.Add(item);
-            }
+            
 
             try
             {
-                //var cfdiCreated = facturama.Cfdis.Create(cfdi); //CFDI 3.3
-                var cfdiCreated = facturama.Cfdis.Create3(cfdi); // Probar CFDI 4.0
-                Console.WriteLine($"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
-
-                //Descargar PDF y XML
-                //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
-                //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
-
-
-                //var list = facturama.Cfdis.List("Expresion en Software");
-               //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
-                //list = facturama.Cfdis.List(rfc: "EWE1709045U0"); //RFC receptor en especifico
-                //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
-
-                
-                //Enviar CFDI por correo
-                /*
-                if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "rafael@facturama.mx"))
-                {
-                    Console.WriteLine("Se envió correctamente el CFDI");
-                }                
-                */
-
-                /*
-                var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
-                if (cancelationStatus.Status == "canceled")
-                {
-                    Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                }
-                else if (cancelationStatus.Status == "pending")
-                {
-                    Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                }
-                else if (cancelationStatus.Status == "active")
-                {
-                    Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                }
-                else
-                {
-                    Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                }
-                */
+                //TestCFDI33(facturama);
+                TestCFDI40(facturama);
+                //TestCFDI40FacturaGlobal(facturama);
             }
             catch (FacturamaException ex)
             {
@@ -185,6 +51,343 @@ namespace WebApiExamples
             Console.WriteLine("----- Fin del ejemplo InvoiceExample -----");
         }
 
+        public void TestCFDI33(FacturamaApi facturama)
+        {
+            Console.WriteLine("----- Inicio del ejemplo CFDI 3.3 -----");
 
+            var cfdi33 = new Cfdi
+            {
+                NameId = "1",
+                CfdiType = CfdiType.Ingreso,
+                PaymentForm = "01",
+                PaymentMethod = "PUE",
+                ExpeditionPlace = "78140",
+                Currency = "MXN",
+                Date = null,                                    // Al especificar null, Facturama asigna la fecha y hora actual, de acuerdo al "ExpeditionPlace"
+                Receiver = new Receiver
+                {
+                    Rfc = "CACX7605101P8",
+                    Name = "XOCHILT CASAS CHAVEZ",
+                    CfdiUse = "G03",           
+                    /*
+                    Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
+                    {
+                        Street = "Avenida de los pinos",
+                        ExteriorNumber = "110",
+                        InteriorNumber = "A",
+                        Neighborhood = "Las villerías",
+                        ZipCode = "78000",
+                        Municipality = "San Luis Potosí",
+                        State = "San Luis Potosí",
+                        Country = "México"
+                    }*/
+                },
+            
+                Items = new List<Item>
+                {
+                    new Item
+                    {
+                        ProductCode = "10101504",
+                        UnitCode = "MTS",
+                        Unit = "NO APLICA",
+                        Description = "Estudios de laboratorio",
+                        IdentificationNumber = null,
+                        Quantity = 2.0m,
+                        Discount = 0.0m,
+                        UnitPrice = 50.0m,
+                        Subtotal = 100.0m,
+                        Taxes=new List<Tax>
+                        {
+                            new Tax
+                            {
+                                Name = "IVA",
+                                Rate = 0.16m,
+                                Total = 16.0m,
+                                Base = 100.00m,
+                                IsRetention = false
+                            }
+         
+                        },
+                        Total=116.00m,
+                        
+                    }
+                }
+  
+             };
+            var cfdiCreated = facturama.Cfdis.Create(cfdi33);
+            Console.WriteLine($"Se creo exitosamente el CFDI 3.3 con ID: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+
+        
+            //Descargar PDF y XML
+            //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
+            //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
+
+
+            //var list = facturama.Cfdis.List("Expresion en Software");
+            //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+            //list = facturama.Cfdis.List(rfc: "EWE1709045U0"); //RFC receptor en especifico
+            //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+
+
+            //Enviar CFDI por correo
+            /*
+            if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "ejemplo@facturama.mx"))
+            {
+                Console.WriteLine("Se envió correctamente el CFDI");
+            }                
+            */
+
+            /*
+            var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+            if (cancelationStatus.Status == "canceled")
+            {
+                Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else if (cancelationStatus.Status == "pending")
+            {
+                Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else if (cancelationStatus.Status == "active")
+            {
+                Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else
+            {
+                Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            */
+
+        }
+
+
+        public void TestCFDI40(FacturamaApi facturama)
+        {
+            Console.WriteLine("----- Inicio del ejemplo CFDI 4.0 -----");
+
+
+            var cfdi = new Cfdi
+            {
+                NameId = "1",
+                CfdiType = CfdiType.Ingreso,
+                PaymentForm = "01",
+                PaymentMethod = "PUE",
+                ExpeditionPlace = "78140",
+                Currency = "MXN",
+                Date = null,
+                Receiver = new Receiver
+                {
+                    Rfc = "URE180429TM6",
+                    Name = "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+                    CfdiUse = "G03",
+                    FiscalRegime = "601",
+                    TaxZipCode = "65000",
+                    /*
+                    Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
+                    {
+                        Street = "Avenida de los pinos",
+                        ExteriorNumber = "110",
+                        InteriorNumber = "A",
+                        Neighborhood = "Las villerías",
+                        ZipCode = "78000",
+                        Municipality = "San Luis Potosí",
+                        State = "San Luis Potosí",
+                        Country = "México"
+                    }*/
+                },
+                Items = new List<Item>
+                {
+                    new Item
+                    {
+                        ProductCode = "10101504",
+                        UnitCode = "MTS",
+                        Unit = "NO APLICA",
+                        Description = "Estudios de laboratorio",
+                        IdentificationNumber = null,
+                        Quantity = 2.0m,
+                        Discount = 0.0m,
+                        UnitPrice = 50.0m,
+                        Subtotal = 100.0m,
+                        TaxObject="02",
+                        Taxes=new List<Tax>
+                        {
+                            new Tax
+                            {
+                                Name = "IVA",
+                                Rate = 0.16m,
+                                Total = 16.0m,
+                                Base = 100.00m,
+                                IsRetention = false
+                            }
+
+                        },
+                        Total=116.00m,
+
+                    }
+                }
+
+            };
+            var cfdiCreated = facturama.Cfdis.Create3(cfdi); // Probar CFDI 4.0
+            Console.WriteLine($"Se creo exitosamente el CFDI 4.0 con ID: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+
+                //Descargar PDF y XML
+                //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
+                //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
+
+
+            //var list = facturama.Cfdis.List("Expresion en Software");
+            //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+            //list = facturama.Cfdis.List(rfc: "EWE1709045U0"); //RFC receptor en especifico
+            //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+
+
+            //Enviar CFDI por correo
+            /*
+            if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "rafael@facturama.mx"))
+            {
+                Console.WriteLine("Se envió correctamente el CFDI");
+            }                
+            */
+
+            /*
+            var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+            if (cancelationStatus.Status == "canceled")
+            {
+                Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else if (cancelationStatus.Status == "pending")
+            {
+                Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else if (cancelationStatus.Status == "active")
+            {
+                Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else
+            {
+                Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            */
+
+        }
+
+        public void TestCFDI40FacturaGlobal(FacturamaApi facturama)
+        {
+            Console.WriteLine("----- Inicio del ejemplo CFDI 4.0 -----");
+
+            var cfdi = new Cfdi
+            {
+                NameId = "1",
+                CfdiType = CfdiType.Ingreso,
+                PaymentForm = "01",
+                PaymentMethod = "PUE",
+                ExpeditionPlace = "78140",
+                Currency = "MXN",
+                Date = null,
+
+                Exportation = "01",
+
+                GlobalInformation = new GlobalInformation
+                {
+                    Periodicity = "04",
+                    Months = "04",
+                    Year = "2022",
+                },
+
+                Receiver = new Receiver
+                {
+                    Rfc = "XAXX010101000",
+                    Name = "PUBLICO EN GENERAL",
+                    CfdiUse = "S01",
+                    FiscalRegime = "616",
+                    TaxZipCode = "78140",
+                    /*
+                    Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
+                    {
+                        Street = "Avenida de los pinos",
+                        ExteriorNumber = "110",
+                        InteriorNumber = "A",
+                        Neighborhood = "Las villerías",
+                        ZipCode = "78000",
+                        Municipality = "San Luis Potosí",
+                        State = "San Luis Potosí",
+                        Country = "México"
+                    }*/
+                },
+
+                Items = new List<Item>
+                {
+                    new Item
+                    {
+                        ProductCode = "10101504",
+                        UnitCode = "MTS",
+                        Unit = "NO APLICA",
+                        Description = "Estudios de laboratorio",
+                        IdentificationNumber = null,
+                        Quantity = 2.0m,
+                        Discount = 0.0m,
+                        UnitPrice = 50.0m,
+                        Subtotal = 100.0m,
+                        TaxObject="02",
+                        Taxes=new List<Tax>
+                        {
+                            new Tax
+                            {
+                                Name = "IVA",
+                                Rate = 0.16m,
+                                Total = 16.0m,
+                                Base = 100.00m,
+                                IsRetention = false
+                            }
+
+                        },
+                        Total=116.00m,
+
+                    }
+                }
+            };
+
+            var cfdiCreated = facturama.Cfdis.Create3(cfdi); // Probar CFDI 4.0 Factura Global
+            Console.WriteLine($"Se creo exitosamente el CFDI 4.0 Factura Global con ID: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+
+            //Descargar PDF y XML
+            //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
+            //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
+
+
+            //var list = facturama.Cfdis.List("Expresion en Software");
+            //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+            //list = facturama.Cfdis.List(rfc: "EWE1709045U0"); //RFC receptor en especifico
+            //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+
+
+            //Enviar CFDI por correo
+            /*
+            if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "rafael@facturama.mx"))
+            {
+                Console.WriteLine("Se envió correctamente el CFDI");
+            }                
+            */
+
+            /*
+            var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+            if (cancelationStatus.Status == "canceled")
+            {
+                Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else if (cancelationStatus.Status == "pending")
+            {
+                Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else if (cancelationStatus.Status == "active")
+            {
+                Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else
+            {
+                Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            */
+
+        }
     }
 }
