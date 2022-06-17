@@ -26,51 +26,79 @@ namespace WebApiExamples
         public void Run()
         {
             try
-            {
+            { 
+
                 Console.WriteLine("----- Inicio del ejemplo PaymentComplementExample -----");
 
                 // Cfdi Incial (debe ser "PPD")
-                // -------- Creacion del cfdi en su forma general (sin items / productos) asociados --------
-                Facturama.Models.Request.Cfdi cfdi = CreateModelCfdiGeneral(facturama);
+                // Primer Ejemplo: CFDI 3.3 con un item agregado manualmente.
+                Facturama.Models.Request.Cfdi cfdi33 = CFDI33(facturama);
 
-                // -------- Agregar los items que lleva el cfdi ( para este ejemplo, se agregan con datos aleatorios) --------        
-                cfdi = AddItemsToCfdi(facturama, cfdi);
-
-                cfdi.PaymentMethod = "PPD";           // El método de pago del documento inicial debe ser "PPD"
+                //Segundo Ejemplo: CFDI 4.0 con un item agregado manualmente.
+                //Facturama.Models.Request.Cfdi cfdi40 = CFDI40(facturama);
 
                 // Se manda timbrar mediante Facturama
-                Facturama.Models.Response.Cfdi cfdiInicial = facturama.Cfdis.Create(cfdi);
-
+                Facturama.Models.Response.Cfdi cfdiInicial = facturama.Cfdis.Create(cfdi33); // endpoint CFDI 3.3
+                //Facturama.Models.Response.Cfdi cfdiInicial = facturama.Cfdis.Create3(cfdi40);   // endpoint CFDI 4.0
                 Console.WriteLine("Se creó exitosamente el cfdi Inicial (PPD) con el folio fiscal: " + cfdiInicial.Complement.TaxStamp.Uuid);
 
+                // Complemento de pago (debe ser "PUE")        
+                // Y no lleva "Items" solo especifica el "Complemento"
+                Facturama.Models.Request.Cfdi paymentComplementModel = CreateModelCfdiPaymentComplement(facturama, cfdiInicial); // Complemento de pago 
+                //Facturama.Models.Request.Cfdi paymentComplementModel = CreateModelCfdiPaymentComplement20(facturama, cfdiInicial); // Complemento de pago 2.0
+
+
+                // Se manda timbrar el complemento de pago mediante Facturama
+                Facturama.Models.Response.Cfdi paymentComplement = facturama.Cfdis.Create(paymentComplementModel); // endpoint CFDI 3.3
+                //Facturama.Models.Response.Cfdi paymentComplement = facturama.Cfdis.Create3(paymentComplementModel);  // endpoint CFDI 4.0
+
+                Console.WriteLine("Se creó exitosamente el complemento de pago con el folio fiscal: " + cfdiInicial.Complement.TaxStamp.Uuid);
+
+
+                // Ejemplos con datos de catalogos
+                // -------- Creacion del cfdi en su forma general (sin items / productos) asociados --------
+                //Facturama.Models.Request.Cfdi cfdi = CreateModelCfdiGeneral(facturama);
+
+
+                // -------- Agregar los items que lleva el cfdi ( para este ejemplo, se agregan con datos aleatorios) --------        
+                //cfdi = AddItemsToCfdi(facturama, cfdi);
+
+                //cfdi.PaymentMethod = "PPD";           // El método de pago del documento inicial debe ser "PPD"
+
+                // Se manda timbrar mediante Facturama
+                //Facturama.Models.Response.Cfdi cfdiInicial = facturama.Cfdis.Create(cfdi);
+
+
+                //Console.WriteLine("Se creó exitosamente el cfdi Inicial (PPD) con el folio fiscal: " + cfdiInicial.Complement.TaxStamp.Uuid);
+
                 // Descarga de los archivos del documento inicial
-                String filePath = "factura" + cfdiInicial.Complement.TaxStamp.Uuid;
-                facturama.Cfdis.SavePdf(filePath + ".pdf", cfdiInicial.Id);
-                facturama.Cfdis.SaveXml(filePath + ".xml", cfdiInicial.Id);
+                //String filePath = "factura" + cfdiInicial.Complement.TaxStamp.Uuid;
+                //facturama.Cfdis.SavePdf(filePath + ".pdf", cfdiInicial.Id);
+                //facturama.Cfdis.SaveXml(filePath + ".xml", cfdiInicial.Id);
 
 
 
                 // Complemento de pago (debe ser "PUE")        
                 // Y no lleva "Items" solo especifica el "Complemento"
-                Facturama.Models.Request.Cfdi paymentComplementModel = CreateModelCfdiPaymentComplement(facturama, cfdiInicial);
+                //Facturama.Models.Request.Cfdi paymentComplementModel = CreateModelCfdiPaymentComplement(facturama, cfdiInicial);
 
 
                 // Se manda timbrar el complemento de pago mediante Facturama
-                Facturama.Models.Response.Cfdi paymentComplement = facturama.Cfdis.Create(paymentComplementModel);
+                //Facturama.Models.Response.Cfdi paymentComplement = facturama.Cfdis.Create(paymentComplementModel);
 
-                Console.WriteLine("Se creó exitosamente el complemento de pago con el folio fiscal: " + cfdiInicial.Complement.TaxStamp.Uuid);
+                //Console.WriteLine("Se creó exitosamente el complemento de pago con el folio fiscal: " + cfdiInicial.Complement.TaxStamp.Uuid);
 
 
                 // Descarga de los archivos del documento inicial
-                String filePathPayment = "factura" + paymentComplement.Complement.TaxStamp.Uuid;
-                facturama.Cfdis.SavePdf(filePath + ".pdf", paymentComplement.Id);
-                facturama.Cfdis.SaveXml(filePath + ".xml", paymentComplement.Id);
+                //String filePathPayment = "factura" + paymentComplement.Complement.TaxStamp.Uuid;
+                //facturama.Cfdis.SavePdf(filePath + ".pdf", paymentComplement.Id);
+                //facturama.Cfdis.SaveXml(filePath + ".xml", paymentComplement.Id);
 
 
 
                 // Posibilidad de mandar  los cfdis por coreo ( el cfdiInical y complemento de pago)
-                Console.WriteLine(facturama.Cfdis.SendByMail(cfdiInicial.Id, "chucho@facturama.mx"));
-                Console.WriteLine(facturama.Cfdis.SendByMail(paymentComplement.Id, "chucho@facturama.mx"));
+                //Console.WriteLine(facturama.Cfdis.SendByMail(cfdiInicial.Id, "ejemplo@facturama.mx"));
+                //Console.WriteLine(facturama.Cfdis.SendByMail(paymentComplement.Id, "ejemplo@facturama.mx"));
 
 
                 Console.WriteLine("----- Fin del ejemplo de PaymentComplementExample -----");
@@ -89,6 +117,145 @@ namespace WebApiExamples
             }
 
         }
+
+        private static Facturama.Models.Request.Cfdi CFDI33(FacturamaApi facturama)
+        {
+            Console.WriteLine("----- Inicio del ejemplo CFDI 3.3 -----");
+
+            var cfdi33 = new Cfdi
+            {
+                NameId = "1",
+                CfdiType = CfdiType.Ingreso,
+                PaymentForm = "01",
+                PaymentMethod = "PPD",
+                ExpeditionPlace = "78140",
+                Currency = "MXN",
+                Date = null,                                    // Al especificar null, Facturama asigna la fecha y hora actual, de acuerdo al "ExpeditionPlace"
+                Receiver = new Receiver
+                {
+                    Rfc = "CACX7605101P8",
+                    Name = "XOCHILT CASAS CHAVEZ",
+                    CfdiUse = "G03",
+                    /*
+                    Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
+                    {
+                        Street = "Avenida de los pinos",
+                        ExteriorNumber = "110",
+                        InteriorNumber = "A",
+                        Neighborhood = "Las villerías",
+                        ZipCode = "78000",
+                        Municipality = "San Luis Potosí",
+                        State = "San Luis Potosí",
+                        Country = "México"
+                    }*/
+                },
+
+                Items = new List<Item>
+                {
+                    new Item
+                    {
+                        ProductCode = "10101504",
+                        UnitCode = "MTS",
+                        Unit = "NO APLICA",
+                        Description = "Estudios de laboratorio",
+                        IdentificationNumber = null,
+                        Quantity = 2.0m,
+                        Discount = 0.0m,
+                        UnitPrice = 50.0m,
+                        Subtotal = 100.0m,
+                        Taxes=new List<Tax>
+                        {
+                            new Tax
+                            {
+                                Name = "IVA",
+                                Rate = 0.16m,
+                                Total = 16.0m,
+                                Base = 100.00m,
+                                IsRetention = false
+                            }
+
+                        },
+                        Total=116.00m,
+
+                    }
+                }
+
+
+
+            };
+            return cfdi33;
+
+        }
+
+        public static Facturama.Models.Request.Cfdi CFDI40(FacturamaApi facturama)
+        {
+            Console.WriteLine("----- Inicio del ejemplo CFDI 4.0 -----");
+
+
+            var cfdi40 = new Cfdi
+            {
+                NameId = "1",
+                CfdiType = CfdiType.Ingreso,
+                PaymentForm = "99",
+                PaymentMethod = "PPD",
+                ExpeditionPlace = "78140",
+                Currency = "MXN",
+                Date = null,
+                Receiver = new Receiver
+                {
+                    Rfc = "URE180429TM6",
+                    Name = "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+                    CfdiUse = "G03",
+                    FiscalRegime = "601",
+                    TaxZipCode = "65000",
+                    /*
+                    Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
+                    {
+                        Street = "Avenida de los pinos",
+                        ExteriorNumber = "110",
+                        InteriorNumber = "A",
+                        Neighborhood = "Las villerías",
+                        ZipCode = "78000",
+                        Municipality = "San Luis Potosí",
+                        State = "San Luis Potosí",
+                        Country = "México"
+                    }*/
+                },
+                Items = new List<Item>
+                {
+                    new Item
+                    {
+                        ProductCode = "10101504",
+                        UnitCode = "MTS",
+                        Unit = "NO APLICA",
+                        Description = "Estudios de laboratorio",
+                        IdentificationNumber = null,
+                        Quantity = 2.0m,
+                        Discount = 0.0m,
+                        UnitPrice = 50.0m,
+                        Subtotal = 100.0m,
+                        TaxObject="02",
+                        Taxes=new List<Tax>
+                        {
+                            new Tax
+                            {
+                                Name = "IVA",
+                                Rate = 0.16m,
+                                Total = 16.0m,
+                                Base = 100.00m,
+                                IsRetention = false
+                            }
+
+                        },
+                        Total=116.00m,
+
+                    }
+                }
+
+            };
+            return cfdi40;
+        }
+
 
         /**
         * Llenado del modelo de CFDI, de una forma general
@@ -239,7 +406,7 @@ namespace WebApiExamples
 
 
         /**
-        * Modelo "Complemento de pago"
+        * Modelo "Complemento de pago" usando catalogos
         * - Se especifica: la moneda, método de pago, forma de pago, cliente, y lugar de expedición     
         */
         private static Facturama.Models.Request.Cfdi CreateModelCfdiPaymentComplement(FacturamaApi facturama, Facturama.Models.Response.Cfdi cfdiInicial)
@@ -266,7 +433,7 @@ namespace WebApiExamples
 
             // Lugar de expedición (es necesario por lo menos tener una sucursal)
             BranchOffice branchOffice = facturama.BranchOffices.List().First();
-            cfdi.ExpeditionPlace = "78240";
+            cfdi.ExpeditionPlace = "78140";
 
             // Fecha y hora de expecidión del comprobante
             //DateTime bindingDate;
@@ -315,7 +482,7 @@ namespace WebApiExamples
                 PaymentMethod = "PUE", // En el complemento de pago tiene que ser PUE
                 PartialityNumber = 1,
                 PreviousBalanceAmount = 100.00m,
-                AmountPaid = 100.00m
+                AmountPaid = 100.00m,
             };
             lstRelatedDocuments.Add(relatedDocument);
 
@@ -333,5 +500,104 @@ namespace WebApiExamples
         }
 
 
+        /**
+        * Modelo "Complemento de pago 2.0" sin catalogos
+        * - Se especifica: la moneda, método de pago, forma de pago, cliente, y lugar de expedición     
+        */
+        private static Facturama.Models.Request.Cfdi CreateModelCfdiPaymentComplement20(FacturamaApi facturama, Facturama.Models.Response.Cfdi cfdiInicial)
+        {
+
+
+            Cfdi cfdi = new Cfdi();
+
+            cfdi.NameId = "14"; // "Complemento de pago"
+            cfdi.ExpeditionPlace = "78140";
+            cfdi.Date = null; // Puedes especificar una fecha por ejemplo:  DateTime.Now
+            cfdi.CfdiType = CfdiType.Pago; //"P" Pago
+          
+
+            Receiver receiver = new Receiver
+            {
+                Rfc = "URE180429TM6",
+                Name = "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+                CfdiUse = "CP01",
+                FiscalRegime = "601",
+                TaxZipCode = "65000",
+            };
+            cfdi.Receiver = receiver;
+
+
+            // Complemento de pago ---
+            Complement complement = new Complement();
+            // Pueden representarse más de un pago en un solo CFDI
+            List<Facturama.Models.Complements.Payment> lstPagos = new List<Facturama.Models.Complements.Payment>();
+            Facturama.Models.Complements.Payment pago = new Facturama.Models.Complements.Payment();
+
+            // Fecha y hora en que se registró el pago en el formato: "yyyy-MM-ddTHH:mm:ss" 
+            // (la fecha del pago debe ser menor que la fecha en que se emite el CFDI)
+            // Para este ejemplo, se considera que  el pago se realizó hace una hora   
+            pago.Date = DateTime.Now.AddHours(-6).ToString("yyyy-MM-dd HH:mm:ss");
+
+
+            // Forma de pago (Efectivo, Tarjeta, etc)
+            Facturama.Models.Response.Catalogs.CatalogViewModel paymentForm = facturama.Catalogs.PaymentForms.Where(p => p.Name.Equals("Efectivo")).First();
+            pago.PaymentForm = paymentForm.Value;
+
+            // Selección de la moneda del catálogo
+            // La Moneda, puede ser diferente a la del documento inicial
+            // (En el caso de que sea diferente, se debe colocar el tipo de cambio)
+            List<CurrencyCatalog> lstCurrencies = facturama.Catalogs.Currencies.ToList();
+            CurrencyCatalog currency = lstCurrencies.Where(p => p.Value.Equals("MXN")).First();
+            pago.Currency = currency.Value;
+
+            // Monto del pago
+            // Este monto se puede distribuir entre los documentos relacionados al pago            
+            pago.Amount = 116.00m;
+
+            // Documentos relacionados con el pago
+            // En este ejemplo, los datos se obtiene el cfdiInicial, pero puedes colocar solo los datos
+            // aun sin tener el "Objeto" del cfdi Inicial, ya que los valores son del tipo "String"
+            List<Facturama.Models.Complements.RelatedDocument> lstRelatedDocuments = new List<Facturama.Models.Complements.RelatedDocument>();
+            List<Facturama.Models.Complements.Tax> lsttax = new List<Facturama.Models.Complements.Tax>();
+            Facturama.Models.Complements.RelatedDocument relatedDocument = new Facturama.Models.Complements.RelatedDocument
+            {
+                Uuid = cfdiInicial.Complement.TaxStamp.Uuid, // "27568D31-E579-442F-BA77-798CBF30BD7D"
+                Serie = "A",//cfdiInicial.Serie, // "EA"
+                Folio = cfdiInicial.Folio, // 
+                Currency = currency.Value,
+                PaymentMethod = "PUE", // En el complemento de pago tiene que ser PUE
+                PartialityNumber = 1,
+                PreviousBalanceAmount = 116.00m,
+                AmountPaid = 116.00m,
+                TaxObject = "02",
+            };
+            
+            Facturama.Models.Complements.Tax tax = new Facturama.Models.Complements.Tax
+            {
+                Total = 16.00m,
+                Name  = "IVA",
+                Base = 100.00m,
+                Rate= 0.16m,
+                IsRetention= false
+            };
+
+            lsttax.Add(tax);
+            relatedDocument.Taxes = lsttax;
+
+            lstRelatedDocuments.Add(relatedDocument);
+
+            pago.RelatedDocuments = lstRelatedDocuments;
+
+            lstPagos.Add(pago);
+           
+            complement.Payments = lstPagos;
+
+            cfdi.Complement = complement;
+
+            return cfdi;
+
+        }
+
+       
     }
 }

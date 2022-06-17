@@ -64,10 +64,20 @@ namespace WebApiExamples
 
             var clientes = facturama.Clients.List();            // Obtiene el listado de clientes
             var clientesBefore = clientes.Count;
-            
+
             
             var cliente = facturama.Clients.Create(new Client  // Agrega un nuevo cliente
             {
+                Id="",
+                Email = "soporte@facturama.mx",
+                EmailOp1=null,
+                EmailOp2=null,
+                Rfc = "IAÑL750210963",
+                Name = "LUIS IAN ÑUZCO",
+                CfdiUse = "G03",
+                TaxResidence=null,
+                FiscalRegime="605",
+                TaxZipCode= "30230",
                 Address = new Address
                 {
                     Country = "MEXICO",
@@ -80,18 +90,15 @@ namespace WebApiExamples
                     Street = "Cañada de Gomez",
                     ZipCode = "78220"
                 },
-                CfdiUse = "P01",
-                Email = "diego@facturama.com.mx",
-                Rfc = "EWE1709045U0",
-                Name = "Expresion en Software"
+                
             });
 
             cliente = facturama.Clients.Retrieve(cliente.Id);   // Detalle de cliente
-            cliente.Rfc = "XAXX010101000";
+            cliente.Rfc = "IAÑL750210963";
             facturama.Clients.Update(cliente, cliente.Id);      // Actualizar datos
             cliente = facturama.Clients.Retrieve(cliente.Id);
 
-            Console.WriteLine(cliente.Rfc == "XAXX010101000" ? "Cliente Editado" : "Error al editar cliente");
+            Console.WriteLine(cliente.Rfc == "IAÑL750210963" ? "Cliente Editado" : "Error al editar cliente");
 
             facturama.Clients.Remove(cliente.Id);               // Eliminar cliente
 

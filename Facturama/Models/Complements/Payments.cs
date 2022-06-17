@@ -17,6 +17,9 @@ namespace Facturama.Models.Complements
         public int PartialityNumber { get; set; }
         public decimal PreviousBalanceAmount { get; set; }
         public decimal AmountPaid { get; set; }
+        public string TaxObject { get; set; }
+
+        public List<Tax> Taxes { get; set; }
     }
 
     public class Tax
