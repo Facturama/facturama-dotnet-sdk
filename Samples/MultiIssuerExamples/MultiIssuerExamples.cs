@@ -13,7 +13,7 @@ namespace MultiIssuerExamples
     {
         public static void RunExamples()
         {
-            var facturamaMultiEmisor = new FacturamaApiMultiemisor("sdkpruebas", "pruebas2022");
+            var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebas", "pruebas2011");
             //TestListCreateAndRemoveCsd(facturamaMultiEmisor);
             //TestCreateCfdiMultiemisor(facturamaMultiEmisor);// CFDI 3.3
             //TestCreateCfdiMultiemisor40(facturamaMultiEmisor);// CFDI 4.0

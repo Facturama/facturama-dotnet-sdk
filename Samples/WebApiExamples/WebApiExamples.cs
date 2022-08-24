@@ -14,11 +14,12 @@ namespace WebApiExamples
             // Los datos de usuario y contraseña serán los mismos con los que creaste tu cuenta en Facturama,
             // Si aún no tienes cuenta en Facturama te recomiendo el crear una en ambiente de sandbox (pruebas)
             // https://dev.facturama.mx/api/registro
-            var facturama = new FacturamaApi("sdkpruebas", "pruebas2022");
+
+            var facturama = new FacturamaApi("pruebas", "pruebas2011");
 
 			//new CatalogsExample(facturama).Run();                           // CRUD  de clientes y productos
-			//new InvoiceExample(facturama).Run();                            // Creación de factura, descarga de XML y PDF, envío por correo
-			new PaymentComplementExample(facturama).Run();                  // Complemento de pago
+			new InvoiceExample(facturama).Run();                            // Creación de factura, descarga de XML y PDF, envío por correo
+			//new PaymentComplementExample(facturama).Run();                  // Complemento de pago
 			//new PayrollExample(facturama).Run();                            // Nómina
 			//new EducationalInstitutionComplementExample(facturama).Run();   // Complemento IEDU - Instituciones educativas
 			//new WaybillComplementExample(facturama).Run();                  // Complemento Carta Porte 2.0
