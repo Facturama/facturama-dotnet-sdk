@@ -6,6 +6,7 @@ using Facturama.Models;
 using Facturama.Models.Request;
 using Facturama.Models.Complements.Payroll;
 using PayrollIssuer = Facturama.Models.Complements.Payroll.Issuer;
+using Newtonsoft.Json;
 
 namespace WebApiExamples
 {
@@ -33,8 +34,9 @@ namespace WebApiExamples
             {
                 Console.WriteLine("----- Inicio del ejemplo CatalogsExample -----");
 
-                CrudClientExample(facturama);
-                CrudProductExample(facturama);
+                //CrudClientExample(facturama);
+                //CrudProductExample(facturama);
+                //CrudBranchOfficeExample(facturama);
 
                 Console.WriteLine("----- Fin del ejemplo de CatalogsExample -----");
             }
@@ -69,7 +71,7 @@ namespace WebApiExamples
             var cliente = facturama.Clients.Create(new Client  // Agrega un nuevo cliente
             {
                 Id="",
-                Email = "soporte@facturama.mx",
+                Email = "ejemplo@ejemplo.mx",
                 EmailOp1=null,
                 EmailOp2=null,
                 Rfc = "IAÑL750210963",
@@ -85,10 +87,10 @@ namespace WebApiExamples
                     InteriorNumber = "B",
                     Locality = "San Luis",
                     Municipality = "San Luis Potosí",
-                    Neighborhood = "Lomas 4ta",
+                    Neighborhood = "Lomas Bonitas",
                     State = "San Luis Potosí",
-                    Street = "Cañada de Gomez",
-                    ZipCode = "78220"
+                    Street = "Cañada de Lobos",
+                    ZipCode = "78000"
                 },
                 
             });
@@ -162,6 +164,46 @@ namespace WebApiExamples
 
             Console.WriteLine("----- CatalogsExample > CrudProductExample - Fin -----");
         }
+
+
+        /// <summary>
+        /// CRUD  de ejemplo para Lugar de Expedición
+        /// </summary>
+        /// <param name="facturama"></param>
+        private void CrudBranchOfficeExample(FacturamaApi facturama)
+        {
+            Console.WriteLine("----- CatalogsExample > CrudBranchOffice - Inicio -----");
+
+
+            var branchoffice = new BranchOffice
+            {
+                Name="Nueva Sucursal",
+                Description="Descripcion de la sucursal",
+                Address = new Address
+                {
+                    Street = "Av. del Sauce",
+                    ExteriorNumber = "120",
+                    InteriorNumber = "",
+                    Neighborhood = "Las Flores",
+                    ZipCode = "78116",
+                    Locality = "",
+                    Municipality = "San Luis Potosi",
+                    State = "San Luis Potosi",
+                    Country = "México"
+                }
+
+            };
+            branchoffice= facturama.BranchOffices.Create(branchoffice);
+
+            Console.WriteLine("Se creo exitosamente un producto con el id: " + branchoffice.Id);
+
+            //facturama.Products.Remove(product.Id);
+            //Console.WriteLine("Se elimino exitosamente un producto con el id: " + product.Id);
+
+            Console.WriteLine("----- CatalogsExample > CrudProductExample - Fin -----");
+        }
+
+
 
     }
 }

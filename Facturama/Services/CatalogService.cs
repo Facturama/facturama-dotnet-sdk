@@ -31,6 +31,13 @@ namespace Facturama.Services
             var modelView = JsonConvert.DeserializeObject<List<ProductOrServiceCatalog>>(response.Content);
             return modelView.ToArray();
         }
+        public PostalCodeCatalog[] PostalCodes(string keyword)
+        {
+            var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/PostalCodes?keyword={keyword}" };
+            var response = Execute(request);
+            var modelView = JsonConvert.DeserializeObject<List<PostalCodeCatalog>>(response.Content);
+            return modelView.ToArray();
+        }
 
         public CatalogViewModel[] NameIds
         {

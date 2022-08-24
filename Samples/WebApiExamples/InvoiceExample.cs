@@ -31,7 +31,7 @@ namespace WebApiExamples
             try
             {
                 //TestCFDI33(facturama);
-                TestCFDI40(facturama);
+                //TestCFDI40(facturama);
                 //TestCFDI40FacturaGlobal(facturama);
             }
             catch (FacturamaException ex)
