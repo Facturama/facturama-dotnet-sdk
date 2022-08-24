@@ -102,5 +102,40 @@ namespace Facturama.Services
             }
         }
 
+        public CfdiTypesCatalog[] CfdiTypes
+        { 
+            get
+            {
+                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/CfdiTypes" };
+                var response = Execute(request);
+                var modelView = JsonConvert.DeserializeObject<List<CfdiTypesCatalog>>(response.Content);
+                return modelView.ToArray();
+            }
+        }
+        public RelationTypesCatalog[] RelationTypes
+        {
+            get
+            {
+                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/RelationTypes" };
+                var response = Execute(request);
+                var modelView = JsonConvert.DeserializeObject<List<RelationTypesCatalog>>(response.Content);
+                return modelView.ToArray();
+            }
+        }
+
+        public CountriesCatalog[] Countries
+        {
+            get
+            {
+                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/Countries" };
+                var response = Execute(request);
+                var modelView = JsonConvert.DeserializeObject<List<CountriesCatalog>>(response.Content);
+                return modelView.ToArray();
+            }
+        }
+
+
+
+
     }
 }
