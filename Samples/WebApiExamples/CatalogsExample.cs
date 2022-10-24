@@ -65,22 +65,79 @@ namespace WebApiExamples
         {
             Console.WriteLine("----- CatalogsExample > CrudClientExample - Inicio -----");
 
-            var clientes = facturama.Clients.List();            // Obtiene el listado de clientes
-            var clientesBefore = clientes.Count;
+            // Primera Forma facturama.clients.List(); Devuelve los primeros 100 registros solamente.
 
-            
+            //var clientes = facturama.Clients.List();
+            //Console.WriteLine(clientes.Count);
+            //foreach(var val in clientes)
+            //{
+            //    //Console.WriteLine(val.Id);
+            //    //Console.WriteLine(val.Name);
+            //    //Console.WriteLine(val.Rfc);
+            //    //Console.WriteLine(val.NumRegIdTrib);
+            //    //Console.WriteLine(val.CfdiUse);
+            //    //Console.WriteLine(val.TaxZipCode);
+            //    //Console.WriteLine(val.Email);
+            //    //Console.WriteLine(val.EmailOp1);
+            //    //Console.WriteLine(val.EmailOp2);
+            //    //Console.WriteLine(val.TaxResidence);
+            //    //Console.WriteLine(val.Address.Street);
+            //    //Console.WriteLine(val.Address.InteriorNumber);
+            //    //Console.WriteLine(val.Address.ExteriorNumber);
+            //    //Console.WriteLine(val.Address.Locality);
+            //    //Console.WriteLine(val.Address.Municipality);
+            //    //Console.WriteLine(val.Address.State);
+            //    //Console.WriteLine(val.Address.Country);
+            //    //Console.WriteLine(val.Address.ZipCode);
+            //}
+
+
+            // Segunda Forma facturama.clients.List2($"start={start}&lenght={lenght}&search={search}")
+            var start = 0;
+            var lenght = 100;
+            var search = "XAXX010101000";
+
+            var clientes = facturama.Clients.List2($"start={start}&lenght={lenght}&search={search}");
+            Console.WriteLine(clientes.Length);
+            Console.WriteLine(clientes[0].Id);
+            Console.WriteLine(clientes[0].Rfc);
+            //Console.WriteLine(clientes[0].Address.Street);
+
+            //foreach (var val in clientes)
+            //{
+            //    Console.WriteLine(val.Id);
+            //    Console.WriteLine(val.Name);
+            //    Console.WriteLine(val.Rfc);
+            //    Console.WriteLine(val.NumRegIdTrib);
+            //    Console.WriteLine(val.CfdiUse);
+            //    Console.WriteLine(val.TaxZipCode);
+            //    Console.WriteLine(val.Email);
+            //    Console.WriteLine(val.EmailOp1);
+            //    Console.WriteLine(val.EmailOp2);
+            //    Console.WriteLine(val.TaxResidence);
+            //    Console.WriteLine(val.Address.Street);
+            //    Console.WriteLine(val.Address.InteriorNumber);
+            //    Console.WriteLine(val.Address.ExteriorNumber);
+            //    Console.WriteLine(val.Address.Locality);
+            //    Console.WriteLine(val.Address.Municipality);
+            //    Console.WriteLine(val.Address.State);
+            //    Console.WriteLine(val.Address.Country);
+            //    Console.WriteLine(val.Address.ZipCode);
+            //}
+
+
             var cliente = facturama.Clients.Create(new Client  // Agrega un nuevo cliente
             {
-                Id="",
+                Id = "",
                 Email = "ejemplo@ejemplo.mx",
-                EmailOp1=null,
-                EmailOp2=null,
+                EmailOp1 = null,
+                EmailOp2 = null,
                 Rfc = "IAÑL750210963",
                 Name = "LUIS IAN ÑUZCO",
                 CfdiUse = "G03",
-                TaxResidence=null,
-                FiscalRegime="605",
-                TaxZipCode= "30230",
+                TaxResidence = null,
+                FiscalRegime = "605",
+                TaxZipCode = "30230",
                 Address = new Address
                 {
                     Country = "MEXICO",
@@ -93,7 +150,7 @@ namespace WebApiExamples
                     Street = "Cañada de Lobos",
                     ZipCode = "78000"
                 },
-                
+
             });
 
             cliente = facturama.Clients.Retrieve(cliente.Id);   // Detalle de cliente
@@ -105,11 +162,7 @@ namespace WebApiExamples
 
             facturama.Clients.Remove(cliente.Id);               // Eliminar cliente
 
-            clientes = facturama.Clients.List();
-            var clientesAfter = clientes.Count;
 
-            Console.WriteLine(clientesAfter == clientesBefore ? "Test Passed!" : "Test Failed!");            
-            
             Console.WriteLine("----- CatalogsExample > CrudClientExample - Fin -----");
         }
 
@@ -122,48 +175,54 @@ namespace WebApiExamples
         {
             Console.WriteLine("----- CatalogsExample > CrudProductExample - Inicio -----");
 
-            var unit = facturama.Catalogs.Units("servicio")[0];
-            var prod = facturama.Catalogs.ProductsOrServices("desarrollo")[0];
-            var product = new Product
-            {
-                Unit = "Servicio",
-                UnitCode = unit.Value,
-                IdentificationNumber = "WEB003",
-                Name = "Sitio Web CMS",
-                Description = "Desarrollo e implementación de sitio web empleando un CMS",
-                Price = 6500.0m,
-                CodeProdServ = prod.Value,
-                CuentaPredial = "123",
-                Taxes = new[]
-                {
-                    new Tax
-                    {
-                        Name = "IVA",
-                        Rate = 0.16m,
-                        IsRetention = false,
-                    },
-                    new Tax
-                    {
-                        Name = "ISR",
-                        IsRetention = true,
-                        Total = 0.1m
-                    },
-                    new Tax
-                    {
-                        Name = "IVA",
-                        IsRetention = true,
-                        Total = 0.106667m
-                    }
-                }
-            };
+            var start = 0;
+            var lenght = 100;
+            var search = "47131827";
+            var listProduct = facturama.Products.List2($"start={start}&lenght={lenght}&search={search}");
+            Console.WriteLine(listProduct[0].Id);
+
+            //var unit = facturama.Catalogs.Units("servicio")[0];
+            //var prod = facturama.Catalogs.ProductsOrServices("desarrollo")[0];
+            //var product = new Product
+            //{
+            //    Unit = "Servicio",
+            //    UnitCode = unit.Value,
+            //    IdentificationNumber = "WEB003",
+            //    Name = "Sitio Web CMS",
+            //    Description = "Desarrollo e implementación de sitio web empleando un CMS",
+            //    Price = 6500.0m,
+            //    CodeProdServ = prod.Value,
+            //    CuentaPredial = "123",
+            //    Taxes = new[]
+            //    {
+            //        new Tax
+            //        {
+            //            Name = "IVA",
+            //            Rate = 0.16m,
+            //            IsRetention = false,
+            //        },
+            //        new Tax
+            //        {
+            //            Name = "ISR",
+            //            IsRetention = true,
+            //            Total = 0.1m
+            //        },
+            //        new Tax
+            //        {
+            //            Name = "IVA",
+            //            IsRetention = true,
+            //            Total = 0.106667m
+            //        }
+            //    }
+            //};
             
-            product = facturama.Products.Create(product);
-            Console.WriteLine("Se creo exitosamente un producto con el id: " + product.Id);
+            //product = facturama.Products.Create(product);
+            //Console.WriteLine("Se creo exitosamente un producto con el id: " + product.Id);
 
-            facturama.Products.Remove(product.Id);
-            Console.WriteLine("Se elimino exitosamente un producto con el id: " + product.Id);            
+            //facturama.Products.Remove(product.Id);
+            //Console.WriteLine("Se elimino exitosamente un producto con el id: " + product.Id);            
 
-            Console.WriteLine("----- CatalogsExample > CrudProductExample - Fin -----");
+            //Console.WriteLine("----- CatalogsExample > CrudProductExample - Fin -----");
         }
 
 
