@@ -17,8 +17,8 @@ namespace WebApiExamples
 
             var facturama = new FacturamaApi("pruebas", "pruebas2011");
 
-			new CatalogsExample(facturama).Run();                           // CRUD  de clientes y productos
-			//new InvoiceExample(facturama).Run();                            // Creación de factura, descarga de XML y PDF, envío por correo
+			//new CatalogsExample(facturama).Run();                           // CRUD  de clientes y productos
+			new InvoiceExample(facturama).Run();                            // Creación de factura, descarga de XML y PDF, envío por correo
 			//new PaymentComplementExample(facturama).Run();                  // Complemento de pago
 			//new PayrollExample(facturama).Run();                            // Nómina
 			//new EducationalInstitutionComplementExample(facturama).Run();   // Complemento IEDU - Instituciones educativas

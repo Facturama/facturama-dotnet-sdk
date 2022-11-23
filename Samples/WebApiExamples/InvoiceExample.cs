@@ -31,7 +31,7 @@ namespace WebApiExamples
             try
             {
                 //TestCFDI33(facturama);
-                //TestCFDI40(facturama);
+                TestCFDI40(facturama);
                 //TestCFDI40FacturaGlobal(facturama);
             }
             catch (FacturamaException ex)
@@ -109,7 +109,8 @@ namespace WebApiExamples
          
                         },
                         Total=116.00m,
-                        
+
+
                     }
                 }
   
@@ -171,7 +172,7 @@ namespace WebApiExamples
                 CfdiType = CfdiType.Ingreso,
                 PaymentForm = "01",
                 PaymentMethod = "PUE",
-                ExpeditionPlace = "78140",
+                ExpeditionPlace = "78000",
                 Currency = "MXN",
                 Date = null,
                 Receiver = new Receiver
@@ -221,6 +222,15 @@ namespace WebApiExamples
 
                         },
                         Total=116.00m,
+                        NumerosPedimento = new List<string>()
+                        {
+                            "21  47  3807  8003832",
+                            "21  47  3807  8003832"
+                        }
+                        
+
+                     
+
 
                     }
                 }
@@ -341,6 +351,7 @@ namespace WebApiExamples
 
                         },
                         Total=116.00m,
+                     
 
                     }
                 }
