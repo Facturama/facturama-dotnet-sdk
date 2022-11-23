@@ -50,6 +50,9 @@ namespace Facturama.Models.Request
         [JsonProperty("CuentaPredial")]
         public string CuentaPredial { get; set; }
 
+        [JsonProperty("NumerosPedimento")]
+        public IEnumerable<string> NumerosPedimento { get; set; }
+
         [JsonProperty("Total")]
         public decimal Total { get; set; }
 
