@@ -11,6 +11,6 @@ namespace Facturama.Models.Request
         public string Months { get; set; }
         
         [JsonProperty("Year")]
-        public string Year { get; set; }
+        public short Year { get; set; }
     }
 }
