@@ -8,7 +8,7 @@ namespace Facturama.Models.Complements.Payroll
 		public decimal PositiveBalance { get; set; }
 
 		[JsonProperty("Year")]
-		public short Year { get; set; }
+		public decimal Year { get; set; }
 
 		[JsonProperty("RemainingPositiveBalance")]
 		public decimal RemainingPositiveBalance { get; set; }
