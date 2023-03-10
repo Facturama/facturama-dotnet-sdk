@@ -1,5 +1,6 @@
 ﻿using Facturama.Models.Retentions.Complementos.ServiciosPlataformasTecnologicas;
 using Facturama.Models.Retentions.Complementos.TimbreFiscal;
+using Facturama.Models.Retentions.Complements;
 
 namespace Facturama.Models.Retentions
 {
@@ -15,5 +16,11 @@ namespace Facturama.Models.Retentions
 		/// Timbre Fiscal
 		/// </summary>
 		public TimbreFiscalDigital TimbreFiscalDigital { get; set; }
-	}
+
+
+        /// <summary>
+        /// Complemento para expresar los intereses obtenidos por rendimiento en inversiones
+        /// </summary>
+        public Intereses Intereses { get; set; }
+    }
 }
