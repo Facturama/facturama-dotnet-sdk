@@ -381,7 +381,7 @@ namespace MultiIssuerExamples
                 {
                     Periodicity="04",
                     Months="04",
-                    Year="2022"
+                    Year=2022
                 },
 
                 Items = new List<Item>(),

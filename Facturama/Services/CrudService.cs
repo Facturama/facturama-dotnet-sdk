@@ -29,6 +29,14 @@ namespace Facturama.Services
         {
             return base.Post(obj);
         }
+        public virtual TO CreateRet(TI obj)
+        {
+            return base.Post(obj);
+        }
+        public virtual TO CreateRet2(TI obj)
+        {
+            return base.Post(obj);
+        }
 
         public virtual TO Remove(string id)
         {

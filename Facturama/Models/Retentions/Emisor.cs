@@ -25,5 +25,12 @@ namespace Facturama.Models.Retentions
 		///	retención e información de pagos.
 		/// </summary>		
 		public string CurpE { get; set; }
-	}
+
+        /// <summary>
+        /// Atributo requerido para incorporar la clave del régimen del contribuyente
+        /// emisor del comprobante que ampara retenciones e información de
+        /// pagos.
+        /// </summary>
+        public string RegimenFiscalE { get; set; }
+    }
 }

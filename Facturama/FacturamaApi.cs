@@ -15,6 +15,7 @@ namespace Facturama
 
 		    Clients = new ClientService(httpClient);
 		    Cfdis = new CfdiService(httpClient);
+			Retention = new RetentionService(httpClient);
 		    Products = new ProductService(httpClient);
 		    BranchOffices = new BranchOfficeService(httpClient);
 		    Profile = new ProfileService(httpClient);
@@ -43,6 +44,7 @@ namespace Facturama
         public CatalogService Catalogs { get; }
 		public StoreService Store { get; }
 		public ChargeService Charges { get; }
+		public RetentionService Retention { get; }
 
 	}
 

@@ -22,5 +22,12 @@ namespace Facturama.Models.Retentions
 		/// Atributo opcional para la Clave Única del Registro Poblacional del contribuyente receptor del documento.
 		/// </summary>		
 		public string CurpR { get; set; }
-	}
+
+        /// <summary>
+        /// Atributo requerido para registrar el código postal del domicilio fiscal del
+        /// receptor del comprobante que ampara retenciones e información de
+        /// pagos.
+        /// </summary>
+        public string DomicilioFiscalR { get; set; }
+    }
 }
