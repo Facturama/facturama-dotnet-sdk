@@ -7,6 +7,9 @@ using Facturama.Models.Request;
 using Facturama.Models.Complements.Payroll;
 using PayrollIssuer = Facturama.Models.Complements.Payroll.Issuer;
 
+using Retenciones = Facturama.Models.Retentions.Retenciones;
+using Facturama.Models.Retentions;
+
 namespace WebApiExamples
 {
     /**
@@ -31,8 +34,9 @@ namespace WebApiExamples
             try
             {
                 //TestCFDI33(facturama);
-                TestCFDI40(facturama);
+                //TestCFDI40(facturama);
                 //TestCFDI40FacturaGlobal(facturama);
+                TestRetenciones(facturama);
             }
             catch (FacturamaException ex)
             {
@@ -300,7 +304,7 @@ namespace WebApiExamples
                 {
                     Periodicity = "04",
                     Months = "04",
-                    Year = "2022",
+                    Year = 2022,
                 },
 
                 Receiver = new Receiver
@@ -398,6 +402,168 @@ namespace WebApiExamples
                 Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
             }
             */
+
+        }
+
+        public void TestRetenciones(FacturamaApi facturama)
+        {
+            Console.WriteLine("----- Inicio del ejemplo Retenciones -----");
+
+            var Retenciones = new Retenciones
+            {
+                FolioInt = "0001",
+                FechaExp = "2023-03-12T08:08:01-06:00",
+                CveRetenc = "16",
+
+                Emisor = new Emisor
+                {
+                    RfcEmisor = "EKU9003173C9",
+                    NomDenRazSocE = "ESCUELA KEMPER URGATE",
+                    CurpE= "BADD110313HCMLNS09"
+                },
+                Receptor = new Receptor
+                {
+                    Nacionalidad = "Nacional",
+                    Nacional = new Nacional
+                    {
+                        RfcRecep = "CACX7605101P8",
+                        NomDenRazSocR = "XOCHILT CASAS CHAVEZ",
+                    }
+                },
+                Periodo = new Periodo
+                {
+                    MesIni = 08,
+                    MesFin = 08,
+                    Ejerc = 2022
+                },
+                Totales = new Totales
+                {
+                    MontoTotOperacion = 1681.06M,
+                    MontoTotGrav = 1681.06M,
+                    MontoTotExent = 0.0M,
+                    MontoTotRet = 151.29M,
+                    ImpRetenidos = new List<ImpRetenido>
+                    {
+                        new ImpRetenido
+                        {
+                            BaseRet = 1681.06M,
+                            Impuesto = "01",
+                            MontoRet= 16.81M,
+                            TipoPagoRet= "Pago definitivo"
+                        },
+                        new ImpRetenido
+                        {
+                            BaseRet = 268.96M,
+                            Impuesto = "02",
+                            MontoRet= 134.48M,
+                            TipoPagoRet= "Pago definitivo"
+                        }
+                    }
+                }
+            };
+
+            var Retenciones2 = new Retenciones
+            {
+                FolioInt = "0001",
+                FechaExp = "2023-03-12T08:08:01",
+                CveRetenc = "01",
+                LugarExpRetenc = "78000",
+
+                Emisor = new Emisor
+                {
+                    RfcEmisor = "EKU9003173C9",
+                    NomDenRazSocE= "ESCUELA KEMPER URGATE",
+                    RegimenFiscalE= "601"
+                },
+                Receptor = new Receptor
+                {
+                    Nacionalidad= "Nacional",
+                    Nacional = new Nacional
+                    {
+                        RfcRecep= "CACX7605101P8",
+                        NomDenRazSocR= "XOCHILT CASAS CHAVEZ",
+                        DomicilioFiscalR= "10740"
+                    }
+                },
+                Periodo = new Periodo
+                {
+                    MesIni = 01,
+                    MesFin =01,
+                    Ejerc=2023
+                },
+                Totales = new Totales
+                {
+                    MontoTotOperacion=1681.06M,
+                    MontoTotGrav=1681.06M,
+                    MontoTotExent=0.0M,
+                    MontoTotRet=151.29M,
+                    ImpRetenidos= new List<ImpRetenido>
+                    {
+                        new ImpRetenido
+                        {
+                            BaseRet = 1681.06M,
+                            Impuesto = "01",
+                            MontoRet= 16.81M,
+                            TipoPagoRet= "04"
+                        },
+                        new ImpRetenido
+                        {
+                            BaseRet = 268.96M,
+                            Impuesto = "02",
+                            MontoRet= 134.48M,
+                            TipoPagoRet= "01"
+                        }
+                    }
+                }      
+            };
+
+            //var cfdiCreated = facturama.Retention.CreateRet(Retenciones);
+           // Console.WriteLine($"Se creo exitosamente CFDI de retenciones con Id: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}");
+
+
+            var cfdiCreated = facturama.Retention.CreateRet2(Retenciones2); 
+            Console.WriteLine($"Se creo exitosamente CFDI de retenciones v2 con Id: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}");
+
+            Console.WriteLine(facturama.Retention.Retrieve(cfdiCreated.Id));
+
+            //Descargar PDF y XML
+            facturama.Retention.SavePdf($"factura{cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}.pdf", cfdiCreated.Id);
+            facturama.Retention.SaveXml($"factura{cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}.xml", cfdiCreated.Id);
+
+
+            var list = facturama.Retention.List("XOCHILT CASAS CHAVEZ");
+            Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+            list = facturama.Retention.List("CACX7605101P8"); //RFC receptor en especifico
+            Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+
+
+            //Enviar CFDI por correo
+
+            if (facturama.Retention.SendByMail(cfdiCreated.Id, "rafael@facturama.mx"))
+            {
+                Console.WriteLine("Se envió correctamente el CFDI");
+            }
+
+
+
+            var cancelationStatus = facturama.Retention.Cancel(cfdiCreated.Id);
+            if (cancelationStatus.Status == "canceled")
+            {
+                Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}");
+            }
+            else if (cancelationStatus.Status == "pending")
+            {
+                Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}");
+            }
+            else if (cancelationStatus.Status == "active")
+            {
+                Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}");
+            }
+            else
+            {
+                Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}");
+            }
+
 
         }
     }

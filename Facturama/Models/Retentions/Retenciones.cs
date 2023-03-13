@@ -78,5 +78,7 @@ namespace Facturama.Models.Retentions
 		/// Sello Digital del CFDI (solo lectura)
 		/// </summary>
 		public string Sello { get; set; }
-	}
+        /// </summary>
+        public string LugarExpRetenc { get; set; }
+    }
 }
