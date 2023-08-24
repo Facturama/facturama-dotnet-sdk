@@ -175,54 +175,59 @@ namespace WebApiExamples
         {
             Console.WriteLine("----- CatalogsExample > CrudProductExample - Inicio -----");
 
+            /*
             var start = 0;
             var lenght = 100;
             var search = "47131827";
             var listProduct = facturama.Products.List2($"start={start}&lenght={lenght}&search={search}");
             Console.WriteLine(listProduct[0].Id);
+            */
 
-            //var unit = facturama.Catalogs.Units("servicio")[0];
-            //var prod = facturama.Catalogs.ProductsOrServices("desarrollo")[0];
-            //var product = new Product
-            //{
-            //    Unit = "Servicio",
-            //    UnitCode = unit.Value,
-            //    IdentificationNumber = "WEB003",
-            //    Name = "Sitio Web CMS",
-            //    Description = "Desarrollo e implementación de sitio web empleando un CMS",
-            //    Price = 6500.0m,
-            //    CodeProdServ = prod.Value,
-            //    CuentaPredial = "123",
-            //    Taxes = new[]
-            //    {
-            //        new Tax
-            //        {
-            //            Name = "IVA",
-            //            Rate = 0.16m,
-            //            IsRetention = false,
-            //        },
-            //        new Tax
-            //        {
-            //            Name = "ISR",
-            //            IsRetention = true,
-            //            Total = 0.1m
-            //        },
-            //        new Tax
-            //        {
-            //            Name = "IVA",
-            //            IsRetention = true,
-            //            Total = 0.106667m
-            //        }
-            //    }
-            //};
-            
-            //product = facturama.Products.Create(product);
-            //Console.WriteLine("Se creo exitosamente un producto con el id: " + product.Id);
+            /*
+            var unit = facturama.Catalogs.Units("servicio")[0];
+            var prod = facturama.Catalogs.ProductsOrServices("desarrollo")[0];
+            var product = new Product
+            {
+                Unit = "Servicio",
+                UnitCode = unit.Value,
+                IdentificationNumber = "WEB003",
+                Name = "Sitio Web CMS",
+                Description = "Desarrollo e implementación de sitio web empleando un CMS Unico",
+                Price = 6500.0m,
+                CodeProdServ = prod.Value,
+                CuentaPredial = "123",
+                ObjetoImp = "04",
+                Taxes = new[]
+                {
+                    new Tax
+                    {
+                        Name = "IVA",
+                        Rate = 0.16m,
+                        IsRetention = false,
+                    },
+                    new Tax
+                    {
+                        Name = "ISR",
+                        IsRetention = true,
+                        Total = 0.1m
+                    },
+                    new Tax
+                    {
+                        Name = "IVA",
+                        IsRetention = true,
+                        Total = 0.106667m
+                    }
+                }
+            };
 
-            //facturama.Products.Remove(product.Id);
-            //Console.WriteLine("Se elimino exitosamente un producto con el id: " + product.Id);            
+            product = facturama.Products.Create(product);
+            Console.WriteLine("Se creo exitosamente un producto con el id: " + product.Id);
 
-            //Console.WriteLine("----- CatalogsExample > CrudProductExample - Fin -----");
+           // facturama.Products.Remove(product.Id);
+            //Console.WriteLine("Se elimino exitosamente un producto con el id: " + product.Id);
+
+            Console.WriteLine("----- CatalogsExample > CrudProductExample - Fin -----");
+            */
         }
 
 
