@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Facturama.Models.Complements;
 using Facturama.Models.Complements.Payroll;
+using Facturama.Models.Complements.TaxLegends;
 using Facturama.Models.Complements.Waybill;
 using Facturama.Models.Response;
 using Newtonsoft.Json;
@@ -26,6 +27,7 @@ namespace Facturama.Models
         /// Complemento de carta porte 2.0
         /// </summary>
         public ComplementoCartaPorte20 CartaPorte20 { get; set; }
+        public TaxLegends TaxLegends { get; set; }
     }
 }
 

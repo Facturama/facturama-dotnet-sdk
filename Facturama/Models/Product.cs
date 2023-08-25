@@ -32,6 +32,9 @@ namespace Facturama.Models
         [JsonProperty("CuentaPredial")]
         public string CuentaPredial { get; set; }
 
+        [JsonProperty("ObjetoImp")]
+        public string ObjetoImp { get; set; }
+
         [JsonProperty("Taxes")]
         public IEnumerable<Request.Tax> Taxes { get; set; }
     }

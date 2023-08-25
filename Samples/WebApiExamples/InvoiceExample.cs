@@ -5,10 +5,12 @@ using Facturama;
 using Facturama.Models;
 using Facturama.Models.Request;
 using Facturama.Models.Complements.Payroll;
+using Facturama.Models.Complements.TaxLegends;
 using PayrollIssuer = Facturama.Models.Complements.Payroll.Issuer;
 
 using Retenciones = Facturama.Models.Retentions.Retenciones;
 using Facturama.Models.Retentions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WebApiExamples
 {
@@ -36,7 +38,8 @@ namespace WebApiExamples
                 //TestCFDI33(facturama);
                 //TestCFDI40(facturama);
                 //TestCFDI40FacturaGlobal(facturama);
-                TestRetenciones(facturama);
+                //TestRetenciones(facturama);
+                TestTaxLegends(facturama);
             }
             catch (FacturamaException ex)
             {
@@ -281,6 +284,94 @@ namespace WebApiExamples
                 Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
             }
             */
+
+        }
+        public void TestTaxLegends(FacturamaApi facturama)
+        {
+            Console.WriteLine("----- Inicio del ejemplo CFDI 4.0 Leyendas Fiscales-----");
+
+            var cfdi = new Cfdi
+            {
+                NameId = "1",
+                CfdiType = CfdiType.Ingreso,
+                PaymentForm = "01",
+                PaymentMethod = "PUE",
+                ExpeditionPlace = "78000",
+                Currency = "MXN",
+                Date = null,
+                Receiver = new Receiver
+                {
+                    Rfc = "URE180429TM6",
+                    Name = "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+                    CfdiUse = "G03",
+                    FiscalRegime = "601",
+                    TaxZipCode = "86991",
+                    /*
+                    Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
+                    {
+                        Street = "Avenida de los pinos",
+                        ExteriorNumber = "110",
+                        InteriorNumber = "A",
+                        Neighborhood = "Las villerías",
+                        ZipCode = "78000",
+                        Municipality = "San Luis Potosí",
+                        State = "San Luis Potosí",
+                        Country = "México"
+                    }*/
+                },
+
+                Items = new List<Item>
+                {
+                    new Item
+                    {
+                        ProductCode = "10101504",
+                        UnitCode = "MTS",
+                        Unit = "NO APLICA",
+                        Description = "Estudios de laboratorio",
+                        IdentificationNumber = null,
+                        Quantity = 2.0m,
+                        Discount = 0.0m,
+                        UnitPrice = 50.0m,
+                        Subtotal = 100.0m,
+                        TaxObject="02",
+                        Taxes=new List<Tax>
+                        {
+                            new Tax
+                            {
+                                Name = "IVA",
+                                Rate = 0.16m,
+                                Total = 16.0m,
+                                Base = 100.00m,
+                                IsRetention = false
+                            }
+
+                        },
+                        Total=116.00m,
+                                                                      
+                    }
+                }
+
+            };
+            // Complemento Leyendas Fiscales
+            cfdi.Complement = new Complement
+            {
+                TaxLegends = new TaxLegends
+                {
+                    Legends = new[] 
+                    {
+                        new Legend
+                        {
+                            TaxProvision = "F0000001",
+                            Norm = "F2654",
+                            Text = "Exportador ####"
+                        }
+                    }
+                }
+            };
+
+            var cfdiCreated = facturama.Cfdis.Create3(cfdi); 
+            Console.WriteLine($"Se creo exitosamente el CFDI 4.0 con ID: {cfdiCreated.Id}, folio: {cfdiCreated.Folio} y folío fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+
 
         }
 
@@ -566,5 +657,7 @@ namespace WebApiExamples
 
 
         }
+
+
     }
 }
