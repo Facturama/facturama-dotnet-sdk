@@ -39,7 +39,8 @@ namespace WebApiExamples
                 //TestCFDI40(facturama);
                 //TestCFDI40FacturaGlobal(facturama);
                 //TestRetenciones(facturama);
-                TestTaxLegends(facturama);
+                //TestTaxLegends(facturama);
+                //TestDonationCFDI(facturama);
             }
             catch (FacturamaException ex)
             {
@@ -654,6 +655,112 @@ namespace WebApiExamples
             {
                 Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}");
             }
+
+
+        }
+
+        public void TestDonationCFDI(FacturamaApi facturama)
+        {
+            Console.WriteLine("----- Inicio del ejemplo donativos -----");
+
+            var nameId = facturama.Catalogs.NameIds.First(n => n.Name == "Recibo Deducible");
+
+
+            var cfdi = new Cfdi
+            {
+                NameId = nameId.Value,
+                Currency = "MXN",
+                Folio = "1",
+                //Serie = "DONT",
+                CfdiType = CfdiType.Ingreso,
+                PaymentForm = "12",
+                PaymentMethod = "PUE",
+                ExpeditionPlace = "78000",
+                OrderNumber = "TEST-001",
+                Date = null,
+                Observations = "Elemento Observaciones solo visible en PDF",
+                Receiver = new Receiver
+                {
+                    Rfc = "CACX7605101P8",
+                    Name = "XOCHILT CASAS CHAVEZ",
+                    CfdiUse = "D04",
+                    FiscalRegime = "605",
+                    TaxZipCode = "36257",
+                },
+                Items = new List<Item>
+                {
+                    new Item
+                    {
+                        ProductCode = "20102000",
+                        UnitCode = "EA",
+                        Unit = "NO APLICA",
+                        Description = "Cobija de lana y algodon",
+                        IdentificationNumber = "FP114",
+                        Quantity = 3.0m,
+                        Discount = 0.0m,
+                        UnitPrice = 1000.0m,
+                        Subtotal = 3000.0m,
+                        TaxObject="01",
+                        Total=3000.0m,
+                    }
+                }
+
+            };
+
+            cfdi.Complement = new Complement
+            {
+                Donation = new Facturama.Models.Complements.Donation.Donation
+                {
+                    AuthorizationDate = "30/01/2023",
+                    AuthorizationNumber = "B400-05-08-2014-005",
+                    Legend = "El comprobante es un donativo"
+
+                }
+
+            };
+
+            var cfdiCreated = facturama.Cfdis.Create3(cfdi); // Probar CFDI 4.0
+            Console.WriteLine($"Se creo exitosamente el CFDI 4.0 con ID: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+
+            //Descargar PDF y XML
+            //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
+            //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
+
+
+            //var list = facturama.Cfdis.List("Expresion en Software");
+            //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+            //list = facturama.Cfdis.List(rfc: "EKU9003173C9"); //RFC receptor en especifico
+            //Console.WriteLine($"Se encontraron: {list.Length} elementos en la busqueda");
+
+
+            //Enviar CFDI por correo
+            /*
+            if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "rafael@facturama.mx"))
+            {
+                Console.WriteLine("Se envió correctamente el CFDI");
+            }                
+            */
+
+            /*
+            var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+            if (cancelationStatus.Status == "canceled")
+            {
+                Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else if (cancelationStatus.Status == "pending")
+            {
+                Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else if (cancelationStatus.Status == "active")
+            {
+                Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else
+            {
+                Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            */
+
 
 
         }

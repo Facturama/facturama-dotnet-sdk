@@ -18,12 +18,12 @@ namespace WebApiExamples
             var facturama = new FacturamaApi("pruebas", "pruebas2011");
 
 			//new CatalogsExample(facturama).Run();                           // CRUD  de clientes y productos
-			//new InvoiceExample(facturama).Run();                            // Creación de factura, descarga de XML y PDF, envío por correo
+			new InvoiceExample(facturama).Run();                            // Creación de factura, descarga de XML y PDF, envío por correo
 			//new PaymentComplementExample(facturama).Run();                  // Complemento de pago
 			//new PayrollExample(facturama).Run();                            // Nómina
 			//new EducationalInstitutionComplementExample(facturama).Run();   // Complemento IEDU - Instituciones educativas
 			//new WaybillComplementExample(facturama).Run();                  // Complemento Carta Porte 2.0
-
+            
             // Además puedes editar el logo y agregar series a las sucursales como en los siguientes ejemplos            
             //TestLogo(facturama);
             //TestSerie(facturama);            
