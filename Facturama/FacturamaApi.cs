@@ -10,8 +10,9 @@ namespace Facturama
 	    {
 		    var httpClient = new RestClient(url)
 		    {
-			    Authenticator = new HttpBasicAuthenticator(user, password)
-		    };
+			    Authenticator = new HttpBasicAuthenticator(user, password),
+                UserAgent = user
+            };
 
 		    Clients = new ClientService(httpClient);
 		    Cfdis = new CfdiService(httpClient);

@@ -189,7 +189,7 @@ namespace WebApiExamples
                     Name = "UNIVERSIDAD ROBOTICA ESPAÑOLA",
                     CfdiUse = "G03",
                     FiscalRegime = "601",
-                    TaxZipCode = "65000",
+                    TaxZipCode = "86991",
                     /*
                     Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
                     {
@@ -386,7 +386,7 @@ namespace WebApiExamples
                 CfdiType = CfdiType.Ingreso,
                 PaymentForm = "01",
                 PaymentMethod = "PUE",
-                ExpeditionPlace = "78140",
+                ExpeditionPlace = "78000",
                 Currency = "MXN",
                 Date = null,
 
@@ -396,7 +396,7 @@ namespace WebApiExamples
                 {
                     Periodicity = "04",
                     Months = "04",
-                    Year = 2022,
+                    Year = 2023,
                 },
 
                 Receiver = new Receiver
@@ -405,7 +405,7 @@ namespace WebApiExamples
                     Name = "PUBLICO EN GENERAL",
                     CfdiUse = "S01",
                     FiscalRegime = "616",
-                    TaxZipCode = "78140",
+                    TaxZipCode = "78000",
                     /*
                     Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
                     {
@@ -504,7 +504,7 @@ namespace WebApiExamples
             var Retenciones = new Retenciones
             {
                 FolioInt = "0001",
-                FechaExp = "2023-03-12T08:08:01-06:00",
+                FechaExp = "2024-03-18T08:08:01",
                 CveRetenc = "16",
 
                 Emisor = new Emisor
@@ -557,7 +557,7 @@ namespace WebApiExamples
             var Retenciones2 = new Retenciones
             {
                 FolioInt = "0001",
-                FechaExp = "2023-03-12T08:08:01",
+                FechaExp = "2024-03-18T08:08:01",
                 CveRetenc = "01",
                 LugarExpRetenc = "78000",
 
@@ -574,7 +574,7 @@ namespace WebApiExamples
                     {
                         RfcRecep= "CACX7605101P8",
                         NomDenRazSocR= "XOCHILT CASAS CHAVEZ",
-                        DomicilioFiscalR= "10740"
+                        DomicilioFiscalR= "36257"
                     }
                 },
                 Periodo = new Periodo

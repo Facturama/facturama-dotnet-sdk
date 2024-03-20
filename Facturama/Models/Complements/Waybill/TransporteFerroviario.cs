@@ -7,6 +7,7 @@ namespace Facturama.Models.Complements.Waybill
     public class TransporteFerroviario
 	{
         public string TipoDeServicio { get; set; }
+        public string TipoDeTrafico { get; set; }
         public string NombreAseg { get; set; }
         public string NumPolizaSeguro { get; set; }
         public string Concesionario { get; set; }
