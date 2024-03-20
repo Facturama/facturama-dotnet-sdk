@@ -24,57 +24,80 @@ namespace WebApiExamples
 
         public void Run()
         {
-            Console.WriteLine("----- Inicio del ejemplo WaybillComplementExample -----");            
+            Console.WriteLine("----- Inicio del ejemplo Carta Porte 3.0-----");    
+            
 
+            try
+            {
+                //TestCartaPorte30(facturama);
+                //TestCartaPorte30_Traslado(facturama);
+            }
+            catch (FacturamaException ex)
+            {
+                Console.WriteLine(ex.Message);
+                if (ex.Model.Details != null)
+                    foreach (var messageDetail in ex.Model.Details)
+                    {
+                        Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
+                    }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: ", ex.Message);
+            }
+
+
+        }
+
+        public void TestCartaPorte30(FacturamaApi facturama)
+        {
             var cfdi = new Cfdi
             {
-                NameId = "1",                                   // Factura
+                NameId = "33",
+                Currency = "MXN",
+                Folio = "99999",
+                Serie = "CCP", 
                 CfdiType = CfdiType.Ingreso,
-                PaymentForm = "03",                             // Transferencia electrónica de fondos
-                PaymentMethod = "PUE",                          // Pago en una exhibición
-                Date = null,                                    // Al especificar null, Facturama asigna la fecha y hora actual, de acuerdo al "ExpeditionPlace"
-                ExpeditionPlace = "78000",                      // Codigo postal del la sucursal desde donde se expide el CFDI, (este debe pertenecer al catálogo de sucursales)  https://apisandbox.facturama.mx/guias/perfil-fiscal#lugares-expedicion-series
+                PaymentForm = "03",
+                PaymentMethod = "PUE",
+                Date = null,
+                ExpeditionPlace = "78000",
+                PaymentConditions = "CARTA PORTE 3.0",
+                Observations = "Elemento Observaciones solo visible en PDF",
                 Items = new List<Item>(),
                 Receiver = new Receiver
                 {
-                    CfdiUse = "P01",
-                    Name = "José Perez Leon",
-                    Rfc = "JUFA7608212V6",
-                    Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
-					{
-                        Street = "Avenida de los pinos",
-                        ExteriorNumber = "110",
-                        InteriorNumber = "A",
-                        Neighborhood = "Las villerías",
-                        ZipCode = "78000",
-                        Municipality = "San Luis Potosí",
-                        State = "San Luis Potosí",
-                        Country = "México"
-					}
+                    CfdiUse = "S01",
+                    Name = "ESCUELA KEMPER URGATE",
+                    Rfc = "EKU9003173C9",
+                    FiscalRegime = "601",
+                    TaxZipCode = "42501"
+
                 },
-            };            
+            };
 
             var item = new Item
             {
-                ProductCode = "78101703",                       // Reacionado con institucion educativa
-                UnitCode = "E48",                               // Servicio
+                ProductCode = "78101800",
+                UnitCode = "E48",
                 Unit = "Unidad de servicio",
-                Description = "Colegiatura del mes de marzo",
-                IdentificationNumber = "1234",                  // Numero de identificación interno del producto (opcional)
+                Description = "Transporte de carga por carretera",
+                IdentificationNumber = "UT421511",
                 Quantity = 1,
                 Discount = 0,
-                UnitPrice = 2300,
-                Subtotal = 2300,
-                Taxes = new [] { new Tax
+                UnitPrice = 1500,
+                Subtotal = 1500,
+                TaxObject = "02",
+                Taxes = new[] { new Tax
                 {
                     Name = "IVA",
                     IsQuota = false,
                     IsRetention = false,
 
                     Rate = 0.16m,
-                    Base = 2300,
-                    Total = 368
-                } }.ToList()                
+                    Base = 1500,
+                    Total = 240
+                } }.ToList()
             };
             var retenciones = item.Taxes?.Where(t => t.IsRetention).Sum(t => t.Total) ?? 0;
             var traslados = item.Taxes?.Where(t => !t.IsRetention).Sum(t => t.Total) ?? 0;
@@ -84,13 +107,21 @@ namespace WebApiExamples
             // Complemento Carta Porte            
             cfdi.Complement = new Complement
             {
-                CartaPorte20 = new ComplementoCartaPorte20
+                CartaPorte30 = new ComplementoCartaPorte30
                 {
                     TranspInternac = TranspInternac.No,
-                    Ubicaciones = new[] { new Ubicacion
+                    TotalDistRec = 1.0M,
+                    RegistroISTMO = RegistroISTMO.Si,
+                    UbicacionPoloOrigen = "01",
+                    UbicacionPoloDestino = "01",
+                    Ubicaciones = new[]
+                    {
+                        new Ubicacion
                         {
                             TipoUbicacion = TipoUbicacion.Origen,
+                            IDUbicacion = "OR101010",
                             RFCRemitenteDestinatario = "EKU9003173C9",
+                            NombreRemitenteDestinatario = "ESCUELA KEPLER URGATE",
                             FechaHoraSalidaLlegada = DateTime.Now.AddHours(-6),
                             DistanciaRecorrida = 1,
                             Domicilio = new Domicilio
@@ -108,7 +139,9 @@ namespace WebApiExamples
                          new Ubicacion
                         {
                             TipoUbicacion = TipoUbicacion.Destino,
-                            RFCRemitenteDestinatario = "RIFO990729M66",
+                            IDUbicacion = "DE202020",
+                            RFCRemitenteDestinatario = "EKU9003173C9",
+                            NombreRemitenteDestinatario = "NombreRem2",
                             FechaHoraSalidaLlegada = DateTime.Now.AddHours(+6),
                             DistanciaRecorrida = 100,
                             Domicilio = new Domicilio
@@ -125,60 +158,93 @@ namespace WebApiExamples
                          }
                     },
                     Mercancias = new Mercancias
-					{
-                        UnidadPeso = "KGM",
-                        Mercancia = new [] {
+                    {
+                        PesoBrutoTotal = 1.0M,
+                        UnidadPeso = "XBX",
+                        PesoNetoTotal = 1M,
+                        NumTotalMercancias = 1,
+                        LogisticaInversaRecoleccionDevolucion = "Sí",
+                        Mercancia = new[]
+                        {
                             new Mercancia
-							{
-                                Cantidad = 1,
-                                BienesTransp = "10101500",
-                                Descripcion = "Animales vivos de granja",
-                                ClaveUnidad = "KGM",
-                                PesoEnKg = 120,
+                            {
+                                BienesTransp = "11121900",
+                                Descripcion = "Accesorios de equipo de telefonía",
+                                SectorCOFEPRIS = "01",
+                                Cantidad = 1.0M,
+                                ClaveUnidad = "XBX",
+                                MaterialPeligroso = "No",
+                                PesoEnKg = 1,
+                                DenominacionGenericaProd = "DenominacionGenericaProd1",
+                                DenominacionDistintivaProd = "DenominacionDistintivaProd1",
+                                Fabricante = "Fabricante1",
+                                FechaCaducidad = DateTime.Now.AddHours(-6),
+                                LoteMedicamento = "LoteMedic1",
+                                FormaFarmaceutica = "01",
+                                CondicionesEspTransp = "01",
+                                RegistroSanitarioFolioAutorizacion = "RegistroSanita1",
+                                CantidadTransporta = new[]
+                                {
+                                    new CantidadTransporta
+                                    {
+                                        Cantidad = 1.0m,
+                                        IDOrigen = "OR101010",
+                                        IDDestino = "DE202020"
+                                    }
+                                }
+
                             }
-						},
+
+                        },
                         Autotransporte = new Autotransporte
-						{
+                        {
                             PermSCT = "TPAF01",
                             NumPermisoSCT = "123abc",
                             Seguros = new Seguros
-							{
+                            {
                                 AseguraRespCivil = "Seguros SA",
                                 PolizaRespCivil = "123123"
                             },
                             IdentificacionVehicular = new IdentificacionVehicular
-							{
+                            {
                                 AnioModeloVM = 1990,
                                 ConfigVehicular = "C2R3",
                                 PlacaVM = "XXX000",
+                                PesoBrutoVehicular = "1"
                             },
-                            Remolques = new []
-							{
+                            Remolques = new[]
+                            {
                                 new Remolque
-								{
+                                {
                                     SubTipoRem = "CTR001",
                                     Placa = "21132H"
                                 }
-							}
+                            }
                         }
-					},
-                    FiguraTransporte = new[] { new TiposFigura {
+                    },
+                    FiguraTransporte = new[]
+                    {
+                        new TiposFigura
+                        {
                             TipoFigura = "01",
-                            RFCFigura = "MISC491214B86",
-                            NombreFigura = "Juan",
+                            RFCFigura = "XIA190128J61",
+                            NombreFigura = "XENON INDUSTRIAL ARTICLES",
                             NumLicencia = "000001",
                         },
                         new TiposFigura
-						{
+                        {
                             TipoFigura = "02",
                             RFCFigura = "XAMA620210DQ5",
                             NombreFigura = "Juan Jose Perez Lopez",
-                            PartesTransporte = new [] { new PartesTransporte {
+                            PartesTransporte = new []
+                            {
+                                new PartesTransporte
+                                {
                                     ParteTransporte = "PT01"
                                 }
                             },
                             Domicilio = new Domicilio
-							{
+                            {
                                 Calle = "Morelos No.1",
                                 CodigoPostal = "28219",
                                 Colonia = "0575",
@@ -189,63 +255,245 @@ namespace WebApiExamples
                             }
                         }
                     }
-
-
-
-
                 }
             };
-                   
 
-            try
+
+
+            var cfdiCreated = facturama.Cfdis.Create3(cfdi);
+            Console.WriteLine($"Se genero la carta porte 3.0 con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
+            //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
+
+
+            //if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "correo@ejemplo.com"))
+            // Console.WriteLine("Se envió correctamente la carta porte 3.0");
+
+
+            var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+            if (cancelationStatus.Status == "canceled")
             {
-                var cfdiCreated = facturama.Cfdis.Create(cfdi);
-                Console.WriteLine(
-                    $"Se creó ex la carta porte 2.0 con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
-                facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
-                
-
-                if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "chucho@facturama.mx"))
-                    Console.WriteLine("Se envió correctamente la carta porte 2.0");
-                
-
-                var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
-                if (cancelationStatus.Status == "canceled")
-                {
-                    Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                }
-                else if (cancelationStatus.Status == "pending")
-                {
-                    Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                }
-                else if (cancelationStatus.Status == "active")
-                {
-                    Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                }
-                else
-                {
-                    Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
-                }
-
+                Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
             }
-            catch (FacturamaException ex)
+            else if (cancelationStatus.Status == "pending")
             {
-                Console.WriteLine(ex.Message);
-                if(ex.Model.Details != null)
-                    foreach (var messageDetail in ex.Model.Details)
-                    {
-                        Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
-                    }
+                Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
             }
-            catch (Exception ex)
+            else if (cancelationStatus.Status == "active")
             {
-                Console.WriteLine($"Error inesperado: ", ex.Message);
+                Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else
+            {
+                Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
             }
 
             Console.WriteLine("----- Fin del ejemplo WaybillComplementExample -----");
+
         }
 
+        public void TestCartaPorte30_Traslado(FacturamaApi facturama)
+        {
+            var cfdi = new Cfdi
+            {
+                NameId = "33",
+                Currency = "MXN",
+                Folio = "99999",
+                Serie = "CCP",
+                CfdiType = CfdiType.Traslado,
+                Date = null,
+                ExpeditionPlace = "78000",
+                Observations = "Elemento Observaciones solo visible en PDF",
+                Items = new List<Item>(),
+                Receiver = new Receiver
+                {
+                    CfdiUse = "S01",
+                    Name = "ESCUELA KEMPER URGATE",
+                    Rfc = "EKU9003173C9",
+                    FiscalRegime = "601",
+                    TaxZipCode = "42501"
 
+                },
+            };
+
+            var item = new Item
+            {
+                ProductCode = "78101800",
+                UnitCode = "E48",
+                Unit = "Unidad de servicio",
+                Description = "Transporte de carga por carretera",
+                IdentificationNumber = "UT421511",
+                Quantity = 1,
+                UnitPrice = 0,
+                Subtotal = 0M,
+                TaxObject = "01",
+                Total = 0M,
+            };
+            cfdi.Items.Add(item);
+
+            // Complemento Carta Porte            
+            cfdi.Complement = new Complement
+            {
+                CartaPorte30 = new ComplementoCartaPorte30
+                {
+                    TranspInternac = TranspInternac.No,
+                    TotalDistRec = 1.0M,
+                    RegistroISTMO = RegistroISTMO.Si,
+                    UbicacionPoloOrigen = "01",
+                    UbicacionPoloDestino = "01",
+                    Ubicaciones = new[]
+                    {
+                        new Ubicacion
+                        {
+                            TipoUbicacion = TipoUbicacion.Origen,
+                            IDUbicacion = "OR101010",
+                            RFCRemitenteDestinatario = "EKU9003173C9",
+                            NombreRemitenteDestinatario = "ESCUELA KEPLER URGATE",
+                            FechaHoraSalidaLlegada = DateTime.Now.AddHours(-6),
+                            DistanciaRecorrida = 1,
+                            Domicilio = new Domicilio
+                            {
+                                Calle = "Puebla No.1",
+                                CodigoPostal = "28239",
+                                Colonia = "0342",
+                                Estado = "COL",
+                                Municipio = "007",
+                                Localidad = "02",
+                                Pais = "MEX",
+                            }
+
+                         },
+                         new Ubicacion
+                        {
+                            TipoUbicacion = TipoUbicacion.Destino,
+                            IDUbicacion = "DE202020",
+                            RFCRemitenteDestinatario = "EKU9003173C9",
+                            NombreRemitenteDestinatario = "NombreRem2",
+                            FechaHoraSalidaLlegada = DateTime.Now.AddHours(+6),
+                            DistanciaRecorrida = 100,
+                            Domicilio = new Domicilio
+                            {
+                                Calle = "Morelos No.1",
+                                CodigoPostal = "28219",
+                                Colonia = "0575",
+                                Estado = "COL",
+                                Municipio = "007",
+                                Localidad = "02",
+                                Pais = "MEX",
+                            }
+
+                         }
+                    },
+                    Mercancias = new Mercancias
+                    {
+                        PesoBrutoTotal = 1.0M,
+                        UnidadPeso = "XBX",
+                        PesoNetoTotal = 1M,
+                        NumTotalMercancias = 1,
+                        LogisticaInversaRecoleccionDevolucion = "Sí",
+                        Mercancia = new[]
+                        {
+                            new Mercancia
+                            {
+                                BienesTransp = "11121900",
+                                Descripcion = "Accesorios de equipo de telefonía",
+                                SectorCOFEPRIS = "01",
+                                Cantidad = 1.0M,
+                                ClaveUnidad = "XBX",
+                                MaterialPeligroso = "No",
+                                PesoEnKg = 1,
+                                DenominacionGenericaProd = "DenominacionGenericaProd1",
+                                DenominacionDistintivaProd = "DenominacionDistintivaProd1",
+                                Fabricante = "Fabricante1",
+                                FechaCaducidad = DateTime.Now.AddHours(-6),
+                                LoteMedicamento = "LoteMedic1",
+                                FormaFarmaceutica = "01",
+                                CondicionesEspTransp = "01",
+                                RegistroSanitarioFolioAutorizacion = "RegistroSanita1",
+                                CantidadTransporta = new[]
+                                {
+                                    new CantidadTransporta
+                                    {
+                                        Cantidad = 1.0m,
+                                        IDOrigen = "OR101010",
+                                        IDDestino = "DE202020"
+                                    }
+                                }
+
+                            }
+
+                        },
+                        Autotransporte = new Autotransporte
+                        {
+                            PermSCT = "TPAF01",
+                            NumPermisoSCT = "123abc",
+                            Seguros = new Seguros
+                            {
+                                AseguraRespCivil = "Seguros SA",
+                                PolizaRespCivil = "123123"
+                            },
+                            IdentificacionVehicular = new IdentificacionVehicular
+                            {
+                                AnioModeloVM = 1990,
+                                ConfigVehicular = "C2R3",
+                                PlacaVM = "XXX000",
+                                PesoBrutoVehicular = "1"
+                            },
+                            Remolques = new[]
+                            {
+                                new Remolque
+                                {
+                                    SubTipoRem = "CTR001",
+                                    Placa = "21132H"
+                                }
+                            }
+                        }
+                    },
+                    FiguraTransporte = new[]
+                    {
+                        new TiposFigura
+                        {
+                            TipoFigura = "01",
+                            RFCFigura = "XIA190128J61",
+                            NombreFigura = "NombreFigura1",
+                            NumLicencia = "000001",
+                        }
+                    }
+                }
+            };
+
+
+
+            var cfdiCreated = facturama.Cfdis.Create3(cfdi);
+            Console.WriteLine($"Se genero la carta porte 3.0 con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
+            //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
+
+
+            //if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "correo@ejemplo.com"))
+            // Console.WriteLine("Se envió correctamente la carta porte 3.0");
+
+
+            var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+            if (cancelationStatus.Status == "canceled")
+            {
+                Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else if (cancelationStatus.Status == "pending")
+            {
+                Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else if (cancelationStatus.Status == "active")
+            {
+                Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+            else
+            {
+                Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            }
+
+            Console.WriteLine("----- Fin del ejemplo WaybillComplementExample -----");
+
+        }
     }
 }

@@ -6,6 +6,8 @@ namespace Facturama.Models.Complements.Waybill
 	{
         [JsonProperty("ConfigVehicular")]
         public string ConfigVehicular { get; set; }
+        [JsonProperty("PesoBrutoVehicular")]
+        public string PesoBrutoVehicular { get; set; }
 
         [JsonProperty("PlacaVM")]
         public string PlacaVM { get; set; }

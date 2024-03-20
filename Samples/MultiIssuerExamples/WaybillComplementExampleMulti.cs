@@ -5,6 +5,7 @@ using Facturama;
 using Facturama.Models;
 using Facturama.Models.Complements.Waybill;
 using Facturama.Models.Request;
+using Facturama.Models.Response.Catalogs.Cfdi;
 
 namespace MultiIssuerExamples
 {
@@ -28,32 +29,39 @@ namespace MultiIssuerExamples
 
             var cfdi = new CfdiMulti
             {
-                NameId = "1",                                   // Factura
-                Folio = "1342",
+                NameId = "33",
+                Currency = "MXN",
+                Folio = "9999",
+                Serie = "CCP",
                 CfdiType = CfdiType.Ingreso,
-                PaymentForm = "03",                             // Transferencia electrónica de fondos
-                PaymentMethod = "PUE",                          // Pago en una exhibición
-                Date = null,                                    // Al especificar null, Facturama asigna la fecha y hora actual, de acuerdo al "ExpeditionPlace"
-                ExpeditionPlace = "78000",                      // Codigo postal del la sucursal desde donde se expide el CFDI, (este debe pertenecer al catálogo de sucursales)  https://apisandbox.facturama.mx/guias/perfil-fiscal#lugares-expedicion-series
+                PaymentForm = "03",
+                PaymentMethod = "PUE",
+                OrderNumber = "TEST-001",
+                Date = null,
+                ExpeditionPlace = "78000",
+                PaymentConditions = "CARTA PORTE 2.0",
+                Observations = "Elemento Observaciones solo visible en PDF",
                 Items = new List<Item>(),
                 Issuer = new Issuer
                 {
-                    Name = "Escuela emisora del CFDI",
+                    Name = "ESCUELA KEMPER URGATE",
                     Rfc = "EKU9003173C9",
                     FiscalRegime = "601"
                 },
                 Receiver = new Receiver
                 {
-                    CfdiUse = "P01",
-                    Name = "José Perez Leon",
-                    Rfc = "JUFA7608212V6",
+                    CfdiUse = "G01",
+                    Name = "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+                    Rfc = "URE180429TM6",
+                    TaxZipCode = "86991",
+                    FiscalRegime = "601",
                     Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
 					{
                         Street = "Avenida de los pinos",
                         ExteriorNumber = "110",
                         InteriorNumber = "A",
                         Neighborhood = "Las villerías",
-                        ZipCode = "78000",
+                        ZipCode = "86991",
                         Municipality = "San Luis Potosí",
                         State = "San Luis Potosí",
                         Country = "México"
@@ -72,6 +80,7 @@ namespace MultiIssuerExamples
                 Discount = 0,
                 UnitPrice = 2300,
                 Subtotal = 2300,
+                TaxObject = "02",
                 Taxes = new [] { new Tax
                 {
                     Name = "IVA",
@@ -88,13 +97,16 @@ namespace MultiIssuerExamples
             item.Total = item.Subtotal - (item.Discount ?? 0) + traslados - retenciones;
             cfdi.Items.Add(item);
 
-            // Complemento Carta Porte            
+            // Complemento Carta Porte
+
             cfdi.Complement = new Complement
             {
                 CartaPorte20 = new ComplementoCartaPorte20
                 {
                     TranspInternac = TranspInternac.No,
-                    Ubicaciones = new[] { new Ubicacion
+                    Ubicaciones = new[]
+                    { 
+                        new Ubicacion
                         {
                             TipoUbicacion = TipoUbicacion.Origen,
                             RFCRemitenteDestinatario = "EKU9003173C9",
@@ -206,14 +218,14 @@ namespace MultiIssuerExamples
 
             try
             {
-                var cfdiCreated = facturama.Cfdis.Create(cfdi);
+                var cfdiCreated = facturama.Cfdis.Create3(cfdi);
                 Console.WriteLine(
                     $"Se creó ex la carta porte 2.0 con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
                 facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
                 facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
                 
 
-                if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "chucho@facturama.mx"))
+                if (facturama.Cfdis.SendByMail(cfdiCreated.Id, "ejemplo@ejemplo.com"))
                     Console.WriteLine("Se envió correctamente la carta porte 2.0");
                 
 

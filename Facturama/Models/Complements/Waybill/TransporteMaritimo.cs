@@ -26,6 +26,8 @@ namespace Facturama.Models.Complements.Waybill
         public decimal Eslora { get; set; }
         public decimal Manga { get; set; }
         public decimal Calado { get; set; }
+
+        public decimal Puntal { get; set; }
         public string LineaNaviera { get; set; }
        
         public string NombreAgenteNaviero { get; set; }
@@ -34,7 +36,11 @@ namespace Facturama.Models.Complements.Waybill
         public string NumViaje { get; set; }
         public string NumConocEmbarc { get; set; }
 
+        public string PermisoTempNavegacion { get; set; }
+
         public Contenedor[] Contenedor { get; set; }
+
+        public RemolquesCCP[] RemolquesCCP { get; set; }
 
     }
 }

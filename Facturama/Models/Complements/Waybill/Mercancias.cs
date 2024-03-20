@@ -20,6 +20,9 @@ namespace Facturama.Models.Complements.Waybill
         [JsonProperty("CargoPorTasacion")]
         public decimal CargoPorTasacion { get; set; }
 
+        [JsonProperty("LogisticaInversaRecoleccionDevolucion")]
+        public string LogisticaInversaRecoleccionDevolucion { get; set; }
+
 
         [JsonProperty("Mercancia")]
         public Mercancia[] Mercancia { get; set; }

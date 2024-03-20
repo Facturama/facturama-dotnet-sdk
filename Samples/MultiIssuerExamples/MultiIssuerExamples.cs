@@ -21,7 +21,7 @@ namespace MultiIssuerExamples
             //TestCreatePaymentCfdi40(facturamaMultiEmisor); // Complemento de Pago 20
 
             //new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
-            //new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
+            new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
 
             Console.ReadKey();
         }
