@@ -8,10 +8,7 @@ namespace Facturama.Models.Complements.Waybill
     public enum RegistroISTMO
     {
         [EnumMember(Value = "Sí")]
-        Si,
-
-        [EnumMember(Value = "No")]
-        No,
+        Sí
     }
 
     public class ComplementoCartaPorte30

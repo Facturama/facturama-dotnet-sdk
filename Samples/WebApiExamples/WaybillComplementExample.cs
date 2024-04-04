@@ -111,7 +111,7 @@ namespace WebApiExamples
                 {
                     TranspInternac = TranspInternac.No,
                     TotalDistRec = 1.0M,
-                    RegistroISTMO = RegistroISTMO.Si,
+                    RegistroISTMO = RegistroISTMO.Sí,
                     UbicacionPoloOrigen = "01",
                     UbicacionPoloDestino = "01",
                     Ubicaciones = new[]
@@ -338,7 +338,7 @@ namespace WebApiExamples
                 {
                     TranspInternac = TranspInternac.No,
                     TotalDistRec = 1.0M,
-                    RegistroISTMO = RegistroISTMO.Si,
+                    RegistroISTMO = RegistroISTMO.Sí,
                     UbicacionPoloOrigen = "01",
                     UbicacionPoloDestino = "01",
                     Ubicaciones = new[]
