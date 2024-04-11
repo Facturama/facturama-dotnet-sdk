@@ -8,10 +8,7 @@ namespace Facturama.Models.Complements.Waybill
     public enum RegistroISTMO
     {
         [EnumMember(Value = "Sí")]
-        Si,
-
-        [EnumMember(Value = "No")]
-        No,
+        Sí
     }
 
     public class ComplementoCartaPorte30
@@ -38,7 +35,7 @@ namespace Facturama.Models.Complements.Waybill
         public decimal? TotalDistRec { get; set; }
 
         [JsonProperty("RegistroISTMO")]
-        public RegistroISTMO RegistroISTMO { get; set; }
+        public RegistroISTMO? RegistroISTMO { get; set; }
 
         [JsonProperty("UbicacionPoloOrigen")]
         public string UbicacionPoloOrigen { get; set; }
