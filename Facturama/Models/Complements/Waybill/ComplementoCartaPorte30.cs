@@ -35,7 +35,7 @@ namespace Facturama.Models.Complements.Waybill
         public decimal? TotalDistRec { get; set; }
 
         [JsonProperty("RegistroISTMO")]
-        public RegistroISTMO RegistroISTMO { get; set; }
+        public RegistroISTMO? RegistroISTMO { get; set; }
 
         [JsonProperty("UbicacionPoloOrigen")]
         public string UbicacionPoloOrigen { get; set; }
