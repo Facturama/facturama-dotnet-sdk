@@ -25,7 +25,9 @@ namespace Facturama
 		    Catalogs = new CatalogService(httpClient);
 		    Store = new StoreService(httpClient);
 		    Charges = new ChargeService(httpClient);
-	    }
+            Customer = new CustomersService(httpClient);
+
+        }
 
         public FacturamaApi(string user, string password, bool isDevelopment = true)
 			: this(user, password, isDevelopment 
@@ -47,7 +49,9 @@ namespace Facturama
 		public ChargeService Charges { get; }
 		public RetentionService Retention { get; }
 
-	}
+        public CustomersService Customer { get; }
+
+    }
 
 
 }
