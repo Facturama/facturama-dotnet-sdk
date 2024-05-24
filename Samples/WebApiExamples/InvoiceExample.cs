@@ -41,6 +41,7 @@ namespace WebApiExamples
                 //TestRetenciones(facturama);
                 //TestTaxLegends(facturama);
                 //TestDonationCFDI(facturama);
+                //TestValidateClient(facturama);
             }
             catch (FacturamaException ex)
             {
@@ -762,6 +763,23 @@ namespace WebApiExamples
             */
 
 
+
+        }
+
+        public void TestValidateClient(FacturamaApi facturama)
+        {
+            var validate = new CustumerValidate
+            {
+                Rfc= "EKU9003173C9",
+                Name = "ESCUELA KEMPER URGATE",
+                ZipCode = "26015",
+                FiscalRegime = "601"
+            };
+            var Validacion = facturama.Customer.Validate(validate);
+            Console.WriteLine("ExistRfc:" + Validacion.ExistRfc);
+            Console.WriteLine("MatchName:" + Validacion.MatchName);
+            Console.WriteLine("MatchZipCode:" + Validacion.MatchZipCode);
+            Console.WriteLine("MatchFiscalRegime:" + Validacion.MatchFiscalRegime);
 
         }
 
