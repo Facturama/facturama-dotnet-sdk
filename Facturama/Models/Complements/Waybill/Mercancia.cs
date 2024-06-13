@@ -59,7 +59,7 @@ namespace Facturama.Models.Complements.Waybill
 
         [JsonProperty("FechaCaducidad")]
         [JsonConverter(typeof(DateFormatConverter), "yyyy-MM-ddTHH:mm:ss")]
-        public DateTime FechaCaducidad { get; set; }
+        public DateTime? FechaCaducidad { get; set; }
 
         [JsonProperty("LoteMedicamento")]
         public string LoteMedicamento { get; set; }
