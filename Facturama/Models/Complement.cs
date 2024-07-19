@@ -35,6 +35,11 @@ namespace Facturama.Models
         public ComplementoCartaPorte30 CartaPorte30 { get; set; }
 
         /// <summary>
+        /// Complemento de carta porte 3.1
+        /// </summary>
+        public ComplementoCartaPorte31 CartaPorte31 { get; set; }
+
+        /// <summary>
         /// Complemento leyendas fiscales
         /// </summary>
         public TaxLegends TaxLegends { get; set; }

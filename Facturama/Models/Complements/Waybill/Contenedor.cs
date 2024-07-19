@@ -11,5 +11,7 @@ namespace Facturama.Models.Complements.Waybill
         public string IdCCPRelacionado { get; set; }
         public string PlacaVMCCP { get; set; }
         public DateTime FechaCertificacionCCP { get; set; }
+
+        public RemolquesCCP[] RemolquesCCP { get; set; }
     }
 }
