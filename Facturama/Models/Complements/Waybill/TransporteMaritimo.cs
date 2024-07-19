@@ -40,7 +40,6 @@ namespace Facturama.Models.Complements.Waybill
 
         public Contenedor[] Contenedor { get; set; }
 
-        public RemolquesCCP[] RemolquesCCP { get; set; }
 
     }
 }

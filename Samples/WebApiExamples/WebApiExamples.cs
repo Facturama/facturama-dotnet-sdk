@@ -22,7 +22,7 @@ namespace WebApiExamples
 			//new PaymentComplementExample(facturama).Run();                  // Complemento de pago
 			//new PayrollExample(facturama).Run();                            // Nómina
 			//new EducationalInstitutionComplementExample(facturama).Run();   // Complemento IEDU - Instituciones educativas
-			//new WaybillComplementExample(facturama).Run();                  // Complemento Carta Porte 2.0
+			new WaybillComplementExample(facturama).Run();                  // Complemento Carta Porte 2.0
             
             // Además puedes editar el logo y agregar series a las sucursales como en los siguientes ejemplos            
             //TestLogo(facturama);

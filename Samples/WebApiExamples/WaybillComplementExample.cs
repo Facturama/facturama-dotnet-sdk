@@ -24,14 +24,14 @@ namespace WebApiExamples
 
         public void Run()
         {
-            Console.WriteLine("----- Inicio del ejemplo Carta Porte 3.0-----");    
+            Console.WriteLine("----- Inicio del ejemplo Carta Porte 3.1-----");    
             
 
             try
             {
-                //TestCartaPorte30(facturama);
-                //TestCartaPorte30_Traslado(facturama);
-                //TestCartaPorte30_autotransporte(facturama);
+                //TestCartaPorte31(facturama);
+                //TestCartaPorte31_Traslado(facturama);
+                TestCartaPorte31_autotransporte(facturama);
             }
             catch (FacturamaException ex)
             {
@@ -50,11 +50,11 @@ namespace WebApiExamples
 
         }
 
-        public void TestCartaPorte30(FacturamaApi facturama)
+        public void TestCartaPorte31(FacturamaApi facturama)
         {
             var cfdi = new Cfdi
             {
-                NameId = "35",
+                NameId = "36",
                 Currency = "MXN",
                 Folio = "99999",
                 Serie = "CCP", 
@@ -108,13 +108,25 @@ namespace WebApiExamples
             // Complemento Carta Porte            
             cfdi.Complement = new Complement
             {
-                CartaPorte30 = new ComplementoCartaPorte30
+                CartaPorte31 = new ComplementoCartaPorte31
                 {
+                    IdCCP = "CCCBCD94-870A-4332-A52A-A52AA52AA52A",
                     TranspInternac = TranspInternac.No,
                     TotalDistRec = 1.0M,
                     RegistroISTMO = RegistroISTMO.Sí,
                     UbicacionPoloOrigen = "01",
                     UbicacionPoloDestino = "01",
+                    RegimenesAduaneros = new[]
+                    {
+                        new RegimenAduaneroCPP
+                        {
+                            RegimenAduanero = "IMD",
+                        },
+                        new RegimenAduaneroCPP
+                        {
+                            RegimenAduanero = "IMD",
+                        }
+                    },
                     Ubicaciones = new[]
                     {
                         new Ubicacion
@@ -122,9 +134,8 @@ namespace WebApiExamples
                             TipoUbicacion = TipoUbicacion.Origen,
                             IDUbicacion = "OR101010",
                             RFCRemitenteDestinatario = "EKU9003173C9",
-                            NombreRemitenteDestinatario = "ESCUELA KEPLER URGATE",
+                            NombreRemitenteDestinatario = "NombreRemitenteDestinatario1",
                             FechaHoraSalidaLlegada = DateTime.Now.AddHours(-6),
-                            DistanciaRecorrida = 1,
                             Domicilio = new Domicilio
                             {
                                 Calle = "Puebla No.1",
@@ -142,7 +153,7 @@ namespace WebApiExamples
                             TipoUbicacion = TipoUbicacion.Destino,
                             IDUbicacion = "DE202020",
                             RFCRemitenteDestinatario = "EKU9003173C9",
-                            NombreRemitenteDestinatario = "NombreRem2",
+                            NombreRemitenteDestinatario = "NombreRemitenteDestinatario2",
                             FechaHoraSalidaLlegada = DateTime.Now.AddHours(+6),
                             DistanciaRecorrida = 100,
                             Domicilio = new Domicilio
@@ -162,7 +173,6 @@ namespace WebApiExamples
                     {
                         PesoBrutoTotal = 1.0M,
                         UnidadPeso = "XBX",
-                        PesoNetoTotal = 1M,
                         NumTotalMercancias = 1,
                         LogisticaInversaRecoleccionDevolucion = "Sí",
                         Mercancia = new[]
@@ -171,7 +181,6 @@ namespace WebApiExamples
                             {
                                 BienesTransp = "11121900",
                                 Descripcion = "Accesorios de equipo de telefonía",
-                                SectorCOFEPRIS = "01",
                                 Cantidad = 1.0M,
                                 ClaveUnidad = "XBX",
                                 MaterialPeligroso = "No",
@@ -181,8 +190,6 @@ namespace WebApiExamples
                                 Fabricante = "Fabricante1",
                                 FechaCaducidad = DateTime.Now.AddHours(-6),
                                 LoteMedicamento = "LoteMedic1",
-                                FormaFarmaceutica = "01",
-                                CondicionesEspTransp = "01",
                                 RegistroSanitarioFolioAutorizacion = "RegistroSanita1",
                                 CantidadTransporta = new[]
                                 {
@@ -220,8 +227,10 @@ namespace WebApiExamples
                                     SubTipoRem = "CTR001",
                                     Placa = "21132H"
                                 }
-                            }
+                            },
+
                         }
+
                     },
                     FiguraTransporte = new[]
                     {
@@ -262,7 +271,7 @@ namespace WebApiExamples
 
 
             var cfdiCreated = facturama.Cfdis.Create3(cfdi);
-            Console.WriteLine($"Se genero la carta porte 3.0 con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+            Console.WriteLine($"Se genero la carta porte 3.1 con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
             //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
             //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
 
@@ -293,11 +302,11 @@ namespace WebApiExamples
 
         }
 
-        public void TestCartaPorte30_Traslado(FacturamaApi facturama)
+        public void TestCartaPorte31_Traslado(FacturamaApi facturama)
         {
             var cfdi = new Cfdi
             {
-                NameId = "35",
+                NameId = "36",
                 Currency = "MXN",
                 Folio = "99999",
                 Serie = "CCP",
@@ -335,8 +344,9 @@ namespace WebApiExamples
             // Complemento Carta Porte            
             cfdi.Complement = new Complement
             {
-                CartaPorte30 = new ComplementoCartaPorte30
+                CartaPorte31 = new ComplementoCartaPorte31
                 {
+                    IdCCP = "CCCBCD94-870A-4332-A52A-A52AA52AA52A",
                     TranspInternac = TranspInternac.No,
                     TotalDistRec = 1.0M,
                     RegistroISTMO = RegistroISTMO.Sí,
@@ -351,7 +361,6 @@ namespace WebApiExamples
                             RFCRemitenteDestinatario = "EKU9003173C9",
                             NombreRemitenteDestinatario = "ESCUELA KEPLER URGATE",
                             FechaHoraSalidaLlegada = DateTime.Now.AddHours(-6),
-                            DistanciaRecorrida = 1,
                             Domicilio = new Domicilio
                             {
                                 Calle = "Puebla No.1",
@@ -389,7 +398,6 @@ namespace WebApiExamples
                     {
                         PesoBrutoTotal = 1.0M,
                         UnidadPeso = "XBX",
-                        PesoNetoTotal = 1M,
                         NumTotalMercancias = 1,
                         LogisticaInversaRecoleccionDevolucion = "Sí",
                         Mercancia = new[]
@@ -398,7 +406,6 @@ namespace WebApiExamples
                             {
                                 BienesTransp = "11121900",
                                 Descripcion = "Accesorios de equipo de telefonía",
-                                SectorCOFEPRIS = "01",
                                 Cantidad = 1.0M,
                                 ClaveUnidad = "XBX",
                                 MaterialPeligroso = "No",
@@ -497,11 +504,11 @@ namespace WebApiExamples
 
         }
 
-        public void TestCartaPorte30_autotransporte(FacturamaApi facturama)
+        public void TestCartaPorte31_autotransporte(FacturamaApi facturama)
         {
             var cfdi = new Cfdi
             {
-                NameId = "35",
+                NameId = "36",
                 Currency = "MXN",
                 Folio = "99999",
                 Serie = "CCP",
@@ -555,7 +562,7 @@ namespace WebApiExamples
             // Complemento Carta Porte            
             cfdi.Complement = new Complement
             {
-                CartaPorte30 = new ComplementoCartaPorte30
+                CartaPorte31 = new ComplementoCartaPorte31
                 {
                     TranspInternac = TranspInternac.No,
                     TotalDistRec = 1.0M,
@@ -571,7 +578,6 @@ namespace WebApiExamples
                             RFCRemitenteDestinatario = "EKU9003173C9",
                             NombreRemitenteDestinatario = "ESCUELA KEPLER URGATE",
                             FechaHoraSalidaLlegada = DateTime.Now.AddHours(-6),
-                            DistanciaRecorrida = 1,
                             Domicilio = new Domicilio
                             {
                                 Calle = "Puebla No.1",
@@ -609,7 +615,6 @@ namespace WebApiExamples
                     {
                         PesoBrutoTotal = 10.0M,
                         UnidadPeso = "KGM",
-                        PesoNetoTotal = 10.0M,
                         NumTotalMercancias = 1,
                         LogisticaInversaRecoleccionDevolucion = null,
                         CargoPorTasacion = 90.00M,
@@ -623,7 +628,6 @@ namespace WebApiExamples
                                 SectorCOFEPRIS = null,
                                 Cantidad = 2.0M,
                                 ClaveUnidad = "H87",
-                                MaterialPeligroso = "No",
                                 PesoEnKg = 1.00M,
                                 ValorMercancia = 116.00M,
                                 Moneda = "MXN",
