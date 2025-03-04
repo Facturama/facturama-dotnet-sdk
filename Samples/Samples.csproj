@@ -8,9 +8,10 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Samples</RootNamespace>
     <AssemblyName>Samples</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -50,9 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MultiIssuerExamples\EducationalInstitutionComplementExampleMulti.cs" />
+    <Compile Include="MultiIssuerExamples\ForeignTradeExampleAPILite.cs" />
     <Compile Include="MultiIssuerExamples\MultiIssuerExamples.cs" />
     <Compile Include="WebApiExamples\CatalogsExample.cs" />
     <Compile Include="MultiIssuerExamples\WaybillComplementExampleMulti.cs" />
+    <Compile Include="WebApiExamples\ForeignTradeExample.cs" />
     <Compile Include="WebApiExamples\WaybillComplementExample.cs" />
     <Compile Include="WebApiExamples\EducationalInstitutionComplementExample.cs" />
     <Compile Include="WebApiExamples\InvoiceExample.cs" />

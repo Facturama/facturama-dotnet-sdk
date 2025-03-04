@@ -6,6 +6,7 @@ using Facturama.Models.Complements.Donation;
 using Facturama.Models.Complements.Waybill;
 using Facturama.Models.Response;
 using Newtonsoft.Json;
+using Facturama.Models.Complements.ForeignTrade;
 
 namespace Facturama.Models
 {
@@ -48,6 +49,8 @@ namespace Facturama.Models
         /// Complemento Donativos 
         /// </summary>
         public Donation Donation { get; set; }
+
+        public ForeignTrade ForeignTrade { get; set; }
     }
 }
 
