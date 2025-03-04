@@ -13,15 +13,16 @@ namespace MultiIssuerExamples
     {
         public static void RunExamples()
         {
-            var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebas", "pruebas2011");
+            var facturamaMultiEmisor = new FacturamaApiMultiemisor("tu_usuario", "tu_contraseña");
             //TestListCreateAndRemoveCsd(facturamaMultiEmisor);
             //TestCreateCfdiMultiemisor(facturamaMultiEmisor);// CFDI 3.3
             //TestCreateCfdiMultiemisor40(facturamaMultiEmisor);// CFDI 4.0
             //TestCreatePaymentCfdi(facturamaMultiEmisor);
             //TestCreatePaymentCfdi40(facturamaMultiEmisor); // Complemento de Pago 20
+            new ForeignTradeExampleAPILite(facturamaMultiEmisor).Run(); // Comercio Exterior
 
             //new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
-            new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
+            //new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
 
             Console.ReadKey();
         }
