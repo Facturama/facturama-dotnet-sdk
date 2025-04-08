@@ -11,6 +11,7 @@ using PayrollIssuer = Facturama.Models.Complements.Payroll.Issuer;
 using Retenciones = Facturama.Models.Retentions.Retenciones;
 using Facturama.Models.Retentions;
 using static System.Net.Mime.MediaTypeNames;
+using Newtonsoft.Json;
 
 namespace WebApiExamples
 {
@@ -22,16 +23,16 @@ namespace WebApiExamples
     * En este ejemplo se incluye la creacón de este CFDI, para posteriormente realizar el  "Complemento de pago" = "PUE"     
     */
     class InvoiceExample
-	{
+    {
         private readonly FacturamaApi facturama;
         public InvoiceExample(FacturamaApi facturama)
         {
-             this.facturama = facturama;
+            this.facturama = facturama;
         }
 
         public void Run()
         {
-            
+
 
             try
             {
@@ -42,11 +43,12 @@ namespace WebApiExamples
                 //TestTaxLegends(facturama);
                 //TestDonationCFDI(facturama);
                 //TestValidateClient(facturama);
+                //TestResponse(facturama);
             }
             catch (FacturamaException ex)
             {
                 Console.WriteLine(ex.Message);
-                if(ex.Model.Details != null)
+                if (ex.Model.Details != null)
                     foreach (var messageDetail in ex.Model.Details)
                     {
                         Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
@@ -77,7 +79,7 @@ namespace WebApiExamples
                 {
                     Rfc = "CACX7605101P8",
                     Name = "XOCHILT CASAS CHAVEZ",
-                    CfdiUse = "G03",           
+                    CfdiUse = "G03",
                     /*
                     Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
                     {
@@ -91,7 +93,7 @@ namespace WebApiExamples
                         Country = "México"
                     }*/
                 },
-            
+
                 Items = new List<Item>
                 {
                     new Item
@@ -115,19 +117,19 @@ namespace WebApiExamples
                                 Base = 100.00m,
                                 IsRetention = false
                             }
-         
+
                         },
                         Total=116.00m,
 
 
                     }
                 }
-  
-             };
+
+            };
             var cfdiCreated = facturama.Cfdis.Create(cfdi33);
             Console.WriteLine($"Se creo exitosamente el CFDI 3.3 con ID: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
 
-        
+
             //Descargar PDF y XML
             //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
             //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
@@ -236,9 +238,9 @@ namespace WebApiExamples
                             "21  47  3807  8003832",
                             "21  47  3807  8003832"
                         }
-                        
 
-                     
+
+
 
 
                     }
@@ -248,9 +250,9 @@ namespace WebApiExamples
             var cfdiCreated = facturama.Cfdis.Create3(cfdi); // Probar CFDI 4.0
             Console.WriteLine($"Se creo exitosamente el CFDI 4.0 con ID: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
 
-                //Descargar PDF y XML
-                //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
-                //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
+            //Descargar PDF y XML
+            //facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);
+            //facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
 
 
             //var list = facturama.Cfdis.List("Expresion en Software");
@@ -349,7 +351,7 @@ namespace WebApiExamples
 
                         },
                         Total=116.00m,
-                                                                      
+
                     }
                 }
 
@@ -359,7 +361,7 @@ namespace WebApiExamples
             {
                 TaxLegends = new TaxLegends
                 {
-                    Legends = new[] 
+                    Legends = new[]
                     {
                         new Legend
                         {
@@ -371,7 +373,7 @@ namespace WebApiExamples
                 }
             };
 
-            var cfdiCreated = facturama.Cfdis.Create3(cfdi); 
+            var cfdiCreated = facturama.Cfdis.Create3(cfdi);
             Console.WriteLine($"Se creo exitosamente el CFDI 4.0 con ID: {cfdiCreated.Id}, folio: {cfdiCreated.Folio} y folío fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
 
 
@@ -448,7 +450,7 @@ namespace WebApiExamples
 
                         },
                         Total=116.00m,
-                     
+
 
                     }
                 }
@@ -512,7 +514,7 @@ namespace WebApiExamples
                 {
                     RfcEmisor = "EKU9003173C9",
                     NomDenRazSocE = "ESCUELA KEMPER URGATE",
-                    CurpE= "BADD110313HCMLNS09"
+                    CurpE = "BADD110313HCMLNS09"
                 },
                 Receptor = new Receptor
                 {
@@ -565,32 +567,32 @@ namespace WebApiExamples
                 Emisor = new Emisor
                 {
                     RfcEmisor = "EKU9003173C9",
-                    NomDenRazSocE= "ESCUELA KEMPER URGATE",
-                    RegimenFiscalE= "601"
+                    NomDenRazSocE = "ESCUELA KEMPER URGATE",
+                    RegimenFiscalE = "601"
                 },
                 Receptor = new Receptor
                 {
-                    Nacionalidad= "Nacional",
+                    Nacionalidad = "Nacional",
                     Nacional = new Nacional
                     {
-                        RfcRecep= "CACX7605101P8",
-                        NomDenRazSocR= "XOCHILT CASAS CHAVEZ",
-                        DomicilioFiscalR= "36257"
+                        RfcRecep = "CACX7605101P8",
+                        NomDenRazSocR = "XOCHILT CASAS CHAVEZ",
+                        DomicilioFiscalR = "36257"
                     }
                 },
                 Periodo = new Periodo
                 {
                     MesIni = 01,
-                    MesFin =01,
-                    Ejerc=2023
+                    MesFin = 01,
+                    Ejerc = 2023
                 },
                 Totales = new Totales
                 {
-                    MontoTotOperacion=1681.06M,
-                    MontoTotGrav=1681.06M,
-                    MontoTotExent=0.0M,
-                    MontoTotRet=151.29M,
-                    ImpRetenidos= new List<ImpRetenido>
+                    MontoTotOperacion = 1681.06M,
+                    MontoTotGrav = 1681.06M,
+                    MontoTotExent = 0.0M,
+                    MontoTotRet = 151.29M,
+                    ImpRetenidos = new List<ImpRetenido>
                     {
                         new ImpRetenido
                         {
@@ -607,14 +609,14 @@ namespace WebApiExamples
                             TipoPagoRet= "01"
                         }
                     }
-                }      
+                }
             };
 
             //var cfdiCreated = facturama.Retention.CreateRet(Retenciones);
-           // Console.WriteLine($"Se creo exitosamente CFDI de retenciones con Id: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}");
+            // Console.WriteLine($"Se creo exitosamente CFDI de retenciones con Id: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}");
 
 
-            var cfdiCreated = facturama.Retention.CreateRet2(Retenciones2); 
+            var cfdiCreated = facturama.Retention.CreateRet2(Retenciones2);
             Console.WriteLine($"Se creo exitosamente CFDI de retenciones v2 con Id: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complemento.TimbreFiscalDigital.Uuid}");
 
             Console.WriteLine(facturama.Retention.Retrieve(cfdiCreated.Id));
@@ -770,7 +772,7 @@ namespace WebApiExamples
         {
             var validate = new CustumerValidate
             {
-                Rfc= "EKU9003173C9",
+                Rfc = "EKU9003173C9",
                 Name = "ESCUELA KEMPER URGATE",
                 ZipCode = "26015",
                 FiscalRegime = "601"
@@ -781,6 +783,12 @@ namespace WebApiExamples
             Console.WriteLine("MatchZipCode:" + Validacion.MatchZipCode);
             Console.WriteLine("MatchFiscalRegime:" + Validacion.MatchFiscalRegime);
 
+        }
+        public void TestResponse(FacturamaApi facturama)
+        {
+            var cfdireponse = facturama.Cfdis.Retrieve("Vl0J-v9IsV6PJUIPOT_1Nw2");
+            string json = JsonConvert.SerializeObject(cfdireponse.Items);
+            Console.WriteLine(json);
         }
 
 
