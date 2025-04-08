@@ -1,5 +1,6 @@
 ﻿namespace Facturama.Models.Response
 {
+    using Facturama.Models.Complements;
     using Newtonsoft.Json;
 
     public class Cfdi
@@ -152,6 +153,12 @@
 
         [JsonProperty("Total")]
         public decimal Total { get; set; }
+
+        [JsonProperty("IdentificationNumber")]
+        public decimal IdentificationNumber { get; set; }
+
+        [JsonProperty("Complement")]
+        public ItemComplement Complement { get; set; }
     }
 
     public class Receiver
