@@ -34,8 +34,15 @@ namespace Facturama.Services
             }
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
-                var exception = JsonConvert.DeserializeObject<ModelException>(response.Content);
-                throw new FacturamaException(exception.Message, exception);
+                try
+                {
+                    var exception = JsonConvert.DeserializeObject<ModelException>(response.Content);
+                    throw new FacturamaException(exception?.Message ?? "Bad request", exception);
+                }
+                catch (Exception)
+                {
+                    throw new Exception($"Bad request. Content: {response?.Content}");
+                }
             }
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
@@ -85,8 +92,16 @@ namespace Facturama.Services
             });
             request.AddParameter("application/json", json, ParameterType.RequestBody);
             var response = Execute(request);
-            var modelView = JsonConvert.DeserializeObject<TO>(response.Content);
-            return modelView;
+            try
+            {
+                var modelView = JsonConvert.DeserializeObject<TO>(response.Content);
+                return modelView;
+            }
+            catch (Exception)
+            {
+                throw new Exception($"Bad request. Content: {response?.Content}");
+            }
+            
         }
 
         protected TO Put(TI obj, string id)
