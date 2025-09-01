@@ -162,13 +162,18 @@ namespace Facturama.Services
             HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
 
             var response = taskCompletionSource.Task.Result;
-            var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
-            if (result != null && result.ContainsKey("success"))
+            try { 
+                var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
+                if (result != null && result.ContainsKey("success"))
+                {
+                    return (bool)result["success"];
+                }
+            }
+            catch (Exception ex)
             {
-                return (bool)result["success"];
+                throw new Exception($"Error al intentar enviar mensaje. Content: {response?.Content}", ex);
             }
             return false;
-
         }
 
 		/// <summary>

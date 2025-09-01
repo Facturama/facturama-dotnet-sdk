@@ -32,6 +32,10 @@ namespace Facturama.Services
             {
                 throw new FacturamaException("No esta autorizado para realizar esta petición, verifique su usuario y contraseña y que su suscripción se encuentre activa");
             }
+            if (response.ResponseStatus == ResponseStatus.TimedOut)
+            {
+                throw new TimeoutException($"TimeOut {response?.ErrorMessage} content:{response?.Content}");
+            }
             if (response.StatusCode == HttpStatusCode.BadRequest)
             {
                 try
