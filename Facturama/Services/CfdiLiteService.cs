@@ -24,7 +24,7 @@ namespace Facturama.Services
             All, Active, Cancel
         }
 
-        public CfdiLiteService(RestClientService httpClient) : 
+        public CfdiLiteService(IHttpClient httpClient) : 
             base(httpClient, "")
         {
 
