@@ -7,7 +7,7 @@ namespace Facturama.Services
 {
     public class CustomersService : HttpService<Models.Request.CustumerValidate, Models.Response.CustumerValidate>
     {
-        public CustomersService(RestClient httpClient) : base(httpClient, "api/customers/validate")
+        public CustomersService(IHttpClient httpClient) : base(httpClient, "api/customers/validate")
         {
         }
 

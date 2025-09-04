@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
+using Facturama.Data;
+using Facturama.Models;
 using Facturama.Models.Response;
 using Facturama.Models.Retentions;
 using Newtonsoft.Json;
@@ -12,17 +14,7 @@ namespace Facturama.Services
 {
     public class RetentionService : CrudService<Models.Retentions.Retenciones, Models.Retentions.Retenciones>
     {
-        public enum FileFormat
-        {
-            Xml, Pdf, Html
-        }
-
-        public enum CfdiStatus
-        {
-            All, Active, Cancel
-        }
-
-        public RetentionService(RestClient httpClient) : 
+        public RetentionService(IHttpClient httpClient) : 
             base(httpClient, "")
         {
             
@@ -36,6 +28,25 @@ namespace Facturama.Services
         public override Models.Retentions.Retenciones CreateRet2(Models.Retentions.Retenciones model)
         {
             return Post(model, "2/retenciones");
+        }
+
+        /// <summary>
+        /// Creación Ret 2.0 Async
+        /// </summary>   
+        public async Task<Models.Retentions.Retenciones> CreateRet2Async(Models.Retentions.Retenciones model)
+        {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+            try
+            {
+                var result = await this.HttpClient.PostAsync<Models.Retentions.Retenciones, Models.Retentions.Retenciones>(model, "2/retenciones");
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+
         }
 
         /// <summary>
@@ -70,7 +81,7 @@ namespace Facturama.Services
             request.AddHeader("Content-Type", "application/json");
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             var file = JsonConvert.DeserializeObject<CfdiSearchResults[]>(response.Content);
@@ -83,7 +94,7 @@ namespace Facturama.Services
             request.AddHeader("Content-Type", "application/json");
             
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             var file = JsonConvert.DeserializeObject<InvoiceFile>(response.Content);
@@ -112,7 +123,7 @@ namespace Facturama.Services
         {   
             var request = new RestRequest($"retenciones/envia?id={id}&email={email}", Method.POST);
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
@@ -123,7 +134,27 @@ namespace Facturama.Services
             return false;
 
         }
+        public async Task<bool> SendByMailAsync(string id, string email, string subject = null, InvoiceType type = InvoiceType.Issued)
+        {
+            try
+            {
+                var result = await this.HttpClient.PostAsync<ResponseMailViewModel, Models.Request.Cfdi>(null, $"retenciones/envia?id={id}&email={email}");
+                if (result != null && result.success)
+                {
+                    return result.success;
+                }
+                return false;
+            }
+            catch (TimeoutException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al intentar enviar mensaje. Cfdi:{id} To: {email}", ex);
+            }
+        }
 
 
-	}
+    }
 }

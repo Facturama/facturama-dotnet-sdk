@@ -17,7 +17,7 @@ namespace Facturama.Services
 		}
 
 
-		public StoreService(RestClient httpClient)
+		public StoreService(IHttpClient httpClient)
 			: base(httpClient, "store")
 		{
 

@@ -17,7 +17,7 @@ namespace Facturama.Services
 			Receipt, Accuse
 		}
 
-		public ChargeService(RestClient httpClient) 
+		public ChargeService(IHttpClient httpClient) 
             : base(httpClient, "charges")
         {
             

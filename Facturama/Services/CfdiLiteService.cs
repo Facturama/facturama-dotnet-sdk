@@ -24,7 +24,7 @@ namespace Facturama.Services
             All, Active, Cancel
         }
 
-        public CfdiLiteService(RestClient httpClient) : 
+        public CfdiLiteService(RestClientService httpClient) : 
             base(httpClient, "")
         {
 
@@ -88,7 +88,7 @@ namespace Facturama.Services
             request.AddHeader("Content-Type", "application/json");
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             var file = JsonConvert.DeserializeObject<CfdiSearchResults[]>(response.Content);
@@ -105,7 +105,7 @@ namespace Facturama.Services
             request.AddHeader("Content-Type", "application/json");
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             var list = JsonConvert.DeserializeObject<CfdiSearchResults[]>(response.Content);
@@ -126,7 +126,7 @@ namespace Facturama.Services
             request.AddHeader("Content-Type", "application/json");
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             var file = JsonConvert.DeserializeObject<InvoiceFile>(response.Content);
@@ -155,7 +155,7 @@ namespace Facturama.Services
 		{
 			var request = new RestRequest($"Cfdi?cfdiType=issuedLite&cfdiId={id}&email={email}&subject={subject}", Method.POST);
 			var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-			HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+			HttpClient.ExecuteAsync(request, taskCompletionSource);
 
 			var response = taskCompletionSource.Task.Result;
 			var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);

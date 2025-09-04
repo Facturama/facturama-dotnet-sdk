@@ -13,7 +13,7 @@ namespace Facturama.Services
 {
     public class TaxEntityService : HttpService<Models.Request.TaxEntity, Models.Response.TaxEntity>
     {
-        public TaxEntityService(RestClient httpClient) : base(httpClient, "taxentity/")
+        public TaxEntityService(IHttpClient httpClient) : base(httpClient, "taxentity/")
         {
         }
 
@@ -41,7 +41,7 @@ namespace Facturama.Services
             request.AddParameter("application/json", json, ParameterType.RequestBody);
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
 
@@ -67,7 +67,7 @@ namespace Facturama.Services
             request.AddParameter("application/json", json, ParameterType.RequestBody);
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
 

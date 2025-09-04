@@ -10,7 +10,7 @@ namespace Facturama.Services
 {
     public class CatalogService : HttpService<CatalogViewModel, CatalogViewModel>
     {
-        public CatalogService(RestClient httpClient)
+        public CatalogService(IHttpClient httpClient)
             : base(httpClient, "catalogs")
         {
 

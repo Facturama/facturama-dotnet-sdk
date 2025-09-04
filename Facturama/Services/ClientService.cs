@@ -9,7 +9,7 @@ namespace Facturama.Services
 {
     public partial class ClientService : CrudService<Client, Client>
     {
-        public ClientService(RestClient client) 
+        public ClientService(IHttpClient client) 
             : base(client, "client/")
         {
 

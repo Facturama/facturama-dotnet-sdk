@@ -7,7 +7,7 @@ namespace Facturama.Services
 {
     public class CsdService : CrudService<Models.Request.Csd, Models.Response.Csd>
     {
-        public CsdService(RestClient httpClient)
+        public CsdService(RestClientService httpClient)
             : base(httpClient, "api-lite/csds/")
         {
 

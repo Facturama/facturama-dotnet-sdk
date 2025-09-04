@@ -5,7 +5,7 @@ namespace Facturama.Services
 {
     public abstract class CrudService<TI, TO> : HttpService<TI, TO> where TO : new()
     {
-        protected CrudService(RestClient httpClient, string uri) 
+        protected CrudService(IHttpClient httpClient, string uri) 
             : base(httpClient, uri)
         {
 

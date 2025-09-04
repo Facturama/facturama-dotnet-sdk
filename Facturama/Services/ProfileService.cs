@@ -8,7 +8,7 @@ namespace Facturama.Services
 {
     public class ProfileService : HttpService<Profile, Profile>
     {
-        public ProfileService(RestClient httpClient) 
+        public ProfileService(IHttpClient httpClient) 
             : base(httpClient, "profile/")
         {
 

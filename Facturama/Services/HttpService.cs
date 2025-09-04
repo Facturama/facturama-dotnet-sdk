@@ -19,13 +19,13 @@ namespace Facturama.Services
 
     public abstract class HttpService<TI, TO> where TO : new()
     {
-        protected readonly RestClient HttpClient;
+        protected readonly IHttpClient HttpClient;
         protected readonly string UriResource;
 
         protected IRestResponse Execute(IRestRequest request)
         {
             var taskCompletionSource = new TaskCompletionSource<IRestResponse<TO>>();
-            HttpClient.ExecuteAsync<TO>(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync<TO>(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             if (response.StatusCode == HttpStatusCode.Unauthorized)
@@ -59,7 +59,7 @@ namespace Facturama.Services
             return response;
         }
 
-        protected HttpService(RestClient httpClient, string uri)
+        protected HttpService(IHttpClient httpClient, string uri)
         {
             HttpClient = httpClient;
             UriResource = uri;

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Web;
+using Facturama.Data;
+using Facturama.Models;
 using Facturama.Models.Response;
 using Newtonsoft.Json;
 using RestSharp;
@@ -11,22 +13,8 @@ namespace Facturama.Services
 {
     public class CfdiService : CrudService<Models.Request.Cfdi, Models.Response.Cfdi>
     {
-        public enum FileFormat
-        {
-            Xml, Pdf, Html
-        }
 
-        public enum InvoiceType
-        {
-            Issued, Received, Payroll
-        }
-
-        public enum CfdiStatus
-        {
-            All, Active, Cancel
-        }
-
-        public CfdiService(RestClient httpClient) : 
+        public CfdiService(IHttpClient httpClient) : 
             base(httpClient, "")
         {
             
@@ -47,6 +35,25 @@ namespace Facturama.Services
         public override Models.Response.Cfdi Create3(Models.Request.Cfdi model)
         {
             return Post(model, "3/cfdis");
+        }
+
+        /// <summary>
+        /// Creación CFDI4.0 Async
+        /// </summary>   
+        public async Task<Models.Response.Cfdi> Create3Async(Models.Request.Cfdi model)
+        {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+            try
+            {
+                var result = await this.HttpClient.PostAsync<Models.Response.Cfdi, Models.Request.Cfdi>(model, "3/cfdis");
+                return result;
+            }
+            catch
+            {
+                throw;
+            }
+           
         }
 
         /// <summary>
@@ -99,7 +106,7 @@ namespace Facturama.Services
             request.AddHeader("Content-Type", "application/json");
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             var file = JsonConvert.DeserializeObject<CfdiSearchResults[]>(response.Content);
@@ -116,7 +123,7 @@ namespace Facturama.Services
             request.AddHeader("Content-Type", "application/json");
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             var list = JsonConvert.DeserializeObject<CfdiSearchResults[]>(response.Content);
@@ -130,7 +137,7 @@ namespace Facturama.Services
             request.AddHeader("Content-Type", "application/json");
             
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             var file = JsonConvert.DeserializeObject<InvoiceFile>(response.Content);
@@ -159,7 +166,7 @@ namespace Facturama.Services
         {   
             var request = new RestRequest($"Cfdi?cfdiType={type}&cfdiId={id}&email={email}&subject={subject}", Method.POST);
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, restResponse => taskCompletionSource.SetResult(restResponse));
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
 
             var response = taskCompletionSource.Task.Result;
             try { 
@@ -176,12 +183,32 @@ namespace Facturama.Services
             return false;
         }
 
-		/// <summary>
-		/// Carga de una factura recibida.
-		/// Se coloca en la entidad fiscal  que realiza la llamada
-		/// </summary>
-		/// <param name="cfdiXMLBase64">Archivo XML en string de base64</param>
-		public bool Upload(string cfdiXMLBase64)
+        public async Task<bool> SendByMailAsync(string id, string email, string subject = null, InvoiceType type = InvoiceType.Issued)
+        {
+            try
+            {
+                var result = await this.HttpClient.PostAsync<ResponseMailViewModel,Models.Request.Cfdi>(null,$"Cfdi?cfdiType={type}&cfdiId={id}&email={email}&subject={subject}");
+                if (result != null && result.success)
+                {
+                    return result.success;
+                }
+                return false;
+            }
+            catch (TimeoutException){
+                throw; 
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al intentar enviar mensaje. Cfdi:{id} To: {email}", ex);
+            }         
+        }
+
+        /// <summary>
+        /// Carga de una factura recibida.
+        /// Se coloca en la entidad fiscal  que realiza la llamada
+        /// </summary>
+        /// <param name="cfdiXMLBase64">Archivo XML en string de base64</param>
+        public bool Upload(string cfdiXMLBase64)
 		{
 			var invFile = new InvoiceFile()
 			{

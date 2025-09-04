@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Facturama.Services;
-using RestSharp;
 using RestSharp.Authenticators;
 
 namespace Facturama
@@ -15,10 +14,10 @@ namespace Facturama
         {
             var url = isDevelopment ? "https://apisandbox.facturama.mx/" : "https://api.facturama.mx/";
 
-            var httpClient = new RestClient(url)
+            var httpClient = new RestClientService(new RestSharp.RestClient(url)
             {
                 Authenticator = new HttpBasicAuthenticator(user, password)
-            };
+            });
             Catalogs = new CatalogService(httpClient);
             Csds = new CsdService(httpClient);
             Cfdis = new CfdiLiteService(httpClient);

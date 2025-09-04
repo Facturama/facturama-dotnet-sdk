@@ -6,7 +6,7 @@ namespace Facturama.Services
 {
     public class SerieService : HttpService<Serie, Serie>
     {
-        public SerieService(RestClient httpClient) : base(httpClient, "serie/")
+        public SerieService(IHttpClient httpClient) : base(httpClient, "serie/")
         {
         }
 

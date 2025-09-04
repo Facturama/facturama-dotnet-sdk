@@ -5,7 +5,7 @@ namespace Facturama.Services
 {
     public class BranchOfficeService : CrudService<BranchOffice, BranchOffice>
     {
-        public BranchOfficeService(RestClient httpClient) 
+        public BranchOfficeService(IHttpClient httpClient) 
             : base(httpClient, "branchoffice/")
         {
 
