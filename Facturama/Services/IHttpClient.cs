@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using RestSharp;
-
-namespace Facturama.Services
+﻿namespace Facturama.Services
 {
+    using System.Threading.Tasks;
+    using Facturama.Models.Request;
+
     public interface IHttpClient
     {
-        RestRequestAsyncHandle ExecuteAsync(
-            IRestRequest request,TaskCompletionSource<IRestResponse> taskCompletionSource);
-        RestRequestAsyncHandle ExecuteAsync<TO>(
-            IRestRequest request, TaskCompletionSource<IRestResponse<TO>> taskCompletionSource);
-        Task<TO> PostAsync<TO, TI>(TI obj, string urlParams = "");
+        TO Post<TO, TI>(string url, TI data, HttpRequestOptions options = null);
+        Task<TO> PostAsync<TO, TI>(string url, TI data, HttpRequestOptions options = null);
+        TO Get<TO>(string url, HttpRequestOptions options = null);
+        Task<TO> GetAsync<TO>(string url, HttpRequestOptions options = null);
+        TO Put<TO, TI>(string url, TI data, HttpRequestOptions options = null);
+        Task<TO> PutAsync<TO, TI>(string url, TI data, HttpRequestOptions options = null);
+        TO Delete<TO>(string url, HttpRequestOptions options = null);
+        Task<TO> DeleteAsync<TO>(string url, HttpRequestOptions options = null);
     }
 }

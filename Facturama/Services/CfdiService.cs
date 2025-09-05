@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 using Facturama.Data;
 using Facturama.Models;
+using Facturama.Models.Request;
 using Facturama.Models.Response;
 using Newtonsoft.Json;
-using RestSharp;
 
 namespace Facturama.Services
 {
@@ -19,22 +20,12 @@ namespace Facturama.Services
         {
             
         }
-
-        /// <summary>
-        /// Creación CFDI3.3, Método obsoleto
-        /// </summary>      
-        [Obsolete(" El método 'Create' está OBSOLETO, por favor utiliza 'Create3'")]
-        public override Models.Response.Cfdi Create(Models.Request.Cfdi model)
-        {
-            return Post(model, "2/cfdis");     // Método fuera de vigencia 
-        }
-
         /// <summary>
         /// Creación CFDI4.0
         /// </summary>   
         public override Models.Response.Cfdi Create3(Models.Request.Cfdi model)
         {
-            return Post(model, "3/cfdis");
+            return this.HttpClient.Post<Models.Response.Cfdi, Models.Request.Cfdi>("3/cfdis", model);
         }
 
         /// <summary>
@@ -42,18 +33,7 @@ namespace Facturama.Services
         /// </summary>   
         public async Task<Models.Response.Cfdi> Create3Async(Models.Request.Cfdi model)
         {
-            if (model == null)
-                throw new ArgumentNullException(nameof(model));
-            try
-            {
-                var result = await this.HttpClient.PostAsync<Models.Response.Cfdi, Models.Request.Cfdi>(model, "3/cfdis");
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
-           
+            return await this.HttpClient.PostAsync<Models.Response.Cfdi, Models.Request.Cfdi>("3/cfdis",model);
         }
 
         /// <summary>
@@ -69,48 +49,23 @@ namespace Facturama.Services
         {
             if (String.IsNullOrEmpty(id))
                 throw new ArgumentNullException(nameof(id));
-
-            var request = new RestRequest(Method.DELETE) { Resource = $"{UriResource}cfdi/{id}?type=issued&motive={motive}&uuidReplacement={uuidReplacement}" };
-            var response = Execute(request);
-            return JsonConvert.DeserializeObject<Models.Response.CancelationStatus>(response.Content);
+            return this.HttpClient.Delete<Models.Response.CancelationStatus>($"{UriResource}cfdi/{id}?type=issued&motive={motive}&uuidReplacement={uuidReplacement}");
         }
 
-		/// <summary>
-		/// Cancelación CFDI3.3  vigencia 2017 y anteriores
-		/// </summary>
-		/// <param name="id">ID del CFDI</param>
-		/// <returns>CFDI</returns>
-		[Obsolete(" El método 'Remove' está OBSOLETO, por favor utiliza 'Cancel',  para la 'cancelación con aceptación' implementada en 2018.")]
-		public override Models.Response.Cfdi Remove(string id)
-		{
-			if (String.IsNullOrEmpty(id))
-				throw new ArgumentNullException(nameof(id));
-
-			var request = new RestRequest(Method.DELETE) { Resource = $"{UriResource}cfdi/{id}?type=issued" };
-			var response = Execute(request);
-
-			return Retrieve(id);			
-		}
-
-
-
-		public Cfdi Retrieve(string id, InvoiceType type = InvoiceType.Issued)
+		public Facturama.Models.Response.Cfdi Retrieve(string id, InvoiceType type = InvoiceType.Issued)
         {
-            return Get($"cfdi/{id}?type={type}");
+            return this.HttpClient.Get<Facturama.Models.Response.Cfdi>($"cfdi/{id}?type={type}");
         }
 
         public CfdiSearchResults[] List(string keyword, CfdiStatus status = CfdiStatus.Active, InvoiceType type = InvoiceType.Issued)
         {
             keyword = HttpUtility.UrlEncode(keyword);
-            var request = new RestRequest($"{UriResource}Cfdi?type={type}&keyword={keyword}&status={status}", Method.GET);
-            request.AddHeader("Content-Type", "application/json");
+            HttpRequestOptions option = new HttpRequestOptions()
+            {
+                ContentType = "application/json",
+            };
 
-            var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, taskCompletionSource);
-
-            var response = taskCompletionSource.Task.Result;
-            var file = JsonConvert.DeserializeObject<CfdiSearchResults[]>(response.Content);
-            return file;
+            return this.HttpClient.Get<CfdiSearchResults[]>($"{UriResource}Cfdi?type={type}&keyword={keyword}&status={status}", option);
         }
         
         public CfdiSearchResults[] List(int folioStart = -1, int folioEnd = -1, 
@@ -119,29 +74,23 @@ namespace Facturama.Services
             string idBranch = "", string serie = "",
             CfdiStatus status = CfdiStatus.Active, InvoiceType type = InvoiceType.Issued)
         {
-            var request = new RestRequest($"{UriResource}Cfdi?type={type}&status={status}&folioStart={folioStart}&folioEnd={folioEnd}&rfc={rfc}&taxEntityName={taxEntityName}&dateStart={dateStart}&dateEnd={dateEnd}&idBranch={idBranch}&serie={serie}", Method.GET);
-            request.AddHeader("Content-Type", "application/json");
+            HttpRequestOptions option = new HttpRequestOptions()
+            {
+                ContentType = "application/json",
+            };
 
-            var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, taskCompletionSource);
-
-            var response = taskCompletionSource.Task.Result;
-            var list = JsonConvert.DeserializeObject<CfdiSearchResults[]>(response.Content);
-            return list;
+            return this.HttpClient.Get<CfdiSearchResults[]>($"{UriResource}Cfdi?type={type}&status={status}&folioStart={folioStart}&folioEnd={folioEnd}&rfc={rfc}&taxEntityName={taxEntityName}&dateStart={dateStart}&dateEnd={dateEnd}&idBranch={idBranch}&serie={serie}", option);
         }
 
         public InvoiceFile GetFile(string id, FileFormat format, InvoiceType type = InvoiceType.Issued)
         {
 			var strFormat = format.ToString().ToLower();
-            var request = new RestRequest($"{UriResource}cfdi/{strFormat}/{type}/{id}", Method.GET);
-            request.AddHeader("Content-Type", "application/json");
-            
-            var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, taskCompletionSource);
+            HttpRequestOptions option = new HttpRequestOptions()
+            {
+                ContentType = "application/json",
+            };
 
-            var response = taskCompletionSource.Task.Result;
-            var file = JsonConvert.DeserializeObject<InvoiceFile>(response.Content);
-            return file;
+            return this.HttpClient.Get<InvoiceFile>($"{UriResource}cfdi/{strFormat}/{type}/{id}", option);
         }
 
         public void SavePdf(string filePath, string id, InvoiceType type = InvoiceType.Issued)
@@ -163,44 +112,23 @@ namespace Facturama.Services
         }
 
         public bool SendByMail(string id, string email, string subject = null, InvoiceType type = InvoiceType.Issued)
-        {   
-            var request = new RestRequest($"Cfdi?cfdiType={type}&cfdiId={id}&email={email}&subject={subject}", Method.POST);
-            var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
-            HttpClient.ExecuteAsync(request, taskCompletionSource);
-
-            var response = taskCompletionSource.Task.Result;
-            try { 
-                var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
-                if (result != null && result.ContainsKey("success"))
-                {
-                    return (bool)result["success"];
-                }
-            }
-            catch (Exception ex)
+        {
+            var result = this.HttpClient.Post<ResponseMailViewModel, Models.Request.Cfdi>($"Cfdi?cfdiType={type}&cfdiId={id}&email={email}&subject={subject}", null);
+            if (result != null && result.success)
             {
-                throw new Exception($"Error al intentar enviar mensaje. Content: {response?.Content}", ex);
+                return result.success;
             }
             return false;
         }
 
         public async Task<bool> SendByMailAsync(string id, string email, string subject = null, InvoiceType type = InvoiceType.Issued)
         {
-            try
+            var result = await this.HttpClient.PostAsync<ResponseMailViewModel,Models.Request.Cfdi>($"Cfdi?cfdiType={type}&cfdiId={id}&email={email}&subject={subject}",null);
+            if (result != null && result.success)
             {
-                var result = await this.HttpClient.PostAsync<ResponseMailViewModel,Models.Request.Cfdi>(null,$"Cfdi?cfdiType={type}&cfdiId={id}&email={email}&subject={subject}");
-                if (result != null && result.success)
-                {
-                    return result.success;
-                }
-                return false;
+                return result.success;
             }
-            catch (TimeoutException){
-                throw; 
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error al intentar enviar mensaje. Cfdi:{id} To: {email}", ex);
-            }         
+            return false;
         }
 
         /// <summary>

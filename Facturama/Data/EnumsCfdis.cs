@@ -14,4 +14,11 @@
     {
         All, Active, Cancel
     }
+    public enum Method
+    {
+        GET,
+        POST,
+        PUT,
+        DELETE
+    }
 }
