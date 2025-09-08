@@ -14,7 +14,10 @@
     public class HttpClientService : IHttpClient
     {
         private readonly HttpClient httpClient;
-
+        public HttpClientService(HttpClient HttpClient)
+        {
+            this.httpClient = HttpClient;
+        }
         private void HandleBadRequest(string responseContent)
         {
             try

@@ -16,7 +16,7 @@ namespace Facturama.Services
 
         public Profile Retrieve()
         {
-            return base.Get("");
+            return this.HttpClient.Get<Profile>("");
         }
     }
 }

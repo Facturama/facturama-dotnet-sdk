@@ -145,19 +145,7 @@ namespace Facturama.Services
 				ContentType = "xml",
 				ContentLength = cfdiXMLBase64.Length
 			};
-			
-
-			var request = new RestRequest(Method.POST) { Resource = $"{UriResource}/upload/cfdi" };
-			request.AddHeader("Content-Type", "application/json");
-			var json = JsonConvert.SerializeObject(invFile, Formatting.None, new JsonSerializerSettings
-			{
-				NullValueHandling = NullValueHandling.Ignore,
-				Converters = new List<JsonConverter> { new Newtonsoft.Json.Converters.StringEnumConverter() }
-			});
-			request.AddParameter("application/json", json, ParameterType.RequestBody);
-			var response = Execute(request);
-
-			var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
+            var result = this.HttpClient.Post<IDictionary<string, object>, InvoiceFile>($"{UriResource}/upload/cfdi", invFile);
 			if (result != null && result.ContainsKey("success"))
 			{
 				return (bool)result["success"];

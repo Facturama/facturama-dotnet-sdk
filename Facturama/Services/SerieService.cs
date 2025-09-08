@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Facturama.Models;
-using RestSharp;
 
 namespace Facturama.Services
 {
@@ -13,27 +12,27 @@ namespace Facturama.Services
         //---------------------------- metodo create add by kiva -----------------------// no sirve u.u
         public Serie Create(Serie modelo)
         {
-            return Post(modelo, $"{modelo.IdBranchOffice}");
+            return this.HttpClient.Post<Serie, Serie>($"{modelo.IdBranchOffice}",modelo);
         }
 
         public List<Serie> List(string idBranchOffice)
         {
-            return GetList(idBranchOffice);
+            return this.HttpClient.Get<List<Serie>>($"{idBranchOffice}");
         }
 
         public Serie Retrieve(string idBranchOffice, string serieName)
         {
-            return Get($"{idBranchOffice}/{serieName}");
+            return this.HttpClient.Get<Serie>($"{idBranchOffice}/{serieName}");
         }
 
         public Serie Update(Serie model)
         {
-            return Put(model, $"{model.IdBranchOffice}/{model.Name}");
+            return this.HttpClient.Put<Serie,Serie>($"{model.IdBranchOffice}/{model.Name}",model);
         }
 
         public Serie Remove(string idBranchOffice, string serieName)
         {
-            return Delete($"{idBranchOffice}/{serieName}");
+            return this.HttpClient.Delete<Serie>($"{idBranchOffice}/{serieName}");
         }
 
 

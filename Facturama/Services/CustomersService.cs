@@ -1,7 +1,4 @@
 ﻿using Facturama.Models.Response;
-using Facturama.Models;
-using RestSharp;
-
 
 namespace Facturama.Services
 {
@@ -13,7 +10,7 @@ namespace Facturama.Services
 
         public CustumerValidate Validate(Models.Request.CustumerValidate model)
         {
-            return Post(model, "");
+            return this.HttpClient.Post<CustumerValidate, Models.Request.CustumerValidate>($"", model);
         }
 
     }

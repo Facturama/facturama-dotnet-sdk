@@ -1,7 +1,5 @@
 ﻿using System;
 using Facturama.Models.Response;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace Facturama.Services
 {
@@ -22,11 +20,7 @@ namespace Facturama.Services
         {
             if (String.IsNullOrEmpty(rfc))
                 throw new ArgumentNullException(nameof(rfc));
-
-            var request = new RestRequest(Method.DELETE) { Resource = $"{UriResource}/{rfc}" };
-            var response = Execute(request);
-            var modelView = JsonConvert.DeserializeObject<Csd>(response.Content);
-            return modelView;
+            return this.HttpClient.Delete<Csd>($"{UriResource}/{rfc}");
         }
     }
 }

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Facturama.Models.Response.Catalogs;
-using Facturama.Models.Response.Catalogs.Cfdi;
-using Newtonsoft.Json;
-using RestSharp;
+﻿using System.Collections.Generic;
 using Facturama.Models.Charge;
+using Facturama.Models.Response.Catalogs;
 
 namespace Facturama.Services
 {
@@ -25,44 +20,33 @@ namespace Facturama.Services
 
         public Charge Preview(Charge charge)
         {
-            var request = new RestRequest(Method.POST) { Resource = $"{UriResource}/preview" };
-            var response = Execute(request);
-            return  JsonConvert.DeserializeObject<Charge>(response.Content);            
+            return this.HttpClient.Post<Charge, object>($"{UriResource}/preview",null);         
         }
 
 		public Charge Create(Charge charge)
 		{
-			var request = new RestRequest(Method.POST) { Resource = $"{UriResource}" };
-			var response = Execute(request);
-			return JsonConvert.DeserializeObject<Charge>(response.Content);
+            return this.HttpClient.Post<Charge, object>($"{UriResource}", null);
 		}
 
 		public Charge[] List()
 		{
-			var request = new RestRequest(Method.GET) { Resource = $"{UriResource}" };
-			var response = Execute(request);
-			var modelView = JsonConvert.DeserializeObject<List<Charge>>(response.Content);
-			return modelView.ToArray();			
+            var response= this.HttpClient.Get<List<Charge>>($"{UriResource}");
+			return response.ToArray();			
 		}
 
 		public Charge Retrieve(string chargeId)
 		{
-			var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/{chargeId}" };
-			var response = Execute(request);
-			return JsonConvert.DeserializeObject<Charge>(response.Content);			
+            return this.HttpClient.Get<Charge>($"{UriResource}/{chargeId}");	
 		}
 
 		public bool SendByMail(string chargeId, string email, DocumentType type = DocumentType.Receipt)
 		{
 			var documentType = (DocumentType.Receipt == type) ? "receipts" : "acuses";
+            var response=this.HttpClient.Post<IDictionary<string, object>, object>($"{UriResource}/{documentType}?chargeId={chargeId}&email={email}",null);
 
-			var request = new RestRequest(Method.POST) { Resource = $"{UriResource}/{documentType}?chargeId={chargeId}&email={email}" };
-			var response = Execute(request);
-			
-			var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
-			if (result != null && result.ContainsKey("success"))
+			if (response != null && response.ContainsKey("success"))
 			{
-				return (bool)result["success"];
+				return (bool)response["success"];
 			}
 			return false;
 

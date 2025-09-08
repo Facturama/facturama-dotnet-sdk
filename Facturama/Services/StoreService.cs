@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Facturama.Models;
 using Facturama.Models.Response.Catalogs;
-using Facturama.Models.Response.Catalogs.Cfdi;
-using Newtonsoft.Json;
-using RestSharp;
 
 namespace Facturama.Services
 {
@@ -26,10 +21,8 @@ namespace Facturama.Services
 
         public Product[] Products(ProductType productType = ProductType.Web)
         {
-            var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/products/{productType}" };
-            var response = Execute(request);
-            var modelView = JsonConvert.DeserializeObject<List<Product>>(response.Content);
-            return modelView.ToArray();
+            var response= this.HttpClient.Get<List<Product>>($"{UriResource}/products/{productType}");
+            return response.ToArray();
         }        
 
     }

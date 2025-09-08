@@ -19,6 +19,10 @@ namespace Facturama.Services
             Converters = new List<JsonConverter> { new StringEnumConverter() },
             DateTimeZoneHandling = DateTimeZoneHandling.Utc
         };
+        public RestClientService(RestClient HttpClient)
+        {
+            this.restClient = HttpClient;
+        }
         private async Task<TO> ExecuteAsync<TO, TI>(string url, TI data,HttpRequestOptions options,Method method )
         {
             var request = CreateRequest(url, data, options,method);
