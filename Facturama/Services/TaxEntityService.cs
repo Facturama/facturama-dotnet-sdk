@@ -1,4 +1,6 @@
-﻿using Facturama.Models.Request;
+﻿using System.Net;
+using Facturama.Models;
+using Facturama.Models.Request;
 using TaxEntity = Facturama.Models.Response.TaxEntity;
 
 namespace Facturama.Services
@@ -16,12 +18,17 @@ namespace Facturama.Services
 
         public TaxEntity Update(Models.Request.TaxEntity model)
         {
-            return this.HttpClient.Put<TaxEntity, Models.Request.TaxEntity>($"",model);
+            return Put(model,"");
         }
 
         public bool UploadImage(Image img)
         {
-            return this.HttpClient.Put<bool, Image>($"{UriResource}UploadLogo", img);
+            var response=this.HttpClient.Put<ImageResponse, Image>($"{UriResource}UploadLogo", img);
+            if (response.Message == "Se cargo exitosamente el logo")
+            {
+                return true;
+            }
+            return false;
         }
 
         public bool UploadCsd(Csd csd)

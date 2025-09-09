@@ -81,13 +81,16 @@
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            foreach (var header in options.Headers)
+            foreach (var header in options?.Headers ?? new Dictionary<string, string>())
             {
                 content.Headers.Add(header.Key, header.Value);
             }
             return content;
         }
-
+        public string GetBaseUrl()
+        {
+            return "";
+        }
         public TO Post<TO, TI>(string url, TI data, HttpRequestOptions options = null)
         {
            

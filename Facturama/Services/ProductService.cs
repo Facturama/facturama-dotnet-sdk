@@ -13,7 +13,7 @@ namespace Facturama.Services
         public Product[] List2(string keyword)
         {
             var response= this.HttpClient.Get<JsonResponse>($"{"products"}?{keyword}");
-            var SerJson = JsonConvert.SerializeObject(response);
+            var SerJson = JsonConvert.SerializeObject(response.Data);
             var modelView = JsonConvert.DeserializeObject<List<Product>>(SerJson);
             return modelView.ToArray();
 

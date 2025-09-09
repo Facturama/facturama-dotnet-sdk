@@ -5,6 +5,7 @@
 
     public interface IHttpClient
     {
+        string GetBaseUrl();
         TO Post<TO, TI>(string url, TI data, HttpRequestOptions options = null);
         Task<TO> PostAsync<TO, TI>(string url, TI data, HttpRequestOptions options = null);
         TO Get<TO>(string url, HttpRequestOptions options = null);

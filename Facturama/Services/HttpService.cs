@@ -31,7 +31,7 @@ namespace Facturama.Services
 
         protected List<TO> GetList(string resourceId = null)
         {
-            return this.HttpClient.Get<List<TO>>($"{UriResource}");
+            return this.HttpClient.Get<List<TO>>($"{UriResource}{resourceId}");
         }
 
         protected TO Post(TI obj, string urlParams = "")

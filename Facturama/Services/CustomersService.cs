@@ -10,7 +10,7 @@ namespace Facturama.Services
 
         public CustumerValidate Validate(Models.Request.CustumerValidate model)
         {
-            return this.HttpClient.Post<CustumerValidate, Models.Request.CustumerValidate>($"", model);
+            return Post(model, "");
         }
 
     }
