@@ -43,9 +43,9 @@ namespace Facturama.Services
                     var exception = JsonConvert.DeserializeObject<ModelException>(response.Content);
                     throw new FacturamaException(exception?.Message ?? "Bad request", exception);
                 }
-                catch (Exception ex)
+                catch (JsonException ex)
                 {
-                    throw new Exception($"Bad request. Content: {response?.Content}",ex);
+                    throw new JsonException($"Bad request. Content: {response?.Content}",ex);
                 }
             }
             if (response.StatusCode == HttpStatusCode.InternalServerError)

@@ -46,21 +46,30 @@ namespace Facturama.Services
             {
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await this.httpClient.PostAsync($"{this.httpClient.BaseAddress.AbsoluteUri}{urlParams}", content);
+                var responseContent = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == HttpStatusCode.RequestTimeout || response.StatusCode == HttpStatusCode.GatewayTimeout)
                 {
                     throw new TimeoutException($"La petición HTTP excedió el tiempo de espera configurado {response.StatusCode}.");
                 }
-                var responseContent = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     try
                     {
                         var exception = JsonConvert.DeserializeObject<ModelException>(responseContent);
-                        throw new FacturamaException(exception?.Message ?? "Bad request", exception);
+                        if (exception != null && !string.IsNullOrEmpty(exception.Message))
+                        {
+                            throw new FacturamaException(exception.Message, exception);
+                        }
+                        else
+                        {
+                            throw new FacturamaException("Bad request: Error al intentar deserializar response.Content con ModelException", exception);
+                        }
                     }
-                    catch (Exception ex)
+                    catch (JsonException jsonEx)
                     {
-                        throw new Exception($"Bad request. Content: {response?.Content}", ex);
+                        
+                        throw new JsonException(
+                            $"Bad request: No se pudo deserializar la respuesta del servidor. Content: {responseContent},{jsonEx.Message}");
                     }
                 }
                 response.EnsureSuccessStatusCode();
@@ -70,17 +79,9 @@ namespace Facturama.Services
             {
                 throw new TimeoutException("La petición HTTP excedió el tiempo de espera configurado.", tex);
             }
-            catch (HttpRequestException httpEx)
+            catch
             {
-                throw new Exception($"Error HTTP en POST: {httpEx.Message}", httpEx);
-            }
-            catch (JsonException jsonEx)
-            {
-                throw new Exception($"Error al deserializar la respuesta: {jsonEx.Message}", jsonEx);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error inesperado en POST: {ex.Message}", ex);
+                throw;
             }
         }
     }

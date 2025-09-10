@@ -44,16 +44,9 @@ namespace Facturama.Services
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            try
-            {
-                var result = await this.HttpClient.PostAsync<Models.Response.Cfdi, Models.Request.Cfdi>(model, "3/cfdis");
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
-           
+          
+            var result = await this.HttpClient.PostAsync<Models.Response.Cfdi, Models.Request.Cfdi>(model, "3/cfdis");
+            return result;
         }
 
         /// <summary>
@@ -185,22 +178,12 @@ namespace Facturama.Services
 
         public async Task<bool> SendByMailAsync(string id, string email, string subject = null, InvoiceType type = InvoiceType.Issued)
         {
-            try
+            var result = await this.HttpClient.PostAsync<ResponseMailViewModel,Models.Request.Cfdi>(null,$"Cfdi?cfdiType={type}&cfdiId={id}&email={email}&subject={subject}");
+            if (result != null && result.success)
             {
-                var result = await this.HttpClient.PostAsync<ResponseMailViewModel,Models.Request.Cfdi>(null,$"Cfdi?cfdiType={type}&cfdiId={id}&email={email}&subject={subject}");
-                if (result != null && result.success)
-                {
-                    return result.success;
-                }
-                return false;
+                return result.success;
             }
-            catch (TimeoutException){
-                throw; 
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error al intentar enviar mensaje. Cfdi:{id} To: {email}", ex);
-            }         
+            return false;   
         }
 
         /// <summary>
