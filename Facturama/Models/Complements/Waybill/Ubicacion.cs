@@ -1,6 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Facturama.Services;
+using Facturama.Services.BaseService;
 
 namespace Facturama.Models.Complements.Waybill
 {

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Facturama.Models.Response;
-using RestSharp;
+﻿using Facturama.Models.Response;
+using Facturama.Services.BaseService;
 
 namespace Facturama.Services
 {

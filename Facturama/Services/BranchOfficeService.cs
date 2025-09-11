@@ -1,4 +1,5 @@
 ﻿using Facturama.Models;
+using Facturama.Services.BaseService;
 using RestSharp;
 
 namespace Facturama.Services

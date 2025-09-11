@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using RestSharp;
 
-namespace Facturama.Services
+namespace Facturama.Services.BaseService
 {
     public abstract class CrudService<TI, TO> : HttpService<TI, TO> where TO : new()
     {
@@ -13,39 +12,27 @@ namespace Facturama.Services
 
         public virtual TO Retrieve(string id)
         {
-            return base.Get(id);
+            return Get(id);
         }
 
         public virtual List<TO> List()
         {
-            return base.GetList();
+            return Get<List<TO>>(null);
         }
 
         public virtual TO Create(TI obj)
         {
-            return base.Post(obj);
-        }
-        public virtual TO Create3(TI obj)
-        {
-            return base.Post(obj);
-        }
-        public virtual TO CreateRet(TI obj)
-        {
-            return base.Post(obj);
-        }
-        public virtual TO CreateRet2(TI obj)
-        {
-            return base.Post(obj);
+            return Post(obj);
         }
 
         public virtual TO Remove(string id)
         {
-            return base.Delete(id);
+            return Delete(id);
         }
 
         public virtual TO Update(TI model, string id)
         {
-            return base.Put(model, id);
+            return Put(model, id);
         }
     }
 }

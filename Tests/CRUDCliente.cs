@@ -15,7 +15,7 @@ namespace Tests
             var clientes = facturama.Clients.List();
             var clientesBefore = clientes.Count;
 
-            var cliente = facturama.Clients.Create(new Client
+            var cliente = facturama.Clients.Create(new Customer
             {
                 Address = new Address
                 {

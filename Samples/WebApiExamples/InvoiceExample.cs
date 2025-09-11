@@ -126,7 +126,7 @@ namespace WebApiExamples
                 }
 
             };
-            var cfdiCreated = facturama.Cfdis.Create(cfdi33);
+            var cfdiCreated = facturama.Cfdis.Create3(cfdi33);
             Console.WriteLine($"Se creo exitosamente el CFDI 3.3 con ID: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
 
 

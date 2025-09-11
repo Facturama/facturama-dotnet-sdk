@@ -1,4 +1,5 @@
 ﻿using Facturama.Services;
+using Facturama.Services.BaseService;
 using RestSharp.Authenticators;
 
 namespace Facturama
@@ -24,7 +25,7 @@ namespace Facturama
 
         public FacturamaApi(IHttpClient httpClient)
         {
-            Clients = new ClientService(httpClient);
+            Clients = new CustomerService(httpClient);
             Cfdis = new CfdiService(httpClient);
             Retention = new RetentionService(httpClient);
             Products = new ProductService(httpClient);
@@ -35,12 +36,12 @@ namespace Facturama
             Catalogs = new CatalogService(httpClient);
             Store = new StoreService(httpClient);
             Charges = new ChargeService(httpClient);
-            Customer = new CustomersService(httpClient);
+            Customer = new CustomerValidationService(httpClient);
 
         }
 
         public ProductService Products { get; }
-        public ClientService Clients { get; }
+        public CustomerService Clients { get; }
         public CfdiService Cfdis { get; }
         public BranchOfficeService BranchOffices { get; }
         public ProfileService Profile { get; }
@@ -51,7 +52,7 @@ namespace Facturama
 		public ChargeService Charges { get; }
 		public RetentionService Retention { get; }
 
-        public CustomersService Customer { get; }
+        public CustomerValidationService Customer { get; }
 
     }
 

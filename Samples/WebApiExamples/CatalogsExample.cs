@@ -97,7 +97,7 @@ namespace WebApiExamples
             var lenght = 100;
             var search = "XAXX010101000";
 
-            var clientes = facturama.Clients.List2($"start={start}&lenght={lenght}&search={search}");
+            var clientes = facturama.Clients.List($"start={start}&lenght={lenght}&search={search}");
             Console.WriteLine(clientes.Length);
             Console.WriteLine(clientes[0].Id);
             Console.WriteLine(clientes[0].Rfc);
@@ -126,7 +126,7 @@ namespace WebApiExamples
             //}
 
 
-            var cliente = facturama.Clients.Create(new Client  // Agrega un nuevo cliente
+            var cliente = facturama.Clients.Create(new Customer  // Agrega un nuevo cliente
             {
                 Id = "",
                 Email = "ejemplo@ejemplo.mx",

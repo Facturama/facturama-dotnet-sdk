@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Facturama.Models.Response.Catalogs;
-using Facturama.Models.Response.Catalogs.Cfdi;
-using Newtonsoft.Json;
-using RestSharp;
 using Facturama.Models.Charge;
+using Facturama.Services.BaseService;
 
 namespace Facturama.Services
 {
@@ -25,47 +21,33 @@ namespace Facturama.Services
 
         public Charge Preview(Charge charge)
         {
-            var request = new RestRequest(Method.POST) { Resource = $"{UriResource}/preview" };
-            var response = Execute(request);
-            return  JsonConvert.DeserializeObject<Charge>(response.Content);            
+			return base.Post<Charge, Charge>(charge, "/preview");
         }
 
 		public Charge Create(Charge charge)
 		{
-			var request = new RestRequest(Method.POST) { Resource = $"{UriResource}" };
-			var response = Execute(request);
-			return JsonConvert.DeserializeObject<Charge>(response.Content);
-		}
+            return base.Post<Charge, Charge>(charge);
+        }
 
 		public Charge[] List()
 		{
-			var request = new RestRequest(Method.GET) { Resource = $"{UriResource}" };
-			var response = Execute(request);
-			var modelView = JsonConvert.DeserializeObject<List<Charge>>(response.Content);
-			return modelView.ToArray();			
-		}
+			return base.Get<Charge[]>("");
+        }
 
 		public Charge Retrieve(string chargeId)
 		{
-			var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/{chargeId}" };
-			var response = Execute(request);
-			return JsonConvert.DeserializeObject<Charge>(response.Content);			
-		}
+			return base.Get<Charge>($"/{chargeId}");
+        }
 
 		public bool SendByMail(string chargeId, string email, DocumentType type = DocumentType.Receipt)
 		{
 			var documentType = (DocumentType.Receipt == type) ? "receipts" : "acuses";
-
-			var request = new RestRequest(Method.POST) { Resource = $"{UriResource}/{documentType}?chargeId={chargeId}&email={email}" };
-			var response = Execute(request);
-			
-			var result = JsonConvert.DeserializeObject<IDictionary<string, object>>(response.Content);
+			var result = base.Post<IDictionary<string, object>, object>(null, $"/{chargeId}/{documentType}?email={email}");
 			if (result != null && result.ContainsKey("success"))
 			{
 				return (bool)result["success"];
 			}
 			return false;
-
 		}
 
 	}

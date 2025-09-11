@@ -353,7 +353,7 @@ namespace WebApiExamples
 
             // Receptor de comprobante (se toma como cliente el mismo a quien se emitió el CFDI Inicial),            
             String clientRfc = cfdiInicial.Receiver.Rfc;
-            Client client = facturama.Clients.List().Where(p => p.Rfc.Equals(clientRfc)).First();
+            Customer client = facturama.Clients.List().Where(p => p.Rfc.Equals(clientRfc)).First();
 
             Receiver receiver = new Receiver
             {

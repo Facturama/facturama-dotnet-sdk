@@ -36,17 +36,17 @@ namespace WebApiExamples
                 Cfdi payroll = CreatePayrollModel(facturama);                
 
                 // Se manda timbrar mediante Facturama
-                Facturama.Models.Response.Cfdi cfdiInicial = facturama.Cfdis.Create(payroll);
+                Facturama.Models.Response.Cfdi cfdiInicial = facturama.Cfdis.Create3(payroll);
 
                 Console.WriteLine("Se creó exitosamente el CFDI de Nómina con el folio fiscal: " + cfdiInicial.Complement.TaxStamp.Uuid);
 
                 // Descarga de los archivos de la Nómina (en este caso se especifica que el tipo de comprobante es "Payroll")
                 String filePath = "nomina" + cfdiInicial.Complement.TaxStamp.Uuid;
-                facturama.Cfdis.SavePdf(filePath + ".pdf", cfdiInicial.Id, Facturama.Services.CfdiService.InvoiceType.Payroll);
-                facturama.Cfdis.SaveXml(filePath + ".xml", cfdiInicial.Id, Facturama.Services.CfdiService.InvoiceType.Payroll);                                
+                facturama.Cfdis.SavePdf(filePath + ".pdf", cfdiInicial.Id, Facturama.Data.InvoiceType.Payroll);
+                facturama.Cfdis.SaveXml(filePath + ".xml", cfdiInicial.Id, Facturama.Data.InvoiceType.Payroll);                                
 
                 // Posibilidad de mandar las nóminas por correo
-                Console.WriteLine(facturama.Cfdis.SendByMail(cfdiInicial.Id, "chucho@facturama.mx", null, Facturama.Services.CfdiService.InvoiceType.Payroll));
+                Console.WriteLine(facturama.Cfdis.SendByMail(cfdiInicial.Id, "chucho@facturama.mx", null, Facturama.Data.InvoiceType.Payroll));
                 
 
                 Console.WriteLine("----- Fin del ejemplo de PayrollExample -----");

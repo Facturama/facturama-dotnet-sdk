@@ -1,4 +1,4 @@
-﻿using Facturama.Services;
+﻿using Facturama.Services.BaseService;
 using Newtonsoft.Json;
 using System;
 

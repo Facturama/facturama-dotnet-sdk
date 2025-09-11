@@ -13,12 +13,12 @@ namespace MultiIssuerExamples
     {
         public static void RunExamples()
         {
-            var facturamaMultiEmisor = new FacturamaApiMultiemisor("tu_usuario", "tu_contraseña");
-            //TestListCreateAndRemoveCsd(facturamaMultiEmisor);
-            //TestCreateCfdiMultiemisor(facturamaMultiEmisor);// CFDI 3.3
-            //TestCreateCfdiMultiemisor40(facturamaMultiEmisor);// CFDI 4.0
-            //TestCreatePaymentCfdi(facturamaMultiEmisor);
-            //TestCreatePaymentCfdi40(facturamaMultiEmisor); // Complemento de Pago 20
+            var facturamaMultiEmisor = new FacturamaApiMultiemisor("pruebas", "pruebas2011", true);
+            TestListCreateAndRemoveCsd(facturamaMultiEmisor);
+            TestCreateCfdiMultiemisor(facturamaMultiEmisor);// CFDI 3.3
+            TestCreateCfdiMultiemisor40(facturamaMultiEmisor);// CFDI 4.0
+            TestCreatePaymentCfdi(facturamaMultiEmisor);
+            TestCreatePaymentCfdi40(facturamaMultiEmisor); // Complemento de Pago 20
             new ForeignTradeExampleAPILite(facturamaMultiEmisor).Run(); // Comercio Exterior
 
             //new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
@@ -81,7 +81,7 @@ namespace MultiIssuerExamples
             };
             try
             {
-                var cfdiCreated = facturama.Cfdis.Create(cfdi);
+                var cfdiCreated = facturama.Cfdis.Create3(cfdi);
                 Console.WriteLine(
                     $"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
                 facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
@@ -512,7 +512,7 @@ namespace MultiIssuerExamples
 		        Console.WriteLine($"Se guardo el CSD relacionado con el RFC: {csdRequest.Rfc}");
 
 		        csdRequest.Rfc = "EKU9003173C9";
-		        facturama.Csds.Update(csdRequest);
+		        facturama.Csds.Update(csdRequest, csdRequest.Rfc);
 		        Console.WriteLine($"Se actualizó el CSD relacionado con el RFC: {csdRequest.Rfc}");
 
 	        }

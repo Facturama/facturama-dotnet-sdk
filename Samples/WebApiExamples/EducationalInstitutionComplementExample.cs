@@ -97,7 +97,7 @@ namespace WebApiExamples
 
             try
             {
-                var cfdiCreated = facturama.Cfdis.Create(cfdi);
+                var cfdiCreated = facturama.Cfdis.Create3(cfdi);
                 Console.WriteLine(
                     $"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
                 facturama.Cfdis.SavePdf($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.pdf", cfdiCreated.Id);

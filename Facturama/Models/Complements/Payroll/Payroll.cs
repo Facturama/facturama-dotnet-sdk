@@ -1,5 +1,5 @@
 ﻿using System;
-using Facturama.Services;
+using Facturama.Services.BaseService;
 using Newtonsoft.Json;
 
 namespace Facturama.Models.Complements.Payroll

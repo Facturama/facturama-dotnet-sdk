@@ -1,7 +1,5 @@
 ﻿using Facturama.Models;
-using Newtonsoft.Json;
-using RestSharp;
-using System.Collections.Generic;
+using Facturama.Services.BaseService;
 
 namespace Facturama.Services
 {
@@ -11,15 +9,9 @@ namespace Facturama.Services
         {
             
         }
-        public Product[] List2(string keyword)
+        public Product[] List(string keyword)
         {
-            var request = new RestRequest(Method.GET) { Resource = $"{"products"}?{keyword}" };
-            var response = Execute(request);
-            var DesJson = JsonConvert.DeserializeObject<JsonResponse>(response.Content);
-            var SerJson = JsonConvert.SerializeObject(DesJson.Data);
-            var modelView = JsonConvert.DeserializeObject<List<Product>>(SerJson);
-            return modelView.ToArray();
-
+            return this.Get<Product[]>(resourceId: $"{"products"}?{keyword}");
         }
 
     }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Facturama.Services;
 using System.Collections.Generic;
+using Facturama.Services.BaseService;
 
 namespace Facturama.Models.Request
 {

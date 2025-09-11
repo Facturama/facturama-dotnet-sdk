@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Facturama.Models.Response.Catalogs;
+﻿using Facturama.Models.Response.Catalogs;
 using Facturama.Models.Response.Catalogs.Cfdi;
-using Newtonsoft.Json;
-using RestSharp;
+using Facturama.Services.BaseService;
 
 namespace Facturama.Services
 {
@@ -18,35 +14,24 @@ namespace Facturama.Services
 
         public ProductOrServiceCatalog[] Units(string keyword)
         {
-            var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/Units?keyword={keyword}" };
-            var response = Execute(request);
-            var modelView = JsonConvert.DeserializeObject<List<ProductOrServiceCatalog>>(response.Content);
-            return modelView.ToArray();
+            return this.Get<ProductOrServiceCatalog[]>(resourceId: $"{"units"}?{keyword}");
         }
 
         public ProductOrServiceCatalog[] ProductsOrServices(string keyword)
         {
-            var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/ProductsOrServices?keyword={keyword}" };
-            var response = Execute(request);
-            var modelView = JsonConvert.DeserializeObject<List<ProductOrServiceCatalog>>(response.Content);
-            return modelView.ToArray();
+            return this.Get<ProductOrServiceCatalog[]>(resourceId: $"{"productsorservices"}?{keyword}");
         }
+
         public PostalCodeCatalog[] PostalCodes(string keyword)
         {
-            var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/PostalCodes?keyword={keyword}" };
-            var response = Execute(request);
-            var modelView = JsonConvert.DeserializeObject<List<PostalCodeCatalog>>(response.Content);
-            return modelView.ToArray();
+            return this.Get<PostalCodeCatalog[]>(resourceId: $"{"postalcodes"}?{keyword}");
         }
 
         public CatalogViewModel[] NameIds
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/NameIds" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<CatalogViewModel>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<CatalogViewModel[]>(resourceId: $"{"nameids"}");
             }
         }
 
@@ -54,10 +39,7 @@ namespace Facturama.Services
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/Currencies" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<CurrencyCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<CurrencyCatalog[]>(resourceId: $"{"currencies"}");
             }
         }
 
@@ -65,10 +47,7 @@ namespace Facturama.Services
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/paymentforms" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<CatalogViewModel>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<CatalogViewModel[]>(resourceId: $"{"paymentforms"}");
             }
         }
 
@@ -76,29 +55,20 @@ namespace Facturama.Services
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/paymentmethods" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<CatalogViewModel>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<CatalogViewModel[]>(resourceId: $"{"paymentmethods"}");
             }
         }
 
         public UseCfdiCatalog[] CfdiUses(string rfc)
         {
-            var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/CfdiUses?keyword={rfc}" };
-            var response = Execute(request);
-            var modelView = JsonConvert.DeserializeObject<List<UseCfdiCatalog>>(response.Content);
-            return modelView.ToArray();
+            return this.Get<UseCfdiCatalog[]>(resourceId: $"{"cfdiuses"}?rfc={rfc}");
         }
 
         public CatalogViewModel[] FiscalRegimens
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/FiscalRegimens" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<CatalogViewModel>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<CatalogViewModel[]>(resourceId: $"{"fiscalregimens"}");
             }
         }
 
@@ -106,20 +76,15 @@ namespace Facturama.Services
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/CfdiTypes" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<CfdiTypesCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<CfdiTypesCatalog[]>(resourceId: $"{"cfditypes"}");
             }
         }
+        
         public RelationTypesCatalog[] RelationTypes
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/RelationTypes" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<RelationTypesCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<RelationTypesCatalog[]>(resourceId: $"{"relationtypes"}");
             }
         }
 
@@ -127,51 +92,39 @@ namespace Facturama.Services
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/Countries" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<CountriesCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<CountriesCatalog[]>(resourceId: $"{"countries"}");
             }
         }
-        //PayRoll Catalog
+
         public PayRollCatalog[] Banks
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/banks" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"banks"}");
             }
         }
+
         public PayRollCatalog[] OriginSources
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/originsources" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"originsources"}");
             }
         }
-        public PayRollCatalog[] paymentfrequencies
+
+        public PayRollCatalog[] PaymentFrequencies
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/paymentfrequencies" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"paymentfrequencies"}");
             }
         }
+
         public PayRollCatalog[] ContractTypes
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/contracttypes" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"contracttypes"}");
 
             }
         }
@@ -180,10 +133,7 @@ namespace Facturama.Services
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/extrahours" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"extrahours"}");
             }
         }
 
@@ -191,31 +141,23 @@ namespace Facturama.Services
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/incapacities" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"incapacities"}");
             }
         }
-
+        
         public PayRollCatalog[] TypesOfJourne
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/typesofjourne" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"typesofjourne"}");
             }
         }
+        
         public PayRollCatalog[] OtherPayment
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/otherpayment" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"otherpayment"}");
             }
         }
 
@@ -223,35 +165,25 @@ namespace Facturama.Services
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/perceptions" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"perceptions"}");
             }
         }
+        
         public PayRollCatalog[] RegimenTypes
         {
             get
             {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/regimentypes" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
-            }
-        }
-        public PayRollCatalog[] PositionRisks
-        { 
-            get
-            {
-                var request = new RestRequest(Method.GET) { Resource = $"{UriResource}/positionrisks" };
-                var response = Execute(request);
-                var modelView = JsonConvert.DeserializeObject<List<PayRollCatalog>>(response.Content);
-                return modelView.ToArray();
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"regimentypes"}");
             }
         }
         
-
+        public PayRollCatalog[] PositionRisks
+        {
+            get
+            {
+                return this.Get<PayRollCatalog[]>(resourceId: $"{"positionrisks"}");
+            }
+        }
     }
-
 }
 

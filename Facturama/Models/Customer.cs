@@ -2,7 +2,7 @@
 
 namespace Facturama.Models
 {
-    public class Client
+    public class Customer
     {
         [JsonProperty("Id")]
         public string Id { get; set; }
