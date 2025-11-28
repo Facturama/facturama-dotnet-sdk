@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Facturama;
+using Facturama.Data;
 using Facturama.Models;
 using Facturama.Models.Complements;
 using Facturama.Models.Request;
+using Newtonsoft.Json;
 
 
 namespace MultiIssuerExamples
@@ -19,10 +21,12 @@ namespace MultiIssuerExamples
             //TestCreateCfdiMultiemisor40(facturamaMultiEmisor);// CFDI 4.0
             //TestCreatePaymentCfdi(facturamaMultiEmisor);
             //TestCreatePaymentCfdi40(facturamaMultiEmisor); // Complemento de Pago 20
-            new ForeignTradeExampleAPILite(facturamaMultiEmisor).Run(); // Comercio Exterior
+            //new ForeignTradeExampleAPILite(facturamaMultiEmisor).Run(); // Comercio Exterior
 
             //new EducationalInstitutionComplementExampleMultiemisor(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
             //new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
+           // TestCfdiList(facturamaMultiEmisor);
+            //TestCfdiAPI4(facturamaMultiEmisor);
 
             Console.ReadKey();
         }
@@ -87,25 +91,25 @@ namespace MultiIssuerExamples
                 facturama.Cfdis.SaveXml($"factura{cfdiCreated.Complement.TaxStamp.Uuid}.xml", cfdiCreated.Id);
                 Console.WriteLine($"Se guardo existosamente la factura con el UUID: {cfdiCreated.Complement.TaxStamp.Uuid}.");
 
-	            Console.WriteLine($"Se intenta cancelar la factura con el UUID: {cfdiCreated.Complement.TaxStamp.Uuid}.");
-				var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
-				if (cancelationStatus.Status == "canceled")
-				{
-					Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
-				}
-				else if (cancelationStatus.Status == "pending")
-				{
-					Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
-				}
-				else if (cancelationStatus.Status == "active")
-				{
-					Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
-				}
-				else
-				{
-					Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
-				}
-			}
+                Console.WriteLine($"Se intenta cancelar la factura con el UUID: {cfdiCreated.Complement.TaxStamp.Uuid}.");
+                var cancelationStatus = facturama.Cfdis.Cancel(cfdiCreated.Id);
+                if (cancelationStatus.Status == "canceled")
+                {
+                    Console.WriteLine($"Se canceló exitosamente el CFDI con el folio fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
+                }
+                else if (cancelationStatus.Status == "pending")
+                {
+                    Console.WriteLine($"El CFDI está en proceso de cancelacion, require aprobacion por parte del receptor UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+                }
+                else if (cancelationStatus.Status == "active")
+                {
+                    Console.WriteLine($"El CFDI no pudo ser cancelado, se deben revisar docuementos relacionados on cancelar directo en el SAT UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+                }
+                else
+                {
+                    Console.WriteLine($"Estado de cancelacin del CFDI desconocido UUID: {cfdiCreated.Complement.TaxStamp.Uuid}");
+                }
+            }
             catch (FacturamaException ex)
             {
                 Console.WriteLine(ex.Message);
@@ -142,11 +146,11 @@ namespace MultiIssuerExamples
                 },
                 Receiver = new Receiver
                 {
-                    Rfc= "URE180429TM6",
-                    CfdiUse= "CP01",
-                    Name= "UNIVERSIDAD ROBOTICA ESPAÑOLA",
-                    FiscalRegime= "601",
-                    TaxZipCode= "65000"
+                    Rfc = "URE180429TM6",
+                    CfdiUse = "CP01",
+                    Name = "UNIVERSIDAD ROBOTICA ESPAÑOLA",
+                    FiscalRegime = "601",
+                    TaxZipCode = "65000"
                 },
                 Complement = new Complement
                 {
@@ -158,9 +162,9 @@ namespace MultiIssuerExamples
                             PaymentForm = paymentForm.Value,
                             Currency = "MXN",
                             Amount = 116.00m,
-                            RelatedDocuments = new List<RelatedDocument> 
+                            RelatedDocuments = new List<RelatedDocument>
                             {
-                                new RelatedDocument 
+                                new RelatedDocument
                                 {
                                     Uuid = "F884C787-EEA6-4720-874D-B5048DB8F960",
                                     Folio = "100032007",
@@ -184,12 +188,12 @@ namespace MultiIssuerExamples
 
                                     }
 
-                                    
+
                                 }
-                                                             
-                                
+
+
                             }
-                            
+
                         }
                     }
                 }
@@ -270,8 +274,8 @@ namespace MultiIssuerExamples
                     CfdiUse = "G03",
                     Name = "UNIVERSIDAD ROBOTICA ESPAÑOLA",
                     Rfc = "URE180429TM6",
-                    FiscalRegime= "601",
-		            TaxZipCode = "65000"
+                    FiscalRegime = "601",
+                    TaxZipCode = "65000"
                 },
             };
 
@@ -288,7 +292,7 @@ namespace MultiIssuerExamples
                 Quantity = 1.0M,
                 UnitPrice = 100.0M,
                 Subtotal = 100.00M,
-                TaxObject=  "02",
+                TaxObject = "02",
                 Taxes = new List<Facturama.Models.Request.Tax>
                 {
                     new Facturama.Models.Request.Tax
@@ -374,15 +378,15 @@ namespace MultiIssuerExamples
                 Currency = "MXN",
                 Date = null,
                 ExpeditionPlace = "78140",
-                LogoUrl = "https://www.ejemplos.co/wp-content/uploads/2015/11/Logo-Chanel.jpg",
+                //LogoUrl = "url_de_tu_logo.jpg",
 
                 Exportation = "01",
 
-                GlobalInformation=new GlobalInformation
+                GlobalInformation = new GlobalInformation
                 {
-                    Periodicity="04",
-                    Months="04",
-                    Year=2022
+                    Periodicity = "04",
+                    Months = "04",
+                    Year = 2022
                 },
 
                 Items = new List<Item>(),
@@ -396,7 +400,7 @@ namespace MultiIssuerExamples
                 {
                     Rfc = "XAXX010101000",
                     Name = "PUBLICO GENERAL",
-                    CfdiUse = "S01",           
+                    CfdiUse = "S01",
                     FiscalRegime = "616",
                     TaxZipCode = "78140"
                 },
@@ -506,27 +510,171 @@ namespace MultiIssuerExamples
                 PrivateKey = "MIIFDjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIAgEAAoIBAQACAggAMBQGCCqGSIb3DQMHBAgwggS8AgEAMASCBMh4EHl7aNSCaMDA1VlRoXCZ5UUmqErAbucRFLOMmsAaFNkyWR0dXIAh0CMjE6NpQIMZhQ0HH/4tHgmwh4kCawGjIwERoG6/IH3mCt7u19J5+m6gUEGOJdEMXj976E5lKCd/EG6t6lCq66GE3rgux/nFmeQZvsjLlzPyhe2j+X81LrGudITTjDdgLI0EdbdV9CUJwWbibzrVxjuAVShRh07XPL/DiEw3Wk2+kdy4cfWmMvh0U55p0RKZopNkWuVVSvr3ai7ZNCwHZWDVqkUDpwDDGdyt0kYQ7qoKanIxv/A9wv6ekq0LQ/yLlOcelkxQeb8Glu4RXe+krRvrASw1eBAQ3mvNKpngwF8vtlyoil41PjHUOKALMJtNpywckRRYOk4703ylWIzTfdBlrZ6VmDBjdC5723G1HAx3R/x+o+08++RNiFaN06Ly5QbZZvjnealDfSKz1VKRHWeXggaW87rl4n0SOOWnvabKs4ZWRXTS0dhWK+KD/yYYQypTslDSXQrmyMkpc1Zcb4p9RTjodXxGCWdsR5i5+Ro/RiJvxWwwaO3YW6eaSavV0ROqANQ+A+GizMlxsVjl6G5Ooh6ORdA7jTNWmK44Icgyz6QFNh+J3NibxVK2GZxsQRi+N3HXeKYtq5SDXARA0BsaJQzYfDotA9LFgmFKg9jVhtcc1V3rtpaJ5sab8tdBTPPyN/XT8fA0GxlIX+hjLd3E9wB7qzNR6PZ84UKDxhCGWrLuIoSzuCbr+TD9UCJprsfTu8kr8Pur4rrxm7Zu1MsJRR9U5Ut+O9FZfw4SqGykyTGGh0v1gDG8esKpTW5MKNk9dRwDNHEmIF6tE6NeXDlzovf8VW6z9JA6AVUkgiFjDvLUY5MgyTqPB9RJNMSAZBzrkZgXyHlmFz2rvPqQGFbAtukjeRNS+nkVayLqfQnqpgthBvsgDUgFn03z0U2Svb094Q5XHMeQ4KM/nMWTEUC+8cybYhwVklJU7FBl9nzs66wkMZpViIrVWwSB2k9R1r/ZQcmeL+LR+WwgCtRs4It1rNVkxXwYHjsFM2Ce46TWhbVMF/h7Ap4lOTS15EHC8RvIBBcR2w1iJ+3pXiMeihArTELVnQsS31X3kxbBp3dGvLvW7PxDlwwdUQOXnMoimUCI/h0uPdSRULPAQHgSp9+TwqI0Uswb7cEiXnN8PySN5Tk109CYJjKqCxtuXu+oOeQV2I/0knQLd2zol+yIzNLj5a/HvyN+kOhIGi6TrFThuiVbbtnTtRM1CzKtFGuw5lYrwskkkvenoSLNY0N85QCU8ugjc3Bw4JZ9jNrDUaJ1Vb5/+1GQx/q/Dbxnl+FK6wMLjXy5JdFDeQyjBEBqndQxrs9cM5xBnl6AYs2Xymydafm2qK0cEDzwOPMpVcKU8sXS/AHvtgsn+rjMzW0wrQblWE0Ht/74GgfCj4diCDtzxQ0ggi6yJD+yhLZtVVqmKS3Gwnj9RxPLNfpgzPP01eYyBBi/W0RWTzcTb8iMxWX52MTU0oX9//4I7CAPXn0ZhpWAAIvUmkfjwfEModH7iwwaNtZFlT2rlzeshbP++UCEtqbwvveDRhmr5sMYkl+duEOca5156fcRy4tQ8Y3moNcKFKzHGMenShEIHz+W5KE=",
                 PrivateKeyPassword = "12345678a"
             };
-	        try
-	        {
-		        facturama.Csds.Create(csdRequest);
-		        Console.WriteLine($"Se guardo el CSD relacionado con el RFC: {csdRequest.Rfc}");
+            try
+            {
+                facturama.Csds.Create(csdRequest);
+                Console.WriteLine($"Se guardo el CSD relacionado con el RFC: {csdRequest.Rfc}");
 
-		        csdRequest.Rfc = "EKU9003173C9";
-		        facturama.Csds.Update(csdRequest);
-		        Console.WriteLine($"Se actualizó el CSD relacionado con el RFC: {csdRequest.Rfc}");
+                csdRequest.Rfc = "EKU9003173C9";
+                facturama.Csds.Update(csdRequest);
+                Console.WriteLine($"Se actualizó el CSD relacionado con el RFC: {csdRequest.Rfc}");
 
-	        }
-	        catch (FacturamaException ex)
-	        {
-		        Console.WriteLine(ex.Message);
-		        foreach (var messageDetail in ex.Model.Details)
-		        {
-			        Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
-		        }
-			}
+            }
+            catch (FacturamaException ex)
+            {
+                Console.WriteLine(ex.Message);
+                foreach (var messageDetail in ex.Model.Details)
+                {
+                    Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
+                }
+            }
             catch (Exception e)
             {
                 Console.WriteLine(e);
+            }
+        }
+
+        private static void TestCfdiList(FacturamaApiMultiemisor facturama)
+        {
+            int? folioStart = null;
+            int? folioEnd = null;
+            string rfcReceiver = String.Empty;
+            string taxEntityName = String.Empty;
+            string dateStart = null;
+            string dateEnd = null;
+            string serie = String.Empty;
+            string rfcIssuer = String.Empty;
+            int page = 0;
+            try
+            {
+                var cfdisList = facturama.Cfdis.List(
+                        folioStart,
+                        folioEnd,
+                        rfcReceiver,
+                        taxEntityName,
+                        dateStart,
+                        dateEnd,
+                        serie,
+                        CfdiStatus.all,
+                        rfcIssuer,
+                        page
+                        );
+
+                foreach (var cfdi in cfdisList)
+                {
+                    string json = JsonConvert.SerializeObject(cfdi, Formatting.Indented);
+                    Console.WriteLine(json);
+                }
+            }
+            catch (FacturamaException ex)
+            {
+                Console.WriteLine(ex.Message);
+                foreach (var messageDetail in ex.Model.Details)
+                {
+                    Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: ", ex.Message);
+
+
+            }
+        }
+
+        private static void TestCfdiAPI4(FacturamaApiMultiemisor facturama)
+        {
+            var cfdi = new CfdiMulti
+            {
+                Folio = "10",
+                NameId = "1",
+                CfdiType = CfdiType.Ingreso,
+                PaymentForm = "01",
+                PaymentMethod = "PUE",
+                Currency = "MXN",
+                Date = null,
+                ExpeditionPlace = "78140",
+                LogoUrl = "https://www.ejemplos.co/wp-content/uploads/2015/11/Logo-Chanel.jpg",
+
+                Exportation = "01",
+
+                GlobalInformation = new GlobalInformation
+                {
+                    Periodicity = "04",
+                    Months = "04",
+                    Year = 2022
+                },
+
+                Items = new List<Item>(),
+                Issuer = new Issuer
+                {
+                    FiscalRegime = "601",
+                    Name = "ESCUELA KEMPER URGATE",
+                    Rfc = "EKU9003173C9"
+                },
+                Receiver = new Receiver
+                {
+                    Rfc = "XAXX010101000",
+                    Name = "PUBLICO GENERAL",
+                    CfdiUse = "S01",
+                    FiscalRegime = "616",
+                    TaxZipCode = "78140"
+                },
+            };
+
+            var price = 100.00m;
+            var quantity = 2m;
+            var discount = 10m;
+            var subtotal = Math.Round(price * quantity, 2);
+
+            var item = new Item
+            {
+                ProductCode = "25173108",
+                UnitCode = "E48",
+                Description = "GPS estandar pruebas",
+                Quantity = 1.0M,
+                UnitPrice = 100.0M,
+                Subtotal = 100.00M,
+                TaxObject = "02",
+                Taxes = new List<Facturama.Models.Request.Tax>
+                {
+                    new Facturama.Models.Request.Tax
+                    {
+                        Name = "IVA",
+                        IsQuota = false,
+                        IsRetention = false,
+
+                        Rate = 0.160000m,
+                        Base = Math.Round(subtotal - discount, 2),
+                        Total = Math.Round((subtotal - discount) * 0.160000m, 2)
+                    }
+                }
+
+            };
+            var retenciones = item.Taxes?.Where(t => t.IsRetention).Sum(t => t.Total) ?? 0;
+            var traslados = item.Taxes?.Where(t => !t.IsRetention).Sum(t => t.Total) ?? 0;
+            item.Total = item.Subtotal - (item.Discount ?? 0) + traslados - retenciones;
+            cfdi.Items.Add(item);
+
+            try
+            {
+
+                var cfdiCreated = facturama.Cfdis.Create4(cfdi);// Prueba CFDI 4.0 en API 4, TEST
+                Console.WriteLine($"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.TaxStamp.Uuid}");
+
+
+            }
+            catch (FacturamaException ex)
+            {
+                Console.WriteLine(ex.Message);
+                foreach (var messageDetail in ex.Model.Details)
+                {
+                    Console.WriteLine($"{messageDetail.Key}: {string.Join(",", messageDetail.Value)}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error inesperado: ", ex.Message);
             }
         }
     }

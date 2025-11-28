@@ -86,7 +86,6 @@ namespace Facturama.Services
 		}
 
 
-
 		public Cfdi Retrieve(string id, InvoiceType type = InvoiceType.Issued)
         {
             return Get($"cfdi/{id}?type={type}");
@@ -105,14 +104,41 @@ namespace Facturama.Services
             var file = JsonConvert.DeserializeObject<CfdiSearchResults[]>(response.Content);
             return file;
         }
-        
-        public CfdiSearchResults[] List(int folioStart = -1, int folioEnd = -1, 
-            string rfc = null, string taxEntityName = null, 
-            string dateStart = "", string dateEnd = "",
-            string idBranch = "", string serie = "",
-            CfdiStatus status = CfdiStatus.Active, InvoiceType type = InvoiceType.Issued)
+
+        public CfdiSearchResults[] List(
+            int? folioStart = null,
+            int? folioEnd = null,
+            string rfc = "",
+            string taxEntityName = "",
+            string dateStart = null,
+            string dateEnd = null,
+            string idBranch = null,
+            string serie = "",
+            CfdiStatus status = CfdiStatus.all,
+            InvoiceType type = InvoiceType.Issued,
+            string orderNumber = "",
+            string invoiceType = "",
+            string paymentMethod = "",
+            string rfcIssuer = "",
+            int page = 0)
         {
-            var request = new RestRequest($"{UriResource}Cfdi?type={type}&status={status}&folioStart={folioStart}&folioEnd={folioEnd}&rfc={rfc}&taxEntityName={taxEntityName}&dateStart={dateStart}&dateEnd={dateEnd}&idBranch={idBranch}&serie={serie}", Method.GET);
+            var request = new RestRequest(
+                $"{UriResource}Cfdi?type={type}" +
+                $"&status={status}" +
+                $"&folioStart={folioStart}" +
+                $"&folioEnd={folioEnd}" +
+                $"&rfc={rfc}" +
+                $"&taxEntityName={taxEntityName}" +
+                $"&dateStart={dateStart}" +
+                $"&dateEnd={dateEnd}" +
+                $"&idBranch={idBranch}" +
+                $"&serie={serie}" +
+                $"&OrderNumber={orderNumber}" +
+                $"&invoiceType={invoiceType}" +
+                $"&paymentMethod={paymentMethod}" +
+                $"&rfcIssuer={rfcIssuer}" +
+                $"&page={page}", Method.GET);
+
             request.AddHeader("Content-Type", "application/json");
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();

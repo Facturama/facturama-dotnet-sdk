@@ -6,24 +6,12 @@ using Newtonsoft.Json;
 using RestSharp;
 using System.Web;
 using Facturama.Models.Response;
+using Facturama.Data;
 
 namespace Facturama.Services
 {
     public class CfdiLiteService : CrudService<Models.Request.CfdiMulti, Cfdi>
     {
-        /// <summary>
-        /// Enumeración de los formatos de archivos disponibles para descarga
-        /// </summary>
-        public enum FileFormat
-        {
-            Xml, Pdf, Html
-        }
-
-        public enum CfdiStatus
-        {
-            All, Active, Cancel
-        }
-
         public CfdiLiteService(IHttpClient httpClient) : 
             base(httpClient, "")
         {
@@ -38,6 +26,11 @@ namespace Facturama.Services
         public override Cfdi Create3(Models.Request.CfdiMulti model)
         {
             return Post(model, "api-lite/3/cfdis");
+        }
+
+        public override Cfdi Create4(Models.Request.CfdiMulti model)
+        {
+            return Post(model, "api-lite/4/cfdis");
         }
 
         /// <summary>
@@ -95,13 +88,30 @@ namespace Facturama.Services
             return file;
         }
 
-        public CfdiSearchResults[] List(int folioStart = -1, int folioEnd = -1,
-            string rfc = null, string taxEntityName = null,
-            string dateStart = "", string dateEnd = "",
-            string idBranch = "", string serie = "",
-            CfdiStatus status = CfdiStatus.Active)
+        public CfdiSearchResults[] List(
+                    int? folioStart = null,
+                    int? folioEnd = null,
+                    string rfcReceiver = "",
+                    string taxEntityName = "",
+                    string dateStart = null,
+                    string dateEnd = null,
+                    string serie = "",
+                    CfdiStatus status = CfdiStatus.all,
+                    string rfcIssuer = "",
+                    int page = 0)
         {
-            var request = new RestRequest($"{UriResource}Cfdi?type=issuedLite&status={status}&folioStart={folioStart}&folioEnd={folioEnd}&rfc={rfc}&taxEntityName={taxEntityName}&dateStart={dateStart}&dateEnd={dateEnd}&idBranch={idBranch}&serie={serie}", Method.GET);
+            var request = new RestRequest($"{UriResource}Cfdi?" +
+                $"type=issuedLite&status={status}" +
+                $"&folioStart={folioStart}" +
+                $"&folioEnd={folioEnd}" +
+                $"&rfc={rfcReceiver}" +
+                $"&taxEntityName={taxEntityName}" +
+                $"&dateStart={dateStart}" +
+                $"&dateEnd={dateEnd}" +
+                $"&serie={serie}" +
+                $"&rfcIssuer={rfcIssuer}" +
+                $"&page={page}", Method.GET);
+
             request.AddHeader("Content-Type", "application/json");
 
             var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
@@ -151,9 +161,15 @@ namespace Facturama.Services
 			File.WriteAllBytes(filePath, Convert.FromBase64String(file.Content));
 		}
 
-		public bool SendByMail(string id, string email, string subject = null)
+		public bool SendByMail(string id, string email, string subject = null, string comments = null, string issuerEmail = null )
 		{
-			var request = new RestRequest($"Cfdi?cfdiType=issuedLite&cfdiId={id}&email={email}&subject={subject}", Method.POST);
+			var request = new RestRequest($"Cfdi?" +
+                $"cfdiType=issuedLite" +
+                $"&cfdiId={id}" +
+                $"&email={email}" +
+                $"&subject={subject}" +
+                $"&comments={comments}" +
+                $"&issuerEmail={issuerEmail}", Method.POST);
 			var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
 			HttpClient.ExecuteAsync(request, taskCompletionSource);
 

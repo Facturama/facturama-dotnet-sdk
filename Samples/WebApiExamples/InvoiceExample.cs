@@ -12,6 +12,7 @@ using Retenciones = Facturama.Models.Retentions.Retenciones;
 using Facturama.Models.Retentions;
 using static System.Net.Mime.MediaTypeNames;
 using Newtonsoft.Json;
+using Facturama.Data;
 
 namespace WebApiExamples
 {
@@ -44,6 +45,7 @@ namespace WebApiExamples
                 //TestDonationCFDI(facturama);
                 //TestValidateClient(facturama);
                 //TestResponse(facturama);
+                //TestCfdiList(facturama);
             }
             catch (FacturamaException ex)
             {
@@ -789,6 +791,47 @@ namespace WebApiExamples
             var cfdireponse = facturama.Cfdis.Retrieve("Vl0J-v9IsV6PJUIPOT_1Nw2");
             string json = JsonConvert.SerializeObject(cfdireponse.Items);
             Console.WriteLine(json);
+        }
+
+        public void TestCfdiList(FacturamaApi facturama)
+        {
+            int? folioStart = null;
+            int? folioEnd = null;
+            string rfcReceiver= String.Empty;
+            string taxEntityName = String.Empty;
+            string dateStart = null;
+            string dateEnd = null;
+            string idBranch = null;
+            string serie = String.Empty;
+            string orderNumber = String.Empty;
+            string invoiceType = String.Empty;
+            string paymentMethod = String.Empty;
+            string rfcIssuer = String.Empty;
+            int page = 0;
+
+            var list = facturama.Cfdis.List(
+                folioStart,
+                folioEnd,
+                rfcReceiver,
+                taxEntityName,
+                dateStart,
+                dateEnd,
+                idBranch,
+                serie,
+                CfdiStatus.all,
+                InvoiceType.Issued,
+                orderNumber,
+                invoiceType,
+                paymentMethod,
+                rfcIssuer,
+                page);
+
+            foreach (var cfdi in list)
+            {
+                string json = JsonConvert.SerializeObject(cfdi, Formatting.Indented);
+                Console.WriteLine(json);
+            }
+
         }
 
 
