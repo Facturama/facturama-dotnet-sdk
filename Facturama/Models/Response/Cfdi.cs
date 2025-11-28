@@ -80,7 +80,13 @@
         [JsonProperty("OriginalString")]
         public string OriginalString { get; set; }
 
-        
+        [JsonProperty("XmlBase64")]
+        public string XmlBase64 { get; set; }
+
+        [JsonProperty("TaxStamp")]
+        public TaxStamp TaxStamp { get; set; }
+
+
     }
 
     public class Complement
