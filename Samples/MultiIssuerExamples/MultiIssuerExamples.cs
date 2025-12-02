@@ -555,7 +555,7 @@ namespace MultiIssuerExamples
                         dateStart,
                         dateEnd,
                         serie,
-                        CfdiStatus.all,
+                        CfdiStatus.Canceled,
                         rfcIssuer,
                         page
                         );
