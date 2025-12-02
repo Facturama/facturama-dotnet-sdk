@@ -12,6 +12,6 @@
 
     public enum CfdiStatus
     {
-        all, Active, Cancel
+        all, Active, Canceled
     }
 }

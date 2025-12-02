@@ -818,7 +818,7 @@ namespace WebApiExamples
                 dateEnd,
                 idBranch,
                 serie,
-                CfdiStatus.all,
+                CfdiStatus.Canceled,
                 InvoiceType.Issued,
                 orderNumber,
                 invoiceType,
