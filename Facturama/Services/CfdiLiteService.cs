@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Web;
-using Facturama.Models.Response;
 using Facturama.Data;
+using Facturama.Models.Response;
 using Facturama.Services.Integrations;
+using RestSharp;
 
 namespace Facturama.Services
 {
@@ -13,15 +14,6 @@ namespace Facturama.Services
         /// <summary>
         /// Enumeración de los formatos de archivos disponibles para descarga
         /// </summary>
-        public enum FileFormat
-        {
-            Xml, Pdf, Html
-        }
-
-        public enum CfdiStatus
-        {
-            All, Active, Cancel
-        }
 
         public CfdiLiteService(IHttpClient httpClient) : 
             base(httpClient, "")
@@ -84,7 +76,18 @@ namespace Facturama.Services
                     string rfcIssuer = "",
                     int page = 0)
         {
-            return this.HttpClient.Get<CfdiSearchResults[]>($"{UriResource}Cfdi?type=issuedLite&status={status}&folioStart={folioStart}&folioEnd={folioEnd}&rfc={rfc}&taxEntityName={taxEntityName}&dateStart={dateStart}&dateEnd={dateEnd}&idBranch={idBranch}&serie={serie}");
+            var requestUrl =$"{UriResource}Cfdi?" +
+                $"type=issuedLite&status={status}" +
+                $"&folioStart={folioStart}" +
+                $"&folioEnd={folioEnd}" +
+                $"&rfc={rfcReceiver}" +
+                $"&taxEntityName={taxEntityName}" +
+                $"&dateStart={dateStart}" +
+                $"&dateEnd={dateEnd}" +
+                $"&serie={serie}" +
+                $"&rfcIssuer={rfcIssuer}" +
+                $"&page={page}";
+            return this.HttpClient.Get<CfdiSearchResults[]>(requestUrl);
         }
 
         /// <summary>

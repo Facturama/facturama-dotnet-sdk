@@ -1,4 +1,4 @@
-﻿namespace Facturama.Services
+﻿namespace Facturama.Services.Integrations
 {
     using System.Threading.Tasks;
     using Facturama.Models.Request;

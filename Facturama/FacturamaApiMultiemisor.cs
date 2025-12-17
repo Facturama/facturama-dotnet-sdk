@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Facturama.Services;
-using RestSharp.Authenticators;
-
-namespace Facturama
+﻿namespace Facturama
 {
+    using Facturama.Services;
+    using Facturama.Services.Integrations;
+    using RestSharp.Authenticators;
+
     public class FacturamaApiMultiemisor
     {
         public FacturamaApiMultiemisor(string user, string password, bool isDevelopment = true)

@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Facturama;
-using Facturama.Models;
 using Facturama.Models.Complements;
 using Facturama.Models.Complements.ThirdPartyAccount;
 using Facturama.Models.Request;
@@ -64,7 +59,7 @@ namespace Tests
 						Total = 116.0m,
 						Complement = new ItemComplement
 						{
-							ThirdPartyAccount = new ThirdPartyAccount
+							ThirdPartyAccount = new Facturama.Models.Complements.ThirdPartyAccount.ThirdPartyAccount
 							{
 								Rfc = "JES900109Q90",
 								Name = "Expresión en Software",

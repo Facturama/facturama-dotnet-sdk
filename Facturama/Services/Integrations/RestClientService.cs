@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Threading.Tasks;
-using Facturama.Helpers;
 using Facturama.Models.Exception;
 using Facturama.Models.Request;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using RestSharp;
 
-namespace Facturama.Services
+namespace Facturama.Services.Integrations
 {
     public class RestClientService : IHttpClient
     {
@@ -24,7 +21,7 @@ namespace Facturama.Services
         };
         public RestClientService(RestClient HttpClient)
         {
-            this.restClient = HttpClient;
+            restClient = HttpClient;
         }
         private async Task<TO> ExecuteAsync<TO, TI>(string url, TI data,HttpRequestOptions options,Method method )
         {
@@ -42,7 +39,7 @@ namespace Facturama.Services
         private TO Execute<TO, TI>(string url, TI data, HttpRequestOptions options, Method method)
         {
 
-            return this.ExecuteAsync<TO, TI>(url, data, options, method)
+            return ExecuteAsync<TO, TI>(url, data, options, method)
                 .ConfigureAwait(false)
                 .GetAwaiter().GetResult();
         }
@@ -146,39 +143,39 @@ namespace Facturama.Services
         }
         public string GetBaseUrl()
         {
-            return this.restClient.BaseUrl.OriginalString;
+            return restClient.BaseUrl.OriginalString;
         }
         public TO Post<TO, TI>(string path,TI data,HttpRequestOptions options = null)
         {
-            return this.Execute<TO, TI>($"{restClient.BaseUrl.OriginalString}{path}", data, options, Method.POST);
+            return Execute<TO, TI>($"{restClient.BaseUrl.OriginalString}{path}", data, options, Method.POST);
         }
         public async Task<TO> PostAsync<TO, TI>(string path, TI data, HttpRequestOptions options = null) 
         {
-            return await this.ExecuteAsync<TO, TI>($"{restClient.BaseUrl.OriginalString}{path}", data, options, Method.POST);
+            return await ExecuteAsync<TO, TI>($"{restClient.BaseUrl.OriginalString}{path}", data, options, Method.POST);
         }
         public TO Get<TO>(string path, HttpRequestOptions options = null)
         {
-            return this.Execute<TO, object>($"{restClient.BaseUrl.OriginalString}{path}", null, options, Method.GET);
+            return Execute<TO, object>($"{restClient.BaseUrl.OriginalString}{path}", null, options, Method.GET);
         }
         public async Task<TO> GetAsync<TO>(string path, HttpRequestOptions options = null)
         {
-            return await this.ExecuteAsync<TO, object>($"{restClient.BaseUrl.OriginalString}{path}", null, options, Method.GET);
+            return await ExecuteAsync<TO, object>($"{restClient.BaseUrl.OriginalString}{path}", null, options, Method.GET);
         }
         public TO Put<TO, TI>(string path, TI data, HttpRequestOptions options = null)
         {
-            return this.Execute<TO, TI>($"{restClient.BaseUrl.OriginalString}{path}", data, options, Method.PUT);
+            return Execute<TO, TI>($"{restClient.BaseUrl.OriginalString}{path}", data, options, Method.PUT);
         }
         public async Task<TO> PutAsync<TO, TI>(string path, TI data, HttpRequestOptions options = null)
         {
-            return await this.ExecuteAsync<TO, TI>($"{restClient.BaseUrl.OriginalString}{path}", data, options, Method.PUT);
+            return await ExecuteAsync<TO, TI>($"{restClient.BaseUrl.OriginalString}{path}", data, options, Method.PUT);
         }
         public TO Delete<TO>(string path, HttpRequestOptions options = null)
         {
-            return this.Execute<TO, object>($"{restClient.BaseUrl.OriginalString}{path}", null, options, Method.DELETE);
+            return Execute<TO, object>($"{restClient.BaseUrl.OriginalString}{path}", null, options, Method.DELETE);
         }
         public async Task<TO> DeleteAsync<TO>(string path, HttpRequestOptions options = null)
         {
-            return await this.ExecuteAsync<TO, object>($"{ restClient.BaseUrl.OriginalString}{path}", null, options, Method.DELETE);
+            return await ExecuteAsync<TO, object>($"{ restClient.BaseUrl.OriginalString}{path}", null, options, Method.DELETE);
         }
     }
 }

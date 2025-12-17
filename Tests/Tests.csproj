@@ -52,48 +52,14 @@
     <Compile Include="CRUDCliente.cs" />
     <Compile Include="CRUDSerie.cs" />
     <Compile Include="CRUDSucursales.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_036C0B5B-1481-4323-8D20-8F5ADCB23D92.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
-    <Compile Include="obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <Compile Include="PaymentComplement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThirdPartyAccountComplement.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\Samples.exe.config" />
-    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
-    <None Include="obj\Debug\PruebasUnitarias.csproj.CopyComplete" />
-    <None Include="obj\Debug\PruebasUnitarias.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\PruebasUnitarias.csprojResolveAssemblyReference.cache" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\Facturama.dll" />
-    <Content Include="bin\Debug\Facturama.pdb" />
-    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll" />
-    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll" />
-    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll" />
-    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll" />
-    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll" />
-    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml" />
-    <Content Include="bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml" />
-    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
-    <Content Include="bin\Debug\Newtonsoft.Json.xml" />
-    <Content Include="bin\Debug\PruebasUnitarias.dll" />
-    <Content Include="bin\Debug\PruebasUnitarias.pdb" />
-    <Content Include="bin\Debug\RestSharp.dll" />
-    <Content Include="bin\Debug\Samples.exe" />
-    <Content Include="bin\Debug\Samples.pdb" />
-    <Content Include="bin\Debug\System.ValueTuple.dll" />
-    <Content Include="bin\Debug\System.ValueTuple.xml" />
-    <Content Include="obj\Debug\PruebasUnitarias.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\PruebasUnitarias.dll" />
-    <Content Include="obj\Debug\PruebasUnitarias.pdb" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\Release\" />
-    <Folder Include="obj\Debug\TempPE\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Facturama\Facturama.csproj">
       <Project>{3d843c81-6a95-4ed6-aa7c-0d5b1424a981}</Project>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Facturama.Models.Request;
+using Facturama.Services.Integrations;
 using Newtonsoft.Json.Converters;
 
 namespace Facturama.Services
