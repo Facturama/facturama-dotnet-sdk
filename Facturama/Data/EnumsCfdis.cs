@@ -12,7 +12,7 @@
 
     public enum CfdiStatus
     {
-        All, Active, Cancel
+        all, Active, Canceled
     }
     public enum Method
     {

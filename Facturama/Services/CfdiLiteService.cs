@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using Facturama.Models.Response;
+using Facturama.Data;
 
 namespace Facturama.Services
 {
@@ -37,6 +38,11 @@ namespace Facturama.Services
             return Post(model, "api-lite/3/cfdis");
         }
 
+        public override Cfdi Create4(Models.Request.CfdiMulti model)
+        {
+            return Post(model, "api-lite/4/cfdis");
+        }
+
         /// <summary>
         /// Cancelacion con motivo (obligatorio a partir de 01 de enero de 2022)
         /// Nota: en el caso de que No se especifique el motivo de cancelación se considera el 02
@@ -65,11 +71,17 @@ namespace Facturama.Services
             return this.HttpClient.Get<CfdiSearchResults[]>($"{UriResource}Cfdi?type=issuedLite&keyword={keyword}&status={status}");
         }
 
-        public CfdiSearchResults[] List(int folioStart = -1, int folioEnd = -1,
-            string rfc = null, string taxEntityName = null,
-            string dateStart = "", string dateEnd = "",
-            string idBranch = "", string serie = "",
-            CfdiStatus status = CfdiStatus.Active)
+        public CfdiSearchResults[] List(
+                    int? folioStart = null,
+                    int? folioEnd = null,
+                    string rfcReceiver = "",
+                    string taxEntityName = "",
+                    string dateStart = null,
+                    string dateEnd = null,
+                    string serie = "",
+                    CfdiStatus status = CfdiStatus.all,
+                    string rfcIssuer = "",
+                    int page = 0)
         {
             return this.HttpClient.Get<CfdiSearchResults[]>($"{UriResource}Cfdi?type=issuedLite&status={status}&folioStart={folioStart}&folioEnd={folioEnd}&rfc={rfc}&taxEntityName={taxEntityName}&dateStart={dateStart}&dateEnd={dateEnd}&idBranch={idBranch}&serie={serie}");
         }
@@ -104,7 +116,7 @@ namespace Facturama.Services
 			File.WriteAllBytes(filePath, Convert.FromBase64String(file.Content));
 		}
 
-		public bool SendByMail(string id, string email, string subject = null)
+		public bool SendByMail(string id, string email, string subject = null, string comments = null, string issuerEmail = null )
 		{
             var result=this.HttpClient.Post<IDictionary<string, object>,object>($"Cfdi?cfdiType=issuedLite&cfdiId={id}&email={email}&subject={subject}",null);
 

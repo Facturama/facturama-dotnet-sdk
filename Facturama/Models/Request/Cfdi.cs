@@ -22,7 +22,7 @@ namespace Facturama.Models.Request
 
 	    [EnumMember(Value = "N")]
 	    Nomina
-	}
+    }
 
     public class Cfdi
     {
