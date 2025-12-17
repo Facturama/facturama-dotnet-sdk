@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using Facturama.Data;
 using Facturama.Models;
 using Facturama.Models.Response;
+using Facturama.Services.Integrations;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -46,6 +48,18 @@ namespace Facturama.Services
                 throw new ArgumentNullException(nameof(model));
           
             var result = await this.HttpClient.PostAsync<Models.Response.Cfdi, Models.Request.Cfdi>(model, "3/cfdis");
+            return result;
+        }
+
+        /// <summary>
+        /// Creación CFDI4.0 Async
+        /// </summary>   
+        public async Task<Models.Response.Cfdi> Create3Async(Models.Request.Cfdi model,string token)
+        {
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
+            var result = await this.HttpClient.SendAsync<Models.Response.Cfdi, Models.Request.Cfdi>(model, token, HttpMethod.Post, "3/cfdis");
             return result;
         }
 

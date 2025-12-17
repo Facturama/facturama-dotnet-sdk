@@ -4,6 +4,7 @@ using System.Text;
 using Facturama.Models;
 using Facturama.Models.Response.Catalogs;
 using Facturama.Models.Response.Catalogs.Cfdi;
+using Facturama.Services.Integrations;
 using Newtonsoft.Json;
 using RestSharp;
 

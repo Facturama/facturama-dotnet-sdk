@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Facturama.Models.Exception;
@@ -10,12 +11,12 @@ using Newtonsoft.Json.Converters;
 using RestSharp;
 
 
-namespace Facturama.Services
+namespace Facturama.Services.Integrations
 {
     public class HttpClientService : IHttpClient
     {
-        private readonly System.Net.Http.HttpClient httpClient;
-        public HttpClientService(System.Net.Http.HttpClient httpClient) {
+        private readonly HttpClient httpClient;
+        public HttpClientService(HttpClient httpClient) {
             this.httpClient = httpClient;
         }
 
@@ -45,7 +46,7 @@ namespace Facturama.Services
             try
             {
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await this.httpClient.PostAsync($"{this.httpClient.BaseAddress.AbsoluteUri}{urlParams}", content);
+                var response = await httpClient.PostAsync($"{httpClient.BaseAddress.AbsoluteUri}{urlParams}", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == HttpStatusCode.RequestTimeout || response.StatusCode == HttpStatusCode.GatewayTimeout)
                 {
@@ -68,6 +69,61 @@ namespace Facturama.Services
                     catch (JsonException jsonEx)
                     {
                         
+                        throw new JsonException(
+                            $"Bad request: No se pudo deserializar la respuesta del servidor. Content: {responseContent},{jsonEx.Message}");
+                    }
+                }
+                response.EnsureSuccessStatusCode();
+                return JsonConvert.DeserializeObject<TO>(responseContent);
+            }
+            catch (TaskCanceledException tex) when (!tex.CancellationToken.IsCancellationRequested)
+            {
+                throw new TimeoutException("La petición HTTP excedió el tiempo de espera configurado.", tex);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public async Task<TO> SendAsync<TO, TI>(TI obj, string token, HttpMethod httpMethod, string urlParams = "")
+        {
+            var json = JsonConvert.SerializeObject(obj, Formatting.None, new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Converters = new List<JsonConverter> { new StringEnumConverter() }
+            });
+            try 
+            {
+                var request = new HttpRequestMessage(httpMethod, $"{httpClient.BaseAddress.AbsoluteUri}{urlParams}")
+                {
+                    Content = new StringContent(json, Encoding.UTF8, "application/json"),
+                };
+                request.Headers.Authorization =
+                new AuthenticationHeaderValue("Basic", token);
+
+                var response = await httpClient.SendAsync(request);
+                var responseContent = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.RequestTimeout || response.StatusCode == HttpStatusCode.GatewayTimeout)
+                {
+                    throw new TimeoutException($"La petición HTTP excedió el tiempo de espera configurado {response.StatusCode}.");
+                }
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    try
+                    {
+                        var exception = JsonConvert.DeserializeObject<ModelException>(responseContent);
+                        if (exception != null && !string.IsNullOrEmpty(exception.Message))
+                        {
+                            throw new FacturamaException(exception.Message, exception);
+                        }
+                        else
+                        {
+                            throw new FacturamaException("Bad request: Error al intentar deserializar response.Content con ModelException", exception);
+                        }
+                    }
+                    catch (JsonException jsonEx)
+                    {
+
                         throw new JsonException(
                             $"Bad request: No se pudo deserializar la respuesta del servidor. Content: {responseContent},{jsonEx.Message}");
                     }

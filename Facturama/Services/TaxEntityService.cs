@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Facturama.Models;
 using Facturama.Models.Request;
+using Facturama.Services.Integrations;
 using Newtonsoft.Json;
 using RestSharp;
 using TaxEntity = Facturama.Models.Response.TaxEntity;

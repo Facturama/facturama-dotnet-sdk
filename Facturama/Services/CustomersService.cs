@@ -1,6 +1,7 @@
 ﻿using Facturama.Models.Response;
 using Facturama.Models;
 using RestSharp;
+using Facturama.Services.Integrations;
 
 
 namespace Facturama.Services

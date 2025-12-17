@@ -1,4 +1,5 @@
 ﻿using Facturama.Services;
+using Facturama.Services.Integrations;
 using RestSharp.Authenticators;
 
 namespace Facturama

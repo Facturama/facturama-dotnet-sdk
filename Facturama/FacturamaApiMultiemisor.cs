@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Facturama.Services;
+using Facturama.Services.Integrations;
 using RestSharp.Authenticators;
 
 namespace Facturama

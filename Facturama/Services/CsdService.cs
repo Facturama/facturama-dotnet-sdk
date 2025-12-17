@@ -1,5 +1,6 @@
 ﻿using System;
 using Facturama.Models.Response;
+using Facturama.Services.Integrations;
 using Newtonsoft.Json;
 using RestSharp;
 

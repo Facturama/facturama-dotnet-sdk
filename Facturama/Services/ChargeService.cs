@@ -6,6 +6,7 @@ using Facturama.Models.Response.Catalogs.Cfdi;
 using Newtonsoft.Json;
 using RestSharp;
 using Facturama.Models.Charge;
+using Facturama.Services.Integrations;
 
 namespace Facturama.Services
 {

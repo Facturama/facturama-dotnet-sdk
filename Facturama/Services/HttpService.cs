@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Facturama.Models.Exception;
+using Facturama.Services.Integrations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using RestSharp;
