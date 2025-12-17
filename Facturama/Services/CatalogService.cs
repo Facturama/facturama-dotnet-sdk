@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Facturama.Models.Response.Catalogs;
 using Facturama.Models.Response.Catalogs.Cfdi;
+using Facturama.Services.Integrations;
 namespace Facturama.Services
 {
     public class CatalogService : HttpService<CatalogViewModel, CatalogViewModel>

@@ -1,4 +1,5 @@
 ﻿using Facturama.Models;
+using Facturama.Services.Integrations;
 namespace Facturama.Services
 {
     public class BranchOfficeService : CrudService<BranchOffice, BranchOffice>

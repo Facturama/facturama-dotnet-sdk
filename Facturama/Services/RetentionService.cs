@@ -7,6 +7,7 @@ using Facturama.Data;
 using Facturama.Models;
 using Facturama.Models.Response;
 using Facturama.Models.Retentions;
+using Facturama.Services.Integrations;
 
 namespace Facturama.Services
 {

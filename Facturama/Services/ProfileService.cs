@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Facturama.Models.Response;
+using Facturama.Services.Integrations;
 using RestSharp;
 
 namespace Facturama.Services

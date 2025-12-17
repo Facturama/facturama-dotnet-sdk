@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Facturama.Models;
 using Facturama.Models.Request;
+using Facturama.Services.Integrations;
 using TaxEntity = Facturama.Models.Response.TaxEntity;
 
 namespace Facturama.Services

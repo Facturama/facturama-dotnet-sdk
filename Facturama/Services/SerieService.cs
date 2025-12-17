@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Facturama.Models;
+using Facturama.Services.Integrations;
 
 namespace Facturama.Services
 {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Facturama.Models;
 using Facturama.Models.Response.Catalogs;
+using Facturama.Services.Integrations;
 
 namespace Facturama.Services
 {

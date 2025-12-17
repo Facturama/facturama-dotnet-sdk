@@ -8,6 +8,7 @@ using Facturama.Data;
 using Facturama.Models;
 using Facturama.Models.Request;
 using Facturama.Models.Response;
+using Facturama.Services.Integrations;
 using Newtonsoft.Json;
 
 namespace Facturama.Services

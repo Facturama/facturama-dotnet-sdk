@@ -4,6 +4,7 @@ using System.IO;
 using System.Web;
 using Facturama.Models.Response;
 using Facturama.Data;
+using Facturama.Services.Integrations;
 
 namespace Facturama.Services
 {

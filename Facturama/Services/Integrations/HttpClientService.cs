@@ -1,4 +1,4 @@
-﻿namespace Facturama.Services
+﻿namespace Facturama.Services.Integrations
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,7 @@
         private readonly HttpClient httpClient;
         public HttpClientService(HttpClient HttpClient)
         {
-            this.httpClient = HttpClient;
+            httpClient = HttpClient;
         }
         private void HandleBadRequest(string responseContent)
         {
@@ -62,7 +62,7 @@
                 var responseContent = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
                 {
-                    this.HandleErrorResponse(response, responseContent);
+                    HandleErrorResponse(response, responseContent);
                 }
                 return JsonConvert.DeserializeObject<TO>(responseContent);
             }
@@ -94,7 +94,7 @@
         public TO Post<TO, TI>(string url, TI data, HttpRequestOptions options = null)
         {
            
-            return this.PostAsync<TO, TI>(url, data, options)
+            return PostAsync<TO, TI>(url, data, options)
                 .ConfigureAwait(false)
                 .GetAwaiter()
                 .GetResult();
@@ -102,10 +102,10 @@
         }
         public async Task<TO> PostAsync<TO, TI>(string url, TI data, HttpRequestOptions options = null)
         {
-            var content = this.CreateRequest(data, options);
+            var content = CreateRequest(data, options);
             try
             {
-                var response = await this.httpClient.PostAsync($"{this.httpClient.BaseAddress.AbsoluteUri}{url}", content).ConfigureAwait(false);
+                var response = await httpClient.PostAsync($"{httpClient.BaseAddress.AbsoluteUri}{url}", content).ConfigureAwait(false);
                 return await HandleResponseAsync<TO>(response).ConfigureAwait(false);
             }
             catch (Exception)
@@ -115,7 +115,7 @@
         }
         public TO Get<TO>(string url, HttpRequestOptions options = null)
         {
-            return this.GetAsync<TO>(url, options)
+            return GetAsync<TO>(url, options)
                 .ConfigureAwait(false)
                 .GetAwaiter()
                 .GetResult();
@@ -125,7 +125,7 @@
         {
             try
             {
-                var response = await this.httpClient.GetAsync($"{this.httpClient.BaseAddress.AbsoluteUri}{url}").ConfigureAwait(false);
+                var response = await httpClient.GetAsync($"{httpClient.BaseAddress.AbsoluteUri}{url}").ConfigureAwait(false);
                 return await HandleResponseAsync<TO>(response).ConfigureAwait(false);
             }
             catch (Exception)
@@ -135,17 +135,17 @@
         }
         public TO Put<TO, TI>(string url, TI data, HttpRequestOptions options = null)
         {
-            return this.PutAsync<TO, TI>(url, data, options)
+            return PutAsync<TO, TI>(url, data, options)
                  .ConfigureAwait(false)
                  .GetAwaiter()
                  .GetResult();
         }
         public async Task<TO> PutAsync<TO, TI>(string url, TI data, HttpRequestOptions options = null)
         {
-            var content = this.CreateRequest(data, options);
+            var content = CreateRequest(data, options);
             try
             {
-                var response = await this.httpClient.PutAsync($"{this.httpClient.BaseAddress.AbsoluteUri}{url}", content).ConfigureAwait(false);
+                var response = await httpClient.PutAsync($"{httpClient.BaseAddress.AbsoluteUri}{url}", content).ConfigureAwait(false);
                 return await HandleResponseAsync<TO>(response).ConfigureAwait(false);
             }
             catch (Exception)
@@ -155,7 +155,7 @@
         }
         public TO Delete<TO>(string url, HttpRequestOptions options = null)
         {
-            return this.DeleteAsync<TO>(url, options)
+            return DeleteAsync<TO>(url, options)
                  .ConfigureAwait(false)
                  .GetAwaiter()
                  .GetResult();
@@ -164,7 +164,7 @@
         {
             try
             {
-                var response = await this.httpClient.DeleteAsync($"{this.httpClient.BaseAddress.AbsoluteUri}{url}").ConfigureAwait(false);
+                var response = await httpClient.DeleteAsync($"{httpClient.BaseAddress.AbsoluteUri}{url}").ConfigureAwait(false);
                 return await HandleResponseAsync<TO>(response).ConfigureAwait(false);
             }
             catch (Exception)
