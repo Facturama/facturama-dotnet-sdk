@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Facturama.Models;
 using Facturama.Models.Request;
+using Facturama.Models.Response;
 using Newtonsoft.Json;
 using RestSharp;
 using TaxEntity = Facturama.Models.Response.TaxEntity;
@@ -53,7 +54,7 @@ namespace Facturama.Services
             return false;
         }
 
-        public bool UploadCsd(Csd csd)
+        public UploadCsdResponse UploadCsd(Models.Request.Csd csd)
         {
             var request = new RestRequest($"{UriResource}UploadCsd", Method.PUT);
             request.AddHeader("Content-Type", "application/json");
@@ -71,13 +72,22 @@ namespace Facturama.Services
 
             var response = taskCompletionSource.Task.Result;
 
+            if (response.ErrorException != null)
+                throw new Exception("Request execution failed.", response.ErrorException);
+
             if (response.StatusCode == HttpStatusCode.InternalServerError)
-                throw new Exception(response.ErrorMessage);
+                throw new Exception(response.ErrorMessage ?? response.Content);
 
-            if (response.StatusCode == HttpStatusCode.NoContent)
-                return true;
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+                throw new Exception($"BadRequest (400): {response.Content}");
 
-            return false;
+            if (!response.IsSuccessful)
+                throw new Exception($"Request failed with status {response.StatusCode}: {response.Content} - {response.StatusDescription}");
+
+            if (string.IsNullOrEmpty(response.Content))
+                throw new Exception($"Failed to deserialize response. Content: {response.Content}");
+
+            return JsonConvert.DeserializeObject<UploadCsdResponse>(response.Content);
         }
     }
 }

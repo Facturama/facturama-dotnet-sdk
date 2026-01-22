@@ -161,7 +161,7 @@
         public decimal Total { get; set; }
 
         [JsonProperty("IdentificationNumber")]
-        public decimal IdentificationNumber { get; set; }
+        public string IdentificationNumber { get; set; }
 
         [JsonProperty("Complement")]
         public ItemComplement Complement { get; set; }
