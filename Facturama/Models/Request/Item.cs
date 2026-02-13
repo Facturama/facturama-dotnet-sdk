@@ -47,8 +47,8 @@ namespace Facturama.Models.Request
         [JsonProperty("Taxes")]
         public List<Tax> Taxes { get; set; }
 
-        [JsonProperty("CuentaPredial")]
-        public string CuentaPredial { get; set; }
+        [JsonProperty("PropertyTaxIDNumber")]
+        public IEnumerable<string> PropertyTaxIDNumber { get; set; }
 
         [JsonProperty("NumerosPedimento")]
         public IEnumerable<string> NumerosPedimento { get; set; }

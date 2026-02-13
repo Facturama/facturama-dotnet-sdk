@@ -239,7 +239,12 @@ namespace WebApiExamples
                         {
                             "21  47  3807  8003832",
                             "21  47  3807  8003832"
-                        }
+                        },
+                        PropertyTaxIDNumber = new List<string>()
+                        {
+                            "12345678",
+                            "87654321"
+                         }
 
 
 
