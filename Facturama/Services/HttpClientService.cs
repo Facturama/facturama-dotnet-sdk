@@ -47,6 +47,10 @@ namespace Facturama.Services
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await this.httpClient.PostAsync($"{this.httpClient.BaseAddress.AbsoluteUri}{urlParams}", content);
                 var responseContent = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new FacturamaException("No esta autorizado para realizar esta petición, verifique su usuario y contraseña y que su suscripción se encuentre activa");
+                }
                 if (response.StatusCode == HttpStatusCode.RequestTimeout || response.StatusCode == HttpStatusCode.GatewayTimeout)
                 {
                     throw new TimeoutException($"La petición HTTP excedió el tiempo de espera configurado {response.StatusCode}.");
