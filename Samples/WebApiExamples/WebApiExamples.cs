@@ -6,6 +6,8 @@ using Facturama.Models;
 using Facturama.Models.Complements.ForeignTrade;
 using Facturama.Models.Request;
 
+
+
 namespace WebApiExamples
 {
     public class WebApiExamples
@@ -29,7 +31,8 @@ namespace WebApiExamples
             //TestLogo(facturama);
             //TestSerie(facturama);
             //TestCsdApiWeb(facturama);
-            
+            new NotariosPublicosExample(facturama).Run();
+
 
             Console.ReadKey();
         }

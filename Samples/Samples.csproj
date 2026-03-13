@@ -56,6 +56,7 @@
     <Compile Include="WebApiExamples\CatalogsExample.cs" />
     <Compile Include="MultiIssuerExamples\WaybillComplementExampleMulti.cs" />
     <Compile Include="WebApiExamples\ForeignTradeExample.cs" />
+    <Compile Include="WebApiExamples\NotariosPublicosExample.cs" />
     <Compile Include="WebApiExamples\WaybillComplementExample.cs" />
     <Compile Include="WebApiExamples\EducationalInstitutionComplementExample.cs" />
     <Compile Include="WebApiExamples\InvoiceExample.cs" />
