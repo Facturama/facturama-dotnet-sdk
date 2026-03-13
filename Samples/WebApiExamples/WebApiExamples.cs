@@ -31,7 +31,7 @@ namespace WebApiExamples
             //TestLogo(facturama);
             //TestSerie(facturama);
             //TestCsdApiWeb(facturama);
-            new NotariosPublicosExample(facturama).Run();
+            //new NotariosPublicosExample(facturama).Run();
 
 
             Console.ReadKey();

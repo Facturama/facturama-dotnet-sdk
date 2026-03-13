@@ -48,7 +48,7 @@ namespace Facturama.Models.Complements.NotariosPublicos
         public string CoproSocConyugalE { get; set; }
         public Item Item { get; set; }
 
-        public List<DatosEnajenanteCopSC> DatosEnajenanteCopSC { get; set; }
+        
 
     }
     public class DatosAdquiriente
@@ -64,6 +64,8 @@ namespace Facturama.Models.Complements.NotariosPublicos
         public string ApellidoPaterno { get; set; }
         public string RFC { get; set; }
         public string CURP { get; set; }
+
+        public List<DatosEnajenanteCopSC> DatosEnajenanteCopSC { get; set; }
 
     }
     public class DatosEnajenanteCopSC
