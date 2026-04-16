@@ -8,6 +8,7 @@ using Facturama.Models.Request;
 
 
 
+
 namespace WebApiExamples
 {
     public class WebApiExamples
@@ -32,6 +33,7 @@ namespace WebApiExamples
             //TestSerie(facturama);
             //TestCsdApiWeb(facturama);
             //new NotariosPublicosExample(facturama).Run();
+            //new Hidrocarburos(facturama).Run();
 
 
             Console.ReadKey();

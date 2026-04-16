@@ -21,5 +21,8 @@ namespace Facturama.Models.Request
 
         [JsonProperty("IsQuota")]
         public bool IsQuota { get; set; }
+        
+        [JsonProperty("IsFederalTax")]
+        public bool IsFederalTax { get; set; }
     }
 }

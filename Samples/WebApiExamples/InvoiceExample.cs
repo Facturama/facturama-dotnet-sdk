@@ -194,19 +194,7 @@ namespace WebApiExamples
                     Name = "UNIVERSIDAD ROBOTICA ESPAÑOLA",
                     CfdiUse = "G03",
                     FiscalRegime = "601",
-                    TaxZipCode = "86991",
-                    /*
-                    Address = new Address                       // El nodo Address es opcional (puedes colocarlo nulo o no colocarlo). En el caso de no colcoarlo, tomará la correspondiente al RFC en el catálogo de clientes
-                    {
-                        Street = "Avenida de los pinos",
-                        ExteriorNumber = "110",
-                        InteriorNumber = "A",
-                        Neighborhood = "Las villerías",
-                        ZipCode = "78000",
-                        Municipality = "San Luis Potosí",
-                        State = "San Luis Potosí",
-                        Country = "México"
-                    }*/
+                    TaxZipCode = "86991"                    
                 },
                 Items = new List<Item>
                 {
@@ -231,29 +219,23 @@ namespace WebApiExamples
                                 Total = 16.0m,
                                 Base = 100.00m,
                                 IsRetention = false
+                            },
+                            new Tax
+                            {
+                                Name = "IVA RET",
+                                Rate = 0.10668m,
+                                Total = 10.668m,
+                                Base = 100.00m,
+                                IsRetention = true
                             }
 
                         },
-                        Total=116.00m,
-                        NumerosPedimento = new List<string>()
-                        {
-                            "21  47  3807  8003832",
-                            "21  47  3807  8003832"
-                        },
-                        PropertyTaxIDNumber = new List<string>()
-                        {
-                            "12345678",
-                            "87654321"
-                         }
-
-
-
-
-
+                        Total=105.332m,
                     }
                 }
 
             };
+            Console.WriteLine(JsonConvert.SerializeObject(cfdi));
             var cfdiCreated = facturama.Cfdis.Create3(cfdi); // Probar CFDI 4.0
             Console.WriteLine($"Se creo exitosamente el CFDI 4.0 con ID: {cfdiCreated.Id} y folío fiscal: {cfdiCreated.Complement.TaxStamp.Uuid}");
 
@@ -802,7 +784,7 @@ namespace WebApiExamples
         {
             int? folioStart = null;
             int? folioEnd = null;
-            string rfcReceiver= String.Empty;
+            string rfcReceiver = String.Empty;
             string taxEntityName = String.Empty;
             string dateStart = null;
             string dateEnd = null;
@@ -839,6 +821,6 @@ namespace WebApiExamples
 
         }
 
-
+        
     }
 }
