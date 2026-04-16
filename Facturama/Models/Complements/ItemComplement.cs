@@ -13,7 +13,10 @@ namespace Facturama.Models.Complements
         
         [JsonProperty("ThirdPartyAccount")]
         public ThirdPartyAccount.ThirdPartyAccount ThirdPartyAccount { get; set; }
-	}
+
+        [JsonProperty("HidroYPetro")]
+        public HidroYPetro.HidroYPetro HidroYPetro { get; set; }
+    }
 }
 
 

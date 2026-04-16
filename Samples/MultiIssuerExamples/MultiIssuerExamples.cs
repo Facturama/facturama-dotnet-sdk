@@ -27,6 +27,7 @@ namespace MultiIssuerExamples
             //new WaybillComplementExampleMulti(facturamaMultiEmisor).Run();   // Complemento IEDU - Instituciones educativas
            // TestCfdiList(facturamaMultiEmisor);
             //TestCfdiAPI4(facturamaMultiEmisor);
+            //new Hidrocarburos(facturamaMultiEmisor).Run();
 
             Console.ReadKey();
         }
