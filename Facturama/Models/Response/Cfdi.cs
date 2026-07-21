@@ -111,6 +111,12 @@
 
         [JsonProperty("SatSign")]
         public string SatSign { get; set; }
+
+        [JsonProperty("RfcProvCertif")]
+        public string RfcProvCertif { get; set; }
+
+        [JsonProperty("AutNumProvCertif")]
+        public string AutNumProvCertif { get; set; }
     }
 
     public class Issuer
