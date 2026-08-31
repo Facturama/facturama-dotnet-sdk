@@ -16,7 +16,8 @@ namespace Facturama
 
             var httpClient = new RestClientService(new RestSharp.RestClient(url)
             {
-                Authenticator = new HttpBasicAuthenticator(user, password)
+                Authenticator = new HttpBasicAuthenticator(user, password),
+                UserAgent = user
             });
             Catalogs = new CatalogService(httpClient);
             Csds = new CsdService(httpClient);
