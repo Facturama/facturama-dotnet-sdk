@@ -12,16 +12,23 @@ namespace Facturama.Models.Response
 		/// </summary>
 		public string Status { get; set; }
 
-		/// <summary>
-		/// UUID del CFDI consultado
-		/// </summary>
-		public string Uuid { get; set; }
+        /// <summary>
+        /// Mensaje de respuesta de la solicitud de cancelación
+        /// </summary>
+        public string Message { get; set; }
 
+		public string IsCancelable { get; set; }
 
-		/// <summary>
-		/// Fecha de solicitud de la cancelación
-		/// </summary>
-		public string RequestDate { get; set; }
+        /// <summary>
+        /// UUID del CFDI consultado
+        /// </summary>
+
+        public string Uuid { get; set; }
+
+        /// <summary>
+        /// Fecha de solicitud de la cancelación
+        /// </summary>
+        public string RequestDate { get; set; }
 
 		/// <summary>
 		/// Fecha en que se responde la solicitud de cancelación

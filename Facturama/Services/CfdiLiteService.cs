@@ -7,6 +7,7 @@ using RestSharp;
 using System.Web;
 using Facturama.Models.Response;
 using Facturama.Data;
+using Facturama.Models.Response.Catalogs;
 
 namespace Facturama.Services
 {
@@ -143,7 +144,19 @@ namespace Facturama.Services
             return file;
         }
 
-		public void SavePdf(string filePath, string id)
+        public Acuse GetAcuse(string id, FileFormat format)
+        {
+            var strFormat = format.ToString().ToLower();
+            var request = new RestRequest($"{UriResource}/acuse/{strFormat}/issuedLite/{id}", Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
+            var response = taskCompletionSource.Task.Result;
+            var acuse = JsonConvert.DeserializeObject<Acuse>(response.Content);
+            return acuse;
+        }
+
+        public void SavePdf(string filePath, string id)
 		{
 			var file = GetFile(id, FileFormat.Pdf);
 			File.WriteAllBytes(filePath, Convert.FromBase64String(file.Content));
