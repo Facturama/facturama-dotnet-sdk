@@ -20,7 +20,7 @@ namespace Facturama.Models.Complements.ForeignTrade
         [JsonProperty("Name")]
         public string Name { get; set; }
 
-        [JsonProperty("Address")]
+        [JsonProperty("Addresses")]
         public List<Address> Addresses { get; set; }
 
     }

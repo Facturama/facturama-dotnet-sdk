@@ -13,7 +13,7 @@
         static void Main(string[] args)
         {
             //WebApiExamples.RunExamples();
-            //MultiIssuerExamples.RunExamples();
+            MultiIssuerExamples.RunExamples();
         }
     }
 }

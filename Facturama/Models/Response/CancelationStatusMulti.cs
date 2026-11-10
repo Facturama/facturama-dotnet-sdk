@@ -11,14 +11,18 @@ namespace Facturama.Models.Response
 		/// Estado en que se encuntra la factura (canceled | active | pending)
 		/// </summary>
 		public string Status { get; set; }
+
 		/// <summary>
 		/// Mensaje descriptivo al status
 		/// </summary>
 		public string Message { get; set; }
-		/// <summary>
-		/// Identificador del CFDI
-		/// </summary>
-		public string Uuid { get; set; }
+
+        public string IsCancelable { get; set; }
+
+        /// <summary>
+        /// Identificador del CFDI
+        /// </summary>
+        public string Uuid { get; set; }
 		/// <summary>
 		/// Fecha en que se solicitó la cancelacion
 		/// </summary>
@@ -27,9 +31,16 @@ namespace Facturama.Models.Response
 		/// Acuse XML en base64 en caso de existir
 		/// </summary>
 		public string AcuseXmlBase64 { get; set; }
-		/// <summary>
-		/// Fecha en que se canceló el CFDI
-		/// </summary>
-		public string CancelationDate { get; set; }
+
+        /// <summary>
+        /// Vigencia de la solicitud de cancelación
+        /// </summary>
+        public string ExpirationDate { get; set; }
+
+
+        /// <summary>
+        /// Fecha en que se canceló el CFDI
+        /// </summary>
+        public string CancelationDate { get; set; }
 	}
 }

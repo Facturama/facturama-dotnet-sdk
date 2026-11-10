@@ -6,6 +6,7 @@ using System.Web;
 using Facturama.Data;
 using Facturama.Models;
 using Facturama.Models.Response;
+using Facturama.Models.Response.Catalogs;
 using Newtonsoft.Json;
 using RestSharp;
 
@@ -160,6 +161,18 @@ namespace Facturama.Services
 
             var response = taskCompletionSource.Task.Result;
             var file = JsonConvert.DeserializeObject<InvoiceFile>(response.Content);
+            return file;
+        }
+
+        public Acuse GetAcuse(string id, FileFormat format, InvoiceType type = InvoiceType.Issued)
+        {
+            var strFormat = format.ToString().ToLower();
+            var request = new RestRequest($"{UriResource}/acuse/{strFormat}/{type}/{id}", Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+            var taskCompletionSource = new TaskCompletionSource<IRestResponse>();
+            HttpClient.ExecuteAsync(request, taskCompletionSource);
+            var response = taskCompletionSource.Task.Result;
+            var file = JsonConvert.DeserializeObject<Acuse>(response.Content);
             return file;
         }
 

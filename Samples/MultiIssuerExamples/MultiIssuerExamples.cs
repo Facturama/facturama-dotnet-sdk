@@ -663,6 +663,12 @@ namespace MultiIssuerExamples
                 var cfdiCreated = facturama.Cfdis.Create4(cfdi);// Prueba CFDI 4.0 en API 4, TEST
                 Console.WriteLine($"Se creó exitosamente el cfdi con el folio fiscal: {cfdiCreated.TaxStamp.Uuid}");
 
+                var cancelation = facturama.Cfdis.Cancel(cfdiCreated.Id, "02");// Prueba CFDI 4.0 en API 4, TEST
+
+                var acuse= facturama.Cfdis.GetAcuse(cfdiCreated.Id, FileFormat.Pdf);// Prueba CFDI 4.0 en API 4, TEST
+
+
+
 
             }
             catch (FacturamaException ex)

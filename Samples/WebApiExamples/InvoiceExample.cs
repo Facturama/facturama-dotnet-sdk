@@ -45,7 +45,8 @@ namespace WebApiExamples
                 //TestDonationCFDI(facturama);
                 //TestValidateClient(facturama);
                 //TestResponse(facturama);
-                //TestCfdiList(facturama);
+               // TestCfdiList(facturama);
+
             }
             catch (FacturamaException ex)
             {
